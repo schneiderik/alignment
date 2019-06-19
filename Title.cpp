@@ -8,12 +8,13 @@ void Title::update(Game& game) {
   switch(state_) {
     case TITLE_STATES::TITLE_STATE_PLAY:
       if (arduboy.justPressed(A_BUTTON)) {
-//        game.setScore(0);
         game.setState(GAME_STATES::GAME_STATE_QUEST);
       }
       break;
     case TITLE_STATES::TITLE_STATE_INFO:
-      if (arduboy.justPressed(A_BUTTON)) { game.setState(GAME_STATES::GAME_STATE_INFO); }
+      if (arduboy.justPressed(A_BUTTON)) {
+        game.setState(GAME_STATES::GAME_STATE_INFO);
+      }
       break;
     case TITLE_STATES::TITLE_STATE_SFX:
       if (arduboy.justPressed(A_BUTTON)) { 
@@ -92,48 +93,3 @@ void Title::renderCursor_(int baseX, int baseY, int width) {
   arduboy.fillRect(x1, y, TITLE_CURSOR_SIZE, TITLE_CURSOR_SIZE);
   arduboy.fillRect(x2, y, TITLE_CURSOR_SIZE, TITLE_CURSOR_SIZE);
 }
-
-//  void update() {
-//      if (arduboy.justPressed(UP_BUTTON) && state_ > 0) { state_++; };
-//      if (arduboy.justPressed(DOWN_BUTTON) && state_ < LAST_TITLE_OPTION) { state_--; };
-//      
-//      switch(state_) {
-//        case TITLE_STATES::TITLE_STATE_PLAY:
-//          if (arduboy.justPressed(A_BUTTON)) {
-//            pGame_->setScore(0);
-//            pGame_->setState(GAME_STATES::GAME_STATE_QUEST);
-//          }
-//          break;
-//        case TITLE_STATES::TITLE_STATE_INFO:
-//          if (arduboy.justPressed(A_BUTTON)) { pGame_->setState(GAME_STATES::GAME_STATE_INFO); }
-//          break;
-//        case TITLE_STATES::TITLE_STATE_SFX:
-//          if (arduboy.justPressed(A_BUTTON)) { 
-//            if (arduboy.audio.enabled()) {
-//              arduboy.audio.off();
-//            } else {
-//              arduboy.audio.on();
-//            }
-//          
-//            arduboy.audio.saveOnOff();
-//          }
-//          break;
-//    };
-//  };
-
-//    void render() {
-//      sprites.drawOverwrite(
-//        TITLE_IMAGE_X,
-//        TITLE_IMAGE_Y,
-//        titleImage,
-//        0
-//      );
-//      
-//      // draw cursor at position state_
-//      
-//      if (arduboy.audio.enabled()) {
-//        // render text ON
-//      } else {
-//        // render text OFF
-//      }
-//    };

@@ -3,24 +3,26 @@
 
 #include "global.h"
 #include "Title.h"
+#include "Info.h"
 #include "Quest.h"
 #include "Battle.h"
+#include "Player.h"
 
 class Game {
   public:
     Game() {};
 
     void setState(int);
-    void setCurrentEnemyType(int);
-    int getCurrentEnemyType();
     void update();
     void render();
+    Player player;
+    Enemy enemy;
 
   private:
     int state_ = GAME_STATES::GAME_STATE_TITLE;
-    int currentEnemyType_ = ENEMY_TYPES::ENEMY_TYPE_SKELETON;
 
     Title title_;
+    Info info_;
     Quest quest_;
     Battle battle_;
 };

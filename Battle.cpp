@@ -1,42 +1,30 @@
 #include "Battle.h"
+#include "Game.h"
+
+Battle::Battle() {
+  
+}
 
 void Battle::update(Game& game) {
   
 };
 
-void Battle::render(Game& game) {
-  for (int i = 0; i < HEARTS_MAX; i++) {  
-    sprites.drawOverwrite(
-      HEARTS_X + (i * (heartSprite[0] + HEART_OFFSET)),
-      HEARTS_Y,
-      heartSprite,
-      i <= hearts_ ? 0 : 1
-    );
-  }
 
-  arduboy.fillRect(104, 0, 24, 64);
+
+void Battle::renderScore_(unsigned long int score) {
+
+}
+
+void Battle::render(Game& game) {
+  renderHearts_();
+  renderScore_(game.getScore());
+  enemy_.render();
 };
 
-//#include "Game.h"
-//
-//class Battle {
-//  public:
-//    Battle(Game* pGame)
-//    : pGame_(pGame) {
-//      setEnemy(pGame_->getCurrentEnemyType());
-//    };
-//    
-//    setEnemy(int enemyType) {
-//      for (int i = 0; i < ENEMY_DATA_LENGTH; i++) {
-//        enemy_[i] = ENEMIES[enemyType][i];
-//      }
-//    }
-//
-//    reset() {
-//      setEnemy(pGame_->getCurrentEnemyType());
-//      hearts_ = 3;        
-//    }
-//    
+void Battle::setEnemy(int enemyType) {
+  enemy_ = new Enemy(enemyType);
+};
+
 //    void update() {
 //      if (paused_) {
 //        if (arduboy.justPressed(RIGHT_BUTTON)) { paused_ = false; }
@@ -115,22 +103,3 @@ void Battle::render(Game& game) {
 //        currentInterval += timeElapsed;
 //      }
 //    };
-//
-//    void render() {      
-//    };
-//
-//  private:
-//    Game* pGame_;
-//    bool paused_ = false;
-//    int currentInterval = 0;
-//    int intervalLength = 500;
-//    int hearts_ = 3;
-//    int enemy_[ENEMY_DATA_LENGTH];
-//    int weapons_[WEAPONS_MAX][WEAPON_LENGTH]
-//    int preview_[WEAPONS_MAX];
-//    int descendingGemCount_ = 0;
-//    int descendingGems_[DESCENDING_GEM_MAX][DESCENDING_GEM_LENGTH];
-//    void swapWeapons_() {};
-//    void moveCursorUp_() {};
-//    void moveCursorDown_() {};
-//};

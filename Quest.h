@@ -8,12 +8,12 @@ class Quest {
     Quest() {};
 
     void update(Game&);
-    void render(int);
+    void render(Game&);
 
   private:
     int cursorOffset_ = 0;
     int cursorInterval_ = 0;
-    boolean cursorAnimationDirection_ = true;
+    int cursorVelocity_ = -1;
 };
 
 #endif

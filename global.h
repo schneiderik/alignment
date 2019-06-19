@@ -36,10 +36,36 @@
 #define ENEMY_COUNT 5
 #define LAST_ENEMY ENEMY_COUNT - 1
 
+#define ENEMY_PANEL_X 104
+#define ENEMY_PANEL_Y 0
+#define ENEMY_PANEL_WIDTH 24
+#define ENEMY_PANEL_HEIGHT 64
+
+#define ENEMY_PORTRAIT_X 106
+#define ENEMY_PORTRAIT_Y 2
+
+#define ENEMY_HEALTH_X 106
+#define ENEMY_HEALTH_Y 60
+#define ENEMY_HEALTH_WIDTH 20
+#define ENEMY_HEALTH_HEIGHT 2
+
 #define HEARTS_MAX 3
 #define HEARTS_X 2
 #define HEARTS_Y 2
 #define HEART_OFFSET 1
+
+#define NUMBER_SPACING 2
+
+#define SCORE_X 97
+#define SCORE_Y 2
+#define SCORE_INCREMENT 10
+
+#define WEAPON_COUNT 4
+
+#define ENEMY_DATA_LENGTH 6
+#define ENEMY_DATA_TYPE 0
+#define ENEMY_DATA_HEALTH 1
+#define ENEMY_DATA_MODIFIER 2
 
 class Game;
 
@@ -66,21 +92,7 @@ enum ENEMY_TYPES {
   ENEMY_TYPE_SORCERER
 };
 
-// ENEMY DATA
-// [ENEMY_DATA_HEALTH]
-//#define ENEMY_DATA_LENGTH 2
-//#define ENEMY_DATA_TYPE 0
-//#define ENEMY_DATA_HEALTH 1
-
-//int ENEMIES[ENEMY_COUNT][ENEMY_DATA_LENGTH] = {
-//  {1, 100},
-//  {2, 150},
-//  {3, 200},
-//  {4, 250},
-//  {5, 300}  
-//};
-
-extern Arduboy2Base arduboy;
+extern Arduboy2 arduboy;
 extern Sprites sprites;
 extern ArduboyTones sound;
 
