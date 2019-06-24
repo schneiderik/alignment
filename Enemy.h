@@ -7,16 +7,19 @@ class Enemy {
   public:
     Enemy();
 
-    void setEnemy();
+    void set(int);
+    int getType();
     boolean isDead();
-    void takeDamage(int*);
+    void takeDamage();
     void render();
 
   private:
     int type_;
     int health_;
-    int healthBarWidth_ = ENEMY_HEALTH_WIDTH;
-    int weaponModifiers_[WEAPON_COUNT];
+    int* weaponModifiers_;
+    void renderPanel_();
+    void renderPortrait_();
+    void renderHealth_();
 };
 
 #endif

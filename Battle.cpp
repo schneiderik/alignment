@@ -2,39 +2,23 @@
 #include "Game.h"
 
 Battle::Battle() {
-  
+  weaponPositions_ = new int[WEAPON_COUNT] {0, 1, 2, 3};
+  weapons_ = new Weapon[WEAPON_COUNT];
+
+  for (int i = 0; i < WEAPON_COUNT; i++) {
+    weapons_[i].setType(i);
+  }
+}
+
+void Battle::handleInput(Game& game) {
+  if (arduboy.justPressed(RIGHT_BUTTON)) { handlePause_(); }
+  if (paused_) return;
+  if (arduboy.justPressed(A_BUTTON)) { handleSwapWeapons_(); }
+  if (arduboy.justPressed(UP_BUTTON)) { handleMoveCursorUp_(); }
+  if (arduboy.justPressed(DOWN_BUTTON)) { handleMoveCursorDown_(); }  
 }
 
 void Battle::update(Game& game) {
-  
-};
-
-
-
-void Battle::renderScore_(unsigned long int score) {
-
-}
-
-void Battle::render(Game& game) {
-  renderHearts_();
-  renderScore_(game.getScore());
-  enemy_.render();
-};
-
-void Battle::setEnemy(int enemyType) {
-  enemy_ = new Enemy(enemyType);
-};
-
-//    void update() {
-//      if (paused_) {
-//        if (arduboy.justPressed(RIGHT_BUTTON)) { paused_ = false; }
-//      } else {
-//        if (arduboy.justPressed(RIGHT_BUTTON)) { paused_ = true; }
-//        if (arduboy.justPressed(A_BUTTON)) { swapWeapons_(); }
-//        if (arduboy.justPressed(UP_BUTTON)) { moveCursorUp_(); }
-//        if (arduboy.justPressed(DOWN_BUTTON)) { moveCursorDown_(); }
-//      }
-//
 //      if (hearts_ == 0) {
 //        pGame_->lose();
 //        reset();
@@ -101,5 +85,64 @@ void Battle::setEnemy(int enemyType) {
 //        } 
 //      } else {
 //        currentInterval += timeElapsed;
-//      }
-//    };
+//      }  
+};
+
+void Battle::reset() {
+  for (int i = 0; i < WEAPON_COUNT; i++) {
+    weaponPositions_[i] = i;
+    weapons_[i].reset();
+  }  
+}
+
+void Battle::handlePause_() {
+  paused_ = !paused_;
+}
+
+void Battle::handleSwapWeapons_() {
+  int weapon1, weapon2;
+
+  for (int i = 0; i < WEAPON_COUNT; i++) {
+    if (weaponPositions_[i] == cursorIndex_) weapon1 = i;
+    if (weaponPositions_[i] == cursorIndex_ + 1) weapon2 = i;
+  }
+  
+  weaponPositions_[weapon1] = cursorIndex_ + 1;
+  weaponPositions_[weapon2] = cursorIndex_;
+}
+
+void Battle::handleMoveCursorUp_() {
+  if (cursorIndex_ > 0) cursorIndex_--;
+}
+
+void Battle::handleMoveCursorDown_() {
+  if (cursorIndex_ < BATTLE_CURSOR_MAX) cursorIndex_++;
+}
+
+void Battle::renderPaused_() {
+  if (paused_) {
+    sprites.drawOverwrite(
+      BATTLE_PAUSED_TEXT_X,
+      BATTLE_PAUSED_TEXT_Y,
+      pausedTextImage,
+      0
+    ); 
+  }  
+}
+
+void Battle::render(Game& game) {
+  bool active;
+  int position;
+  
+  game.player.hearts.render(BATTLE_HEARTS_X, BATTLE_HEARTS_Y);
+  game.player.score.render(BATTLE_SCORE_X, BATTLE_SCORE_Y);
+  game.enemy.render();
+  
+  for (int i = 0; i < WEAPON_COUNT; i++) {
+    active = weaponPositions_[i] == cursorIndex_ || weaponPositions_[i] == cursorIndex_ + 1;
+    
+    weapons_[i].render(weaponPositions_[i], active);
+  }
+
+  renderPaused_();
+};

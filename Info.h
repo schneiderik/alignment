@@ -7,7 +7,7 @@ class Info {
   public:
     Info() {};
 
-    void update(Game&);
+    void handleInput(Game&);
     void render();
 };
 

@@ -5,12 +5,12 @@
 
 class Score {
   public:
-    Score();
+    Score() {};
 
     unsigned long int get();
     void increase();
     void reset();
-    void render();
+    void render(int, int);
 
   private:
     unsigned long int value_ = 0;

@@ -4,16 +4,11 @@ unsigned long int Score::get() {
   return value_;
 }
 
-void Score::render() {
+void Score::render(int x, int y) {
   unsigned long int score = value_;
-  
+
   if (score == 0) {
-    sprites.drawOverwrite(
-      SCORE_X,
-      SCORE_Y,
-      numberSprite,
-      0
-    );
+    sprites.drawOverwrite(x, y, numberSprite, 0);
 
     return;
   }
@@ -24,8 +19,8 @@ void Score::render() {
     int digit = score % 10;
 
     sprites.drawOverwrite(
-      SCORE_X - (index * (numberSprite[0] + NUMBER_SPACING)),
-      SCORE_Y,
+      x - (index * (numberSprite[0] + NUMBER_SPACING)),
+      y,
       numberSprite,
       digit
     );

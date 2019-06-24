@@ -6,6 +6,7 @@
 #include "Info.h"
 #include "Quest.h"
 #include "Battle.h"
+#include "Enemy.h"
 #include "Player.h"
 
 class Game {
@@ -13,6 +14,7 @@ class Game {
     Game() {};
 
     void setState(int);
+    void handleInput();
     void update();
     void render();
     Player player;

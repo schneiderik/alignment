@@ -2,21 +2,27 @@
 #define BATTLE_H
 
 #include "global.h"
-#include "Enemy.h"
+#include "Weapon.h"
 
 class Battle {
   public:
-    Battle() {};
+    Battle();
 
+    void handleInput(Game&);
     void update(Game&);
     void render(Game&);
-    void setEnemy(int);
+    void reset();
 
   private:
-    int hearts_ = HEARTS_MAX;
-    void renderScore_(unsigned long int);
-    void renderHearts_();
-    Enemy enemy_;
+    int cursorIndex_ = 0;
+    void handlePause_();
+    void handleSwapWeapons_();
+    void handleMoveCursorUp_();
+    void handleMoveCursorDown_();
+    void renderPaused_();
+    Weapon* weapons_;
+    int* weaponPositions_;
+    bool paused_ = false;
 };
 
 #endif

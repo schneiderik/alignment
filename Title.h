@@ -7,11 +7,12 @@ class Title {
   public:
     Title() {};
 
-    void update(Game&);
+    void handleInput(Game&);
     void render();
 
   private:
     int state_ = TITLE_STATES::TITLE_STATE_PLAY;
+    void handleConfirm_(Game&);
     void renderCursor_(int, int, int);
 };
 

@@ -1,34 +1,31 @@
 #include "Title.h"
 #include "Game.h"
 
-void Title::update(Game& game) {
+void Title::handleInput(Game& game) {
   if (arduboy.justPressed(UP_BUTTON) && state_ > 0) { state_--; };
   if (arduboy.justPressed(DOWN_BUTTON) && state_ < LAST_TITLE_OPTION) { state_++; };
-  
+  if (arduboy.justPressed(A_BUTTON)) { handleConfirm_(game); }; 
+};
+
+void Title::handleConfirm_(Game& game) {
   switch(state_) {
     case TITLE_STATES::TITLE_STATE_PLAY:
-      if (arduboy.justPressed(A_BUTTON)) {
-        game.setState(GAME_STATES::GAME_STATE_QUEST);
-      }
+      game.setState(GAME_STATES::GAME_STATE_QUEST);
       break;
     case TITLE_STATES::TITLE_STATE_INFO:
-      if (arduboy.justPressed(A_BUTTON)) {
-        game.setState(GAME_STATES::GAME_STATE_INFO);
-      }
+      game.setState(GAME_STATES::GAME_STATE_INFO);
       break;
     case TITLE_STATES::TITLE_STATE_SFX:
-      if (arduboy.justPressed(A_BUTTON)) { 
-        if (arduboy.audio.enabled()) {
-          arduboy.audio.off();
-        } else {
-          arduboy.audio.on();
-        }
-      
-        arduboy.audio.saveOnOff();
+      if (arduboy.audio.enabled()) {
+        arduboy.audio.off();
+      } else {
+        arduboy.audio.on();
       }
+    
+      arduboy.audio.saveOnOff();
       break;
   };  
-};
+}
 
 void Title::render() {
   sprites.drawOverwrite(

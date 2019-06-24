@@ -1,6 +1,3 @@
-#include <Arduboy2.h>
-#include <ArduboyTones.h>
-
 #include "global.h"
 #include "Game.h"
 
@@ -19,6 +16,7 @@ void loop() {
   arduboy.pollButtons();
   arduboy.clear();
 
+  pGame->handleInput();
   pGame->update();
   pGame->render();
   

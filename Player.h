@@ -9,8 +9,6 @@ class Player {
   public:
     Player() {};
 
-    void update();
-    void render();
     void reset();
     Hearts hearts;
     Score score;
