@@ -10,6 +10,7 @@ class Player {
     Player() {};
 
     void reset();
+    bool isDead();
     Hearts hearts;
     Score score;
 };

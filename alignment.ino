@@ -4,6 +4,7 @@
 Game* pGame = new Game();
 
 void setup() {
+  arduboy.initRandomSeed();
   arduboy.begin();
   arduboy.setFrameRate(FPS);
     

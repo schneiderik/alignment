@@ -10,7 +10,7 @@ const int QUEST_ENEMY_POSITIONS[ENEMY_COUNT][2] = {
 };
 
 void Quest::handleInput(Game& game) {
-  if (arduboy.justPressed(A_BUTTON)) { game.setState(GAME_STATES::GAME_STATE_BATTLE); }
+  if (arduboy.justPressed(A_BUTTON)) { game.goToBattleScreen(); }
 }
 
 void Quest::update() {

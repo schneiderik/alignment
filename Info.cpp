@@ -2,7 +2,7 @@
 #include "Game.h"
 
 void Info::handleInput(Game& game) {
-  if (arduboy.justPressed(A_BUTTON)) { game.setState(GAME_STATES::GAME_STATE_TITLE); }
+  if (arduboy.justPressed(A_BUTTON)) { game.goToTitleScreen(); }
 };
 
 void Info::render() {

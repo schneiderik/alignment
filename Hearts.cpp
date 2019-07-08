@@ -6,7 +6,7 @@ void Hearts::render(int x, int y) {
       x + (i * (heartSprite[0] + HEART_SPACING)),
       y,
       heartSprite,
-      i <= num_ ? 0 : 1
+      i < num_ ? 0 : 1
     );
   }  
 }
@@ -22,3 +22,8 @@ void Hearts::gain() {
 void Hearts::reset() {
   num_ = HEARTS_MAX;
 }
+
+int Hearts::get() {
+  return num_;
+}
+

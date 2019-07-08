@@ -9,13 +9,13 @@ void Title::handleInput(Game& game) {
 
 void Title::handleConfirm_(Game& game) {
   switch(state_) {
-    case TITLE_STATES::TITLE_STATE_PLAY:
-      game.setState(GAME_STATES::GAME_STATE_QUEST);
+    case TITLE_STATE_PLAY:
+      game.goToQuestScreen();
       break;
-    case TITLE_STATES::TITLE_STATE_INFO:
-      game.setState(GAME_STATES::GAME_STATE_INFO);
+    case TITLE_STATE_INFO:
+      game.goToInfoScreen();
       break;
-    case TITLE_STATES::TITLE_STATE_SFX:
+    case TITLE_STATE_SFX:
       if (arduboy.audio.enabled()) {
         arduboy.audio.off();
       } else {
@@ -66,13 +66,13 @@ void Title::render() {
   }
 
   switch(state_) {
-    case TITLE_STATES::TITLE_STATE_PLAY:
+    case TITLE_STATE_PLAY:
       renderCursor_(TITLE_PLAY_TEXT_X, TITLE_PLAY_TEXT_Y, playTextImage[0]);
       break;
-    case TITLE_STATES::TITLE_STATE_INFO:
+    case TITLE_STATE_INFO:
       renderCursor_(TITLE_INFO_TEXT_X, TITLE_INFO_TEXT_Y, infoTextImage[0]);
       break;
-    case TITLE_STATES::TITLE_STATE_SFX:
+    case TITLE_STATE_SFX:
       if (arduboy.audio.enabled()) {
         renderCursor_(TITLE_SFX_ON_TEXT_X, TITLE_SFX_ON_TEXT_Y, sfxOnTextImage[0]);
       } else {

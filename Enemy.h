@@ -10,6 +10,7 @@ class Enemy {
     void set(int);
     int getType();
     boolean isDead();
+    boolean isFinalBoss();
     void takeDamage();
     void render();
 

@@ -3,6 +3,9 @@
 
 #include "global.h"
 
+#define INFO_IMAGE_X 11
+#define INFO_IMAGE_Y 4
+
 class Info {
   public:
     Info() {};

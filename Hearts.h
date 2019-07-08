@@ -3,6 +3,9 @@
 
 #include "global.h"
 
+#define HEARTS_MAX 3
+#define HEART_SPACING 1
+
 class Hearts {
   public:
     Hearts() {};
@@ -10,6 +13,7 @@ class Hearts {
     void lose();
     void gain();
     void reset();
+    int get();
     void render(int, int);
 
   private:

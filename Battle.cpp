@@ -1,123 +1,42 @@
 #include "Battle.h"
 #include "Game.h"
 
-Battle::Battle() {
-  weaponPositions_ = new int[WEAPON_COUNT] {0, 1, 2, 3};
-  weapons_ = new Weapon[WEAPON_COUNT];
-
-  for (int i = 0; i < WEAPON_COUNT; i++) {
-    weapons_[i].setType(i);
-  }
-}
-
 void Battle::handleInput(Game& game) {
-  if (arduboy.justPressed(RIGHT_BUTTON)) { handlePause_(); }
+  if (arduboy.justPressed(RIGHT_BUTTON)) { handleRightButtonPress_(); }
   if (paused_) return;
-  if (arduboy.justPressed(A_BUTTON)) { handleSwapWeapons_(); }
-  if (arduboy.justPressed(UP_BUTTON)) { handleMoveCursorUp_(); }
-  if (arduboy.justPressed(DOWN_BUTTON)) { handleMoveCursorDown_(); }  
+  if (arduboy.justPressed(UP_BUTTON)) { handleUpButtonPress_(); }
+  if (arduboy.justPressed(DOWN_BUTTON)) { handleDownButtonPress_(); } 
+  if (puzzle_.isWaitingForAnimation()) return;
+  if (arduboy.justPressed(A_BUTTON)) { handleAButtonPress_(); }
+ 
 }
 
-void Battle::update(Game& game) {
-//      if (hearts_ == 0) {
-//        pGame_->lose();
-//        reset();
-//      }
-//      
-//      // Check if you killed the enemy
-//      if (enemy_[ENEMY_DATA_HEALTH] <= 0) {
-//        if (enemy_[ENEMY_DATA_TYPE] == LAST_ENEMY) {
-//          pGame_->win();
-//          reset();
-//        } else {
-//          pGame_->continueQuest();
-//          reset();
-//        }
-//      }
-//
-//      // HERE!
-//      // Check for gem matches
-//      int match[MATCH_LENGTH] = getMatch();
-//      
-//      if (match[MATCH_TYPE] != MATCH_TYPES::NONE) {
-//        battle.increaseScore(match);
-//        battle.attackEnemy(match);
-//        battle.removeMatch(match);
-//      }
-//      
-//      // Check for overflowed weapons
-//      for (int i = 0; i < WEAPONS_MAX; i++) {
-//        if (weapons_[i][WEAPON_GEM_COUNT] > WEAPON_GEM_MAX) {
-//          hearts_--;
-//          weapons_[i][WEAPON_GEM_COUNT] = 0;
-//        }
-//      } 
-//      
-//      // Each Interval
-//      if (currentInterval >= game.getIntervalLength()) {
-//        currentInterval = 0;
-//  
-//        // Check for descending gems
-//        if (descendingGemCount_ == 0) {
-//          if (currentGemDelay < GEM_DELAY) {
-//            currentGemDelay++;
-//          } else {
-//            currentGemDelay = 0;
-//            battle.descendGems(preview_);
-//          }
-//        } else {  
-//          // Generate new preview if the preview area is clear of descending gems.
-//            if (descendingGems_[0][DESCENDING_GEM_POSITION] <= GEM_SIZE * WEAPON_GEM_MAX) {
-//            battle.generatePreview();
-//          }
-//        
-//          for (int i = 0; i < descendingGemCount_; i++) {
-//            // Check if a descending gem has reached a gem in play
-//            if (descendingGems_[i][DESCENDING_GEM_POSITION] <= (weapons_[descendingGems_[i][DESCENDING_GEM_WEAPON]][WEAPON_GEM_COUNT] + 1) * GEM_SIZE) {
-//              // If a descending gem has reached a gem in play, add it the weapon.
-//              addDescendingGemToWeapon(descendingGems_[i]);
-//              // remove gem from descendingGems_
-//            } else {
-//              // If a descending gem has not reached a gem in play, increment it further down the weapon.
-//              descendingGems_[i][DESCENDING_GEM_POSITION] -= DESCENT_INCREMENT;
-//            }
-//          }
-//        } 
-//      } else {
-//        currentInterval += timeElapsed;
-//      }  
-};
-
-void Battle::reset() {
-  for (int i = 0; i < WEAPON_COUNT; i++) {
-    weaponPositions_[i] = i;
-    weapons_[i].reset();
-  }  
-}
-
-void Battle::handlePause_() {
+void Battle::handleRightButtonPress_() {
   paused_ = !paused_;
 }
 
-void Battle::handleSwapWeapons_() {
-  int weapon1, weapon2;
+void Battle::handleAButtonPress_() {
+  puzzle_.swapWeapons();
+}
 
-  for (int i = 0; i < WEAPON_COUNT; i++) {
-    if (weaponPositions_[i] == cursorIndex_) weapon1 = i;
-    if (weaponPositions_[i] == cursorIndex_ + 1) weapon2 = i;
-  }
+void Battle::handleUpButtonPress_() {
+  puzzle_.moveCursorUp();
+}
+
+void Battle::handleDownButtonPress_() {
+  puzzle_.moveCursorDown();
+}
+
+void Battle::update(Game& game) {
+  if (paused_) return;
   
-  weaponPositions_[weapon1] = cursorIndex_ + 1;
-  weaponPositions_[weapon2] = cursorIndex_;
-}
-
-void Battle::handleMoveCursorUp_() {
-  if (cursorIndex_ > 0) cursorIndex_--;
-}
-
-void Battle::handleMoveCursorDown_() {
-  if (cursorIndex_ < BATTLE_CURSOR_MAX) cursorIndex_++;
-}
+  puzzle_.update();
+  
+  if (puzzle_.isWaitingForAnimation()) return;
+  
+  if (game.player.isDead()) game.goToLoseScreen();
+  if (game.enemy.isDead()) game.defeatEnemy(); 
+};
 
 void Battle::renderPaused_() {
   if (paused_) {
@@ -130,19 +49,44 @@ void Battle::renderPaused_() {
   }  
 }
 
-void Battle::render(Game& game) {
-  bool active;
-  int position;
-  
+void Battle::renderEnemyPanel_() {
+  arduboy.fillRect(
+    BATTLE_ENEMY_PANEL_X,
+    BATTLE_ENEMY_PANEL_Y,
+    BATTLE_ENEMY_PANEL_WIDTH,
+    BATTLE_ENEMY_PANEL_HEIGHT
+  ); 
+}
+
+void Battle::renderEnemyPortrait_(int type) {
+  sprites.drawOverwrite(
+    BATTLE_ENEMY_PORTRAIT_X,
+    BATTLE_ENEMY_PORTRAIT_Y,
+    enemySprite,
+    type
+  );  
+}
+
+void Battle::renderEnemyHealth_() {
+  arduboy.fillRect(
+    BATTLE_ENEMY_HEALTH_X,
+    BATTLE_ENEMY_HEALTH_Y,
+    BATTLE_ENEMY_HEALTH_WIDTH,
+    BATTLE_ENEMY_HEALTH_HEIGHT,
+    0
+  );   
+}
+
+void Battle::renderEnemy_(int type) {
+  renderEnemyPanel_();
+  renderEnemyPortrait_(type);
+  renderEnemyHealth_();
+}
+
+void Battle::render(Game& game) {    
   game.player.hearts.render(BATTLE_HEARTS_X, BATTLE_HEARTS_Y);
   game.player.score.render(BATTLE_SCORE_X, BATTLE_SCORE_Y);
-  game.enemy.render();
-  
-  for (int i = 0; i < WEAPON_COUNT; i++) {
-    active = weaponPositions_[i] == cursorIndex_ || weaponPositions_[i] == cursorIndex_ + 1;
-    
-    weapons_[i].render(weaponPositions_[i], active);
-  }
-
+  puzzle_.render();
+  renderEnemy_(game.enemy.getType());
   renderPaused_();
 };

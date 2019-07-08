@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#define NUMBER_SPACING 2
+
 class Score {
   public:
     Score() {};

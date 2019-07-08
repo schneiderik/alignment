@@ -1,66 +1,103 @@
 #include "Weapon.h"
 
+Weapon::Weapon() {
+  gems_ = new Gem[WEAPON_GEM_MAX];
+  
+  int num = random(0, 4);
+  int gemType;
+
+  gemCount_ = num;
+
+  for (int i = 0; i < gemCount_; i++) {
+    gemType = random(0, GEM_COUNT);
+    
+    gems_[i].setType(gemType);
+    gems_[i].stop();
+  }
+}
+
+void Weapon::update() {  
+  for (int i = 0; i < gemCount_; i++) {
+    gems_[i].update();
+  }  
+}
+
+bool Weapon::isWaitingForAnimation() {
+  for (int i = 0; i < gemCount_; i++) {
+    if (gems_[i].isAnimatingOut()) return true;
+  }
+
+  return false;
+}
+
 void Weapon::setType(int type) {
   type_ = type;
 }
 
-int Weapon::getType() {
-  return type_;
+Gem* Weapon::getGems() {
+  return gems_;
 }
 
-void Weapon::reset() {
-  // reset gems and stuff
+int Weapon::getGemCount() {
+  return gemCount_;
 }
 
-void Weapon::render(int pos, bool active) {
-  int yOffset = pos * (weaponSprite[1] + WEAPON_SPACING);
-  
-  if (active) {
-    renderActiveIcon_(yOffset);
-  } else {
-    renderInactiveIcon_(yOffset);
-  }
-
-  renderDividers_(yOffset);
+void Weapon::addGem(Gem& gem) {
+  gems_[gemCount_] = gem;
+  gems_[gemCount_].stop();
+  gemCount_++;
 }
 
-void Weapon::renderActiveIcon_(int yOffset) {
+void Weapon::clearGem(int i) {
+  gems_[i].animateOut();
+}
+
+void Weapon::emptyGems() {
+  gemCount_ = 0;
+}
+
+void Weapon::renderActiveIcon_(int x, int y) {
   arduboy.fillRect(
-    WEAPON_ACTIVE_X,
-    WEAPON_ACTIVE_Y + yOffset,
-    WEAPON_ACTIVE_WIDTH,
-    WEAPON_ACTIVE_HEIGHT
+    x,
+    y,
+    WEAPON_ACTIVE_INDICATOR_WIDTH,
+    WEAPON_ACTIVE_INDICATOR_HEIGHT
   );
   
   sprites.drawErase(
-    WEAPON_ICON_X ,
-    WEAPON_ICON_Y + yOffset,
+    x + WEAPON_ICON_X_OFFSET,
+    y + WEAPON_ICON_Y_OFFSET,
     weaponSprite,
     type_
   );  
 }
 
-void Weapon::renderInactiveIcon_(int yOffset) {
+void Weapon::renderInactiveIcon_(int x, int y) {
   sprites.drawOverwrite(
-    WEAPON_ICON_X,
-    WEAPON_ICON_Y + yOffset,
+    x + WEAPON_ICON_X_OFFSET,
+    y + WEAPON_ICON_Y_OFFSET,
     weaponSprite,
     type_
   );  
 }
 
-void Weapon::renderDividers_(int yOffset) {
+void Weapon::renderDivider_(int x, int y) {
   arduboy.fillRect(
-    WEAPON_DIVIDER_LEFT_X,
-    WEAPON_DIVIDER_Y + yOffset,
+    x + WEAPON_DIVIDER_X_OFFSET,
+    y + WEAPON_DIVIDER_Y_OFFSET,
     WEAPON_DIVIDER_WIDTH,
     WEAPON_DIVIDER_HEIGHT
   );
+}
 
-  arduboy.fillRect(
-    WEAPON_DIVIDER_RIGHT_X,
-    WEAPON_DIVIDER_Y + yOffset,
-    WEAPON_DIVIDER_WIDTH,
-    WEAPON_DIVIDER_HEIGHT
-  ); 
+void Weapon::render(int x, int y, bool active) {
+  active ? renderActiveIcon_(x, y) : renderInactiveIcon_(x, y);
+  renderDivider_(x, y);
+
+  for (int i = 0; i < gemCount_; i++) {
+    gems_[i].render(
+      x + WEAPON_GEMS_X_OFFSET + (i * (gemSpritePlusMask[0] + WEAPON_GEM_SPACING)),
+      y + WEAPON_GEMS_Y_OFFSET  
+    );
+  } 
 }

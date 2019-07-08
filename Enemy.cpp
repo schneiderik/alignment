@@ -30,39 +30,9 @@ boolean Enemy::isDead() {
   return health_ <= 0;
 }
 
+boolean Enemy::isFinalBoss() {
+  return type_ == LAST_ENEMY;
+}
+
 void Enemy::takeDamage() {
-}
-
-void Enemy::renderPanel_() {
-  arduboy.fillRect(
-    ENEMY_PANEL_X,
-    ENEMY_PANEL_Y,
-    ENEMY_PANEL_WIDTH,
-    ENEMY_PANEL_HEIGHT
-  ); 
-}
-
-void Enemy::renderPortrait_() {
-  sprites.drawOverwrite(
-    ENEMY_PORTRAIT_X,
-    ENEMY_PORTRAIT_Y,
-    enemySprite,
-    type_
-  );  
-}
-
-void Enemy::renderHealth_() {
-  arduboy.fillRect(
-    ENEMY_HEALTH_X,
-    ENEMY_HEALTH_Y,
-    ENEMY_HEALTH_WIDTH,
-    ENEMY_HEALTH_HEIGHT,
-    0
-  );   
-}
-
-void Enemy::render() {
-  renderPanel_();
-  renderPortrait_();
-  renderHealth_();
 }
