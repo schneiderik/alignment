@@ -25,6 +25,9 @@ enum WEAPON_TYPES {
 #define WEAPON_GEMS_Y_OFFSET 1
 #define WEAPON_GEM_SPACING 2
 
+#define WEAPON_MOVE_INCREMENT 3
+#define WEAPON_MOVE_FRAME_LENGTH 1
+
 #include "global.h"
 #include "Gem.h"
 
@@ -32,27 +35,46 @@ class Weapon {
   public:
     Weapon();
 
-    void render(int, int, bool);
+    void render(bool);
     void update();
 
     void setType(int);
+    int getType();
+    void setX(int);
+    int getX();
+    int getGemX(int);
+    void setY(int);
+    void setTargetY(int);
+    int getGemsY();
     int getGemCount();
     int getGemsMaxX();
     Gem* getGems();
-    void addGem(Gem&);
-    void clearGem(int);
+    void addGem(int);
+    void clearGemAtIndex(int);
+    void removeGemAtIndex(int);
     void emptyGems(); 
-
-    bool isWaitingForAnimation();
+    
+    bool isStopped();
+    bool isClearing();
+    bool isSwapping();
 
   private:
     int type_;
+    int x_ = 0;
+    int y_ = 0;
+    int targetY_ = 0;
     int gemCount_ = 0;  
     Gem* gems_;
+    int* gemPositions_;
+    int moveInterval_ = 0;
+
+    void updateGems_();
+    void removeGems_();
+    void updateY_();
     
-    void renderActiveIcon_(int, int);
-    void renderInactiveIcon_(int, int);
-    void renderDivider_(int, int);
+    void renderActiveIcon_();
+    void renderInactiveIcon_();
+    void renderDivider_();
 };
 
 #endif

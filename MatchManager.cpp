@@ -1,55 +1,43 @@
 //MatchManager::MatchManager() {
-//  matches_ = new Match[MATCH_MAX];
+//  matches = new int[PUZZLE_WEAPON_COUNT * WEAPON_GEM_MAX];
+//  
+//  reset();
 //}
 //
-//int MatchManager::get(Weapon* weapons) {
-//  int gemType1, gemType2;
-//  
-//  for (int gemIndex = 0; gemIndex < WEAPON_GEM_MAX; gemIndex++) {
-//    for (int weaponType = 0; weaponType < WEAPON_COUNT; weaponType++) {
-//      clearMatches();
-//      
-//      matches_[matchesLength_][0] = weaponType;
-//      matches_[matchesLegnth_][1] = gemIndex;
-//      matchesLength_++:
-//      
-//      checkNeighborsForMatches(weaponType, gemIndex);
+//void MatchManager::reset() {
+//  for (int i = 0; i < PUZZLE_WEAPON_COUNT * WEAPON_GEM_MAX; i++) {
+//    matches[i] = 0;
+//  }
+//}
 //
-//      if (matchesLength_ > 0) {
-//        for (int matchIndex = 0; matchIndex < MATCHES_MAX; matchIndex++) {
-//          int* match = matches_[matchIndex];
-//          
-//          if (match[MATCH_DATA_WEAPON_TYPE] != MATCH_EMPTY) {
-//            int weaponType = match[MATCH_DATA_WEAPON_TYPE];
-//            int gemIndex = match[MATCH_DATA_GEM_INDEX];
-//            
-//            weapons_[weaponType].removeGem(gemIndex);
-//          }
+//void MatchManager::check(int* gems) {
+//  int gem1, gem2;
+//
+//  resetMatches();
+//  
+//  for (int i = 0; i < PUZZLE_WEAPON_COUNT; i++) {
+//    for (int g = 0; g < weapons_[weaponOrder_[i]].getGemCount(); g++) {
+//      gem1 = weapons_[weaponOrder_[i]].getGems()[g].getType();
+//      
+//      if (i < PUZZLE_WEAPON_COUNT - 1 && g < weapons_[weaponOrder_[i + 1]].getGemCount()) {
+//        gem2 = weapons_[weaponOrder_[i + 1]].getGems()[g].getType();
+//  
+//        if (gem1 == gem2) {
+//          matches[(i * WEAPON_GEM_MAX) + g] = 1;
+//          matches[((i + 1) * WEAPON_GEM_MAX) + g] = 1;
+//        }      
+//      }
+//    
+//      if (g < weapons_[weaponOrder_[i]].getGemCount() - 1) {
+//        gem2 = weapons_[weaponOrder_[i]].getGems()[g + 1].getType();
+//  
+//        if (gem1 == gem2) {
+//          matches[(i * WEAPON_GEM_MAX) + g] = 1;
+//          matches[(i * WEAPON_GEM_MAX) + g + 1] = 1;
 //        }
 //      }
 //    }
 //  }
 //}
 //
-//int Battle::checkNeighborsForMatches(int weaponType, int gemIndex) {
-//  int gemType1 = weapons_[x].getGems()[y];
-//
-//  if (x > 0) checkNeighborForMatch(gemType1, x - 1, y);
-//  if (x < WEAPON_COUNT - 1) checkNeighborForMatch(gemType1, x + 1, y);
-//  if (y > 0) checkNeighborForMatch(gemType1, x, y - 1);
-//  if (x < weapons_[x].getGemCount() - 1) checkNeighborForMatch(gemType1, x, y + 1);
-//}
-//
-//void Battle::checkNeighborForMatch(int gemType1, int x, int y) {
-//  gemType2 = weapons_[x].getGems()[y];
-//  
-//  if (gemType1 == gemType2) {
-//    matches_[matchesLength_][MATCHES_DATA_X] = x;
-//    matches_[matchesLength_][MATCHES_DATA_Y] = y;
-//    matchesLength_++;
-//  }
-//}
-//
-//void Battle::clearMatches() {
-//  matchesLength_ = 0;
-//}
+

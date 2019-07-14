@@ -6,7 +6,6 @@ void Battle::handleInput(Game& game) {
   if (paused_) return;
   if (arduboy.justPressed(UP_BUTTON)) { handleUpButtonPress_(); }
   if (arduboy.justPressed(DOWN_BUTTON)) { handleDownButtonPress_(); } 
-  if (puzzle_.isWaitingForAnimation()) return;
   if (arduboy.justPressed(A_BUTTON)) { handleAButtonPress_(); }
  
 }
@@ -31,9 +30,7 @@ void Battle::update(Game& game) {
   if (paused_) return;
   
   puzzle_.update();
-  
-  if (puzzle_.isWaitingForAnimation()) return;
-  
+    
   if (game.player.isDead()) game.goToLoseScreen();
   if (game.enemy.isDead()) game.defeatEnemy(); 
 };

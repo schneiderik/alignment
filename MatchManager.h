@@ -2,7 +2,6 @@
 #define MATCHMANAGER_H
 
 #include "global.h"
-#include "Match.h"
 
 class MatchManager {
   public:

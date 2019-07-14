@@ -7,14 +7,21 @@
 #define PUZZLE_CURSOR_MIN 0
 #define PUZZLE_CURSOR_MAX 2
 
-#define PUZZLE_PREVIEW_DIVIDER_X_OFFSET 92
+#define PUZZLE_PREVIEW_DIVIDER_X_OFFSET 89
 #define PUZZLE_PREVIEW_DIVIDER_Y_OFFSET 1
 #define PUZZLE_PREVIEW_DIVIDER_WIDTH 1
 #define PUZZLE_PREVIEW_DIVIDER_HEIGHT 48
 
+#define PUZZLE_GEM_PREVIEW_X_OFFSET 92
+#define PUZZLE_GEM_PREVIEW_THRESHOLD_X_OFFSET 89
+#define PUZZLE_GEM_Y_OFFSET 1
+
 #define PUZZLE_WEAPON_COUNT 4
 
 #define PUZZLE_WEAPON_HEIGHT 12
+
+#define PUZZLE_GEM_MAX 4
+#define PUZZLE_LAST_GEM_INDEX PUZZLE_GEM_MAX - 1
 
 #include "global.h"
 #include "Weapon.h"
@@ -36,12 +43,14 @@ class Puzzle {
     void moveCursorUp();
     void moveCursorDown();
 
-    bool isWaitingForAnimation();
-
   private:
     int* weaponOrder_;
     Weapon* weapons_;
-//    GemManager gemManager_;
+
+    // GemManager
+    int* gemWeaponTypes_;
+    Gem* gems_;
+    int gemIndex_ = 0;
     
     int x_ = PUZZLE_X;
     int y_ = PUZZLE_Y;
@@ -49,9 +58,14 @@ class Puzzle {
     int cursorIndex_ = 0;
     int activeGemCount_ = 0;
 
+    Weapon& weaponAtIndex_(int);
+    int indexOfWeapon_(Weapon&);
+
+    bool isClearingGems_();
     bool previewIsEmpty_();
     void populatePreview_();
-    void activatePreviewGems_();
+    bool previewIsReadyToActivate_();
+    void activatePreview_();
 
     void renderPreviewDivider_();
 };
