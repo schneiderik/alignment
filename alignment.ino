@@ -74,6 +74,8 @@
 #define PREVIEW_GEM_X 92
 #define PREVIEW_THRESHOLD_X 89
 
+#define INITIAL_GAME_SPEED 8
+
 Arduboy2 arduboy;
 Sprites sprites;
 ArduboyTones sound(arduboy.audio.enabled);
@@ -112,6 +114,7 @@ int titleState = TITLE_STATE_PLAY;
 int questCursorOffset = 0;
 int questCursorVelocity = -1;
 unsigned long int score = 0;
+int gameSpeed = INITIAL_GAME_SPEED;
 int enemyType = ENEMY_TYPE_SKELETON;
 int enemyHealth = ENEMY_DATA[enemyType][ENEMY_DATA_HEALTH];
 int enemyHealthBarWidth = ENEMY_HEALTH_BAR_WIDTH_MAX;
@@ -330,7 +333,7 @@ void handleInput() {
 //////////////////////////////
 
 void animateQuestCursor() {
-  if (arduboy.everyXFrames(10)) {
+  if (arduboy.everyXFrames(gameSpeed)) {
     if (questCursorOffset > 0) questCursorVelocity = -1;
     if (questCursorOffset < 0) questCursorVelocity = 1;
     questCursorOffset += questCursorVelocity;
@@ -365,7 +368,7 @@ int randomUniqueRow() {
 }
 
 void adjustGemX(int* gem) {
-  if (arduboy.everyXFrames(10) && gemXOffsets[weapons[gem[GEM_DATA_ROW]][WEAPON_DATA_GEM_COUNT]] < gem[GEM_DATA_X]) { 
+  if (arduboy.everyXFrames(gameSpeed) && gemXOffsets[weapons[gem[GEM_DATA_ROW]][WEAPON_DATA_GEM_COUNT]] < gem[GEM_DATA_X]) { 
     gem[GEM_DATA_X] -= 3;
   }    
 }
@@ -524,7 +527,7 @@ void update() {
       handleEnemyDefeated();
       adjustWeapons();
       adjustFallingGems();
-      if (arduboy.everyXFrames(10)) {
+      if (arduboy.everyXFrames(gameSpeed)) {
         if (shouldGeneratePreviewGems()) generatePreviewGems();        
         if (shouldDropPreviewGems()) dropPreviewGems();
         resolveFallingGems();
