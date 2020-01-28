@@ -93,8 +93,8 @@ const int ENEMY_DATA[ENEMY_COUNT][ENEMY_DATA_LENGTH] = {
   {150, -1, -1, 1, 0, 77, 24},
   {250, 1, -1, -1, -1, 101, 6}
 };
-const int weaponYOffsets[WEAPON_COUNT] = {15, 27, 39, 51};
-const int gemYOffsets[WEAPON_COUNT] = {16, 28, 40, 52};
+const int weaponYOffsets[WEAPON_COUNT] = {13, 25, 37, 49};
+const int gemYOffsets[WEAPON_COUNT] = {14, 26, 38, 50};
 const int gemXOffsets[WEAPON_GEMS_MAX + 1] = {17, 29, 41, 53, 65, 77, 89};
 const int defaultWeapons[WEAPON_COUNT][WEAPON_DATA_LENGTH] = {
   {0, weaponYOffsets[0], 0},
@@ -547,11 +547,15 @@ void renderTitleCursor(int x, int y, int textWidth) {
   arduboy.fillRect(x + textWidth + 3, y + 1, 2, 2);
 }
 
-void renderScoreRight(int x, int y) {
+void renderScoreRight(int x, int y, bool black) {
   unsigned long int score_ = score;
 
   if (score_ == 0) {
-    sprites.drawOverwrite(x, y, numberSprite, 0);
+    if (black) {
+      sprites.drawErase(x, y, numberSprite, 0);
+    } else {
+      sprites.drawOverwrite(x, y, numberSprite, 0);
+    }
     return;
   }
 
@@ -560,19 +564,28 @@ void renderScoreRight(int x, int y) {
   while (score_) {
     int digit = score_ % 10;
 
-    sprites.drawOverwrite(
-      x - (index * (numberSprite[0] + 2)),
-      y,
-      numberSprite,
-      digit
-    );
+    if (black) {
+     sprites.drawErase(
+        x - (index * (numberSprite[0] + 2)),
+        y,
+        numberSprite,
+        digit
+      );     
+    } else {
+      sprites.drawOverwrite(
+        x - (index * (numberSprite[0] + 2)),
+        y,
+        numberSprite,
+        digit
+      );
+    }
 
     score_ /= 10;
     index++;
   }
 }
 
-void renderScoreCenter(int x, int y) {
+void renderScoreCenter(int x, int y, bool black) {
   unsigned long int score_ = score;
   int digitCount = 0;
   
@@ -581,7 +594,7 @@ void renderScoreCenter(int x, int y) {
   int digitWidth = numberSprite[0] + 2;
   int scoreWidth = (digitCount * digitWidth) - 2;
   
-  renderScoreRight(x + (scoreWidth / 2), y);
+  renderScoreRight(x + (scoreWidth / 2), y, black);
 }
 
 void render() {
@@ -640,9 +653,12 @@ void render() {
       } 
       break;
     case GAME_STATE_BATTLE:
+      // Render Top Panel
+      arduboy.fillRect(0, 0, 128, 10);
+      
       // Render Health
       for (int i = 0; i < HEALTH_MAX; i++) {  
-        sprites.drawOverwrite(
+        sprites.drawErase(
           2 + (i * (heartSprite[0] + 1)),
           2,
           heartSprite,
@@ -650,10 +666,10 @@ void render() {
         );
       }
 
-      renderScoreRight(97, 2);
+      renderScoreRight(121, 2, true);
       
       // Render Preview Divider
-      arduboy.fillRect(89, 16, 1, 48);
+      arduboy.fillRect(89, 14, 1, 48);
 
       // Render Weapons
       for (int weaponIndex = 0; weaponIndex < WEAPON_COUNT; weaponIndex++) {
@@ -706,11 +722,8 @@ void render() {
         );
       }
 
-      // Render Enemy Panel
-      arduboy.fillRect(104, 0, 24, 64);
-
       // Render Enemy Portrait
-      sprites.drawOverwrite(106, 2, enemySprite, enemyType);
+      sprites.drawOverwrite(106, 12, enemySprite, enemyType);
 
       // Render Enemy Health
       arduboy.fillRect(106, 60, enemyHealthBarWidth, 2, 0);
@@ -722,13 +735,13 @@ void render() {
       sprites.drawOverwrite(21, 3, victoryImage, 0);
       sprites.drawOverwrite(6, 33, winTextImage, 0);    
       sprites.drawOverwrite(53, 46, dividerImage, 0);
-      renderScoreCenter(64, 54);
+      renderScoreCenter(64, 54, false);
       break;
     case GAME_STATE_LOSE:
       sprites.drawOverwrite(23, 9, youDiedImage, 0);
       sprites.drawOverwrite(48, 35, tryAgainImage, 0);   
       sprites.drawOverwrite(53, 42, dividerImage, 0);
-      renderScoreCenter(64, 50);
+      renderScoreCenter(64, 50, false);
       break;
   }
 }
