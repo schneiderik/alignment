@@ -142,6 +142,24 @@ void setup() {
 
 
 //////////////////////////////
+// SOUNDS
+//////////////////////////////
+
+void confirmSound() {
+  sound.tone(NOTE_C5, 50);
+}
+
+void moveSound() {
+  sound.tone(NOTE_E4, 50);
+}
+
+void swapSound() {
+  sound.tone(NOTE_C5, 100);
+}
+
+
+
+//////////////////////////////
 // HELPERS
 //////////////////////////////
 
@@ -185,14 +203,22 @@ void startBattle() {
   for (int i = 0; i < WEAPON_COUNT; i++) {
     copyArray(weapons[i], defaultWeapons[i], WEAPON_DATA_LENGTH);
   }
+  
+  confirmSound();
 }
 
 void decrementTitleState() {
-  if (titleState > 0) titleState--;  
+  if (titleState > 0) {
+    titleState--;  
+    moveSound();
+  }
 }
 
 void incrementTitleState() {
-  if (titleState < LAST_TITLE_STATE) titleState++;
+  if (titleState < LAST_TITLE_STATE) {
+    titleState++;
+    moveSound();
+  }
 }
 
 void selectTitleOption() {
@@ -212,15 +238,22 @@ void selectTitleOption() {
     
       arduboy.audio.saveOnOff();
       break;
-  };  
+  };
+  confirmSound();
 }
 
 void decrementBattleCursorIndex() {
-  if (battleCursorIndex > BATTLE_CURSOR_MIN) battleCursorIndex--;  
+  if (battleCursorIndex > BATTLE_CURSOR_MIN) {
+    battleCursorIndex--;  
+    moveSound();
+  }
 }
 
 void incrementBattleCursorIndex() {
-  if (battleCursorIndex < BATTLE_CURSOR_MAX) battleCursorIndex++;
+  if (battleCursorIndex < BATTLE_CURSOR_MAX) {
+    battleCursorIndex++;
+    moveSound();
+  }
 }
 
 void swapWeapons() {
@@ -243,6 +276,8 @@ void swapWeapons() {
     } else if (fallingGemInRow2 && fallingGemMustMoveToRow1) {
       fallingGem[GEM_DATA_ROW] = battleCursorIndex;
     }
+
+    swapSound();
   }
 
   swapArrays(weapon1, weapon2, WEAPON_DATA_LENGTH);
@@ -264,7 +299,10 @@ void handleInput() {
       if (arduboy.justPressed(A_BUTTON)) selectTitleOption();     
       break;
     case GAME_STATE_INFO:
-      if (arduboy.justPressed(A_BUTTON)) gameState = GAME_STATE_TITLE;
+      if (arduboy.justPressed(A_BUTTON)) {
+        gameState = GAME_STATE_TITLE;
+        confirmSound();
+      }
       break;
     case GAME_STATE_QUEST:
       if (arduboy.justPressed(A_BUTTON)) startBattle();
@@ -538,7 +576,7 @@ void renderScoreCenter(int x, int y) {
   int digitWidth = numberSprite[0] + 2;
   int scoreWidth = (digitCount * digitWidth) - 2;
   
-  renderScoreRight(x - (scoreWidth / 2), y);
+  renderScoreRight(x + (scoreWidth / 2), y);
 }
 
 void render() {
