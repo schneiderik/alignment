@@ -60,7 +60,7 @@
 
 #define WEAPON_GEMS_MAX 6
 
-#define GEM_TYPE_COUNT 4
+#define GEM_TYPE_COUNT 5
 
 #define GEM_DATA_LENGTH 4
 #define GEM_DATA_TYPE 0
@@ -179,6 +179,8 @@ void swapArrays(int *ptr1, int *ptr2, int arrLength) {
 int* weaponForGem(int* gem) {
   return weapons[gem[GEM_DATA_ROW]];
 }
+
+
 
 //////////////////////////////
 // HANDLE INPUT
@@ -569,7 +571,7 @@ void renderScoreRight(int x, int y) {
 
 void renderScoreCenter(int x, int y) {
   unsigned long int score_ = score;
-  int digitCount = 1;
+  int digitCount = 0;
   
   while (score_ /= 10) digitCount++;
   
