@@ -31,8 +31,9 @@ Gems decend one to three at a time down columns onto the play area. Swap columns
 - [x] Add weapon art under columns (Sword, Bow & Arrow, Magic Staff, Hammer)
 - [x] Add enemy art
 - [x] Add match animation
-- [ ] Add weapon clear animation
-- [ ] Add damage animation (flash total damage over enemy, then reduce health bar)
+- [x] Add weapon clear animation
+- [ ] Make sure multiple weapons can clear at the same time.
+- [ ] Add damage animation (flash enemy, display damage over enemy (ex. -5))
 
 ### Advanced Damage Calculation, Enemy Vulnerabilities/Resistances
 - [ ] Track what weapons inflict damage.
@@ -43,6 +44,23 @@ Gems decend one to three at a time down columns onto the play area. Swap columns
 - [x] Add art for five total enemies.
 - [x] Transition between enemies on win scenario.
 - [x] Add custom poperties for each enemy (Max Health, Resistances, Vulnerabilities)
+
+### Game Dev
+- [ ] Manage Gems as class instances instead of arrays.
+- [ ] Manage Weapons as class instances instead of arrays.
+- [ ] Separate Game States into classes with handleInput, update, and render instance methods.
+
+### Enemy Spells
+- [ ] Allow Skeleton to block random attacks/matches
+- [ ] Display "Block" text over Skeleton when attack is blocked
+- [ ] Allow Orc to randomly send 3 gems
+- [ ] Display "Smash" text over Orc when 3 gems are previewed
+- [ ] Allow Golem to become invulnerable to all non-magic attacks for 10 seconds.
+- [ ] Display "Defense" text over Golem when spell is cast, and display barrier while spell is in affect.
+- [ ] Allow Demon to speed up game for 15 seconds.
+- [ ] Display "Attack" over Demon when spell is cast.
+- [ ] Allow Sorcerer to randomly teleport falling gems to new positions.
+- [ ] Display "Teleport" over Sorcerer when spell is cast.
 
 ## Inspiration
 - Yoshi for Gameboy
