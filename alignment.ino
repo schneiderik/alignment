@@ -71,6 +71,7 @@
 #define FALLING_GEMS_MAX 2
 #define PREVIEW_GEMS_MAX 2
 #define POPPING_GEMS_MAX 4
+#define CLEARING_GEMS_MAX 14
 
 #define PREVIEW_GEM_X 92
 #define PREVIEW_THRESHOLD_X 89
@@ -82,7 +83,6 @@
 
 #define GRAVITY_ACCELERATION 1
 
-#define CLEARING_GEMS_COUNT 7
 #define CLEARING_GEM_ANIMATION_DATA_LENGTH 2
 #define CLEARING_GEM_ANIMATION_DATA_VELOCITY_X 0
 #define CLEARING_GEM_ANIMATION_DATA_VELOCITY_Y 1
@@ -138,12 +138,12 @@ int weapons[WEAPON_COUNT][WEAPON_DATA_LENGTH];
 int previewGemCount = 0;
 int fallingGemCount = 0;
 int poppingGemCount = 0;
+int clearingGemCount = 0;
 int previewGems[PREVIEW_GEMS_MAX][GEM_DATA_LENGTH];
 int fallingGems[FALLING_GEMS_MAX][GEM_DATA_LENGTH];
 int poppingGems[POPPING_GEMS_MAX][GEM_DATA_LENGTH];
-boolean gemsClearing = false;
-int clearingGems[CLEARING_GEMS_COUNT][GEM_DATA_LENGTH];
-int clearingGemAnimationData[CLEARING_GEMS_COUNT][CLEARING_GEM_ANIMATION_DATA_LENGTH];
+int clearingGems[CLEARING_GEMS_MAX][GEM_DATA_LENGTH];
+int clearingGemAnimationData[CLEARING_GEMS_MAX][CLEARING_GEM_ANIMATION_DATA_LENGTH];
 
 
 
@@ -225,7 +225,7 @@ void startBattle() {
   fallingGemCount = 0;
   previewGemCount = 0;
   poppingGemCount = 0;
-  gemsClearing = false;
+  clearingGemCount = 0;
 
   for (int i = 0; i < WEAPON_COUNT; i++) {
     copyArray(weapons[i], defaultWeapons[i], WEAPON_DATA_LENGTH);
@@ -337,7 +337,7 @@ void handleInput() {
       break;
     case GAME_STATE_BATTLE:
       if (arduboy.justPressed(RIGHT_BUTTON)) paused = !paused;
-      if (paused || gemsClearing) return;
+      if (paused || clearingGemCount > 0) return;
       if (arduboy.justPressed(UP_BUTTON)) decrementBattleCursorIndex();
       if (arduboy.justPressed(DOWN_BUTTON)) incrementBattleCursorIndex();
       if (arduboy.justPressed(A_BUTTON)) swapWeapons();
@@ -480,16 +480,17 @@ void handleFullWeapon(int* weapon, int* fallingGem) {
   int weaponType = weapon[WEAPON_DATA_TYPE];
   
   for (int i = 0; i < weaponGemCount; i++) {
-    copyArray(clearingGems[i], weaponGems[weaponType][i], GEM_DATA_LENGTH);
-    clearingGemAnimationData[i][CLEARING_GEM_ANIMATION_DATA_VELOCITY_X] = random(0, 3) - 1;
-    clearingGemAnimationData[i][CLEARING_GEM_ANIMATION_DATA_VELOCITY_Y] = random(0, 3) - 2;
+    copyArray(clearingGems[clearingGemCount], weaponGems[weaponType][i], GEM_DATA_LENGTH);
+    clearingGemAnimationData[clearingGemCount][CLEARING_GEM_ANIMATION_DATA_VELOCITY_X] = random(0, 3) - 1;
+    clearingGemAnimationData[clearingGemCount][CLEARING_GEM_ANIMATION_DATA_VELOCITY_Y] = random(0, 3) - 2;
+    clearingGemCount++;
   }
 
-  copyArray(clearingGems[6], fallingGem, GEM_DATA_LENGTH);
-  clearingGemAnimationData[6][CLEARING_GEM_ANIMATION_DATA_VELOCITY_X] = random(0, 3) - 1;
-  clearingGemAnimationData[6][CLEARING_GEM_ANIMATION_DATA_VELOCITY_Y] = random(0, 3) - 2;
+  copyArray(clearingGems[clearingGemCount], fallingGem, GEM_DATA_LENGTH);
+  clearingGemAnimationData[clearingGemCount][CLEARING_GEM_ANIMATION_DATA_VELOCITY_X] = random(0, 3) - 1;
+  clearingGemAnimationData[clearingGemCount][CLEARING_GEM_ANIMATION_DATA_VELOCITY_Y] = random(0, 3) - 2;
+  clearingGemCount++;
   
-  gemsClearing = true;
   weapon[WEAPON_DATA_GEM_COUNT] = 0;
   health--;
   loseHeartSound();
@@ -519,6 +520,8 @@ void handleMatch(int* weapon, int* fallingGem) {
   copyArray(poppingGems[poppingGemCount], weaponGems[weapon[WEAPON_DATA_TYPE]][weapon[WEAPON_DATA_GEM_COUNT]], GEM_DATA_LENGTH);
   poppingGems[poppingGemCount][GEM_DATA_TYPE] = GEM_POPPING_ANIMATION_START_FRAME;
   poppingGemCount++;
+  
+  confirmSound();
 }
 
 void handleNoMatch(int* weapon, int* fallingGem) {
@@ -581,15 +584,19 @@ void popGems() {
 }
 
 void clearGems() {
-  if (arduboy.everyXFrames(5)) {
-    gemsClearing = false;
-  
-    for (int i = 0; i < CLEARING_GEMS_COUNT; i++) {
+  if (arduboy.everyXFrames(5)) {  
+    for (int i = 0; i < clearingGemCount; i++) {
       if (clearingGems[i][GEM_DATA_Y] < SCREEN_HEIGHT) {
         clearingGems[i][GEM_DATA_Y] += clearingGemAnimationData[i][CLEARING_GEM_ANIMATION_DATA_VELOCITY_Y];
         clearingGems[i][GEM_DATA_X] += clearingGemAnimationData[i][CLEARING_GEM_ANIMATION_DATA_VELOCITY_X];
         clearingGemAnimationData[i][CLEARING_GEM_ANIMATION_DATA_VELOCITY_Y] += GRAVITY_ACCELERATION;
-        gemsClearing = true;
+      } else {
+        for(int j = i + 1; j < clearingGemCount; j++) {
+          copyArray(clearingGems[i], clearingGems[j], GEM_DATA_LENGTH);
+        }
+        
+        clearingGemCount--;
+        i--;
       }
     }
   }
@@ -605,7 +612,7 @@ void update() {
       handlePlayerDefeated();
       handleEnemyDefeated();
       adjustWeapons();
-      if (gemsClearing) {
+      if (clearingGemCount > 0) {
         clearGems();
       } else {
         popGems();
@@ -828,15 +835,13 @@ void render() {
       // Render Enemy Health
       arduboy.fillRect(106, 62, enemyHealthBarWidth, 1, 1);
 
-      if (gemsClearing) {
-        for (int i = 0; i < CLEARING_GEMS_COUNT; i++) {      
-          sprites.drawPlusMask(
-            clearingGems[i][GEM_DATA_X], 
-            clearingGems[i][GEM_DATA_Y], 
-            gemSpritePlusMask, 
-            clearingGems[i][GEM_DATA_TYPE]
-          );     
-        }
+      for (int i = 0; i < clearingGemCount; i++) {      
+        sprites.drawPlusMask(
+          clearingGems[i][GEM_DATA_X], 
+          clearingGems[i][GEM_DATA_Y], 
+          gemSpritePlusMask, 
+          clearingGems[i][GEM_DATA_TYPE]
+        );     
       }
 
       // Render Paused

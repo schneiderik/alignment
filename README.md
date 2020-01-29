@@ -32,7 +32,7 @@ Gems decend one to three at a time down columns onto the play area. Swap columns
 - [x] Add enemy art
 - [x] Add match animation
 - [x] Add weapon clear animation
-- [ ] Make sure multiple weapons can clear at the same time.
+- [x] Make sure multiple weapons can clear at the same time.
 - [ ] Add damage animation (flash enemy, display damage over enemy (ex. -5))
 
 ### Advanced Damage Calculation, Enemy Vulnerabilities/Resistances
