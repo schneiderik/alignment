@@ -499,11 +499,16 @@ void resolveFallingGems() {
     
     if (shouldResolveFallingGem(fallingGem)) {
       int* weapon = weaponForGem(fallingGem);
-  
-      if (weaponIsFull(weapon)) {
-        handleFullWeapon(weapon);
+
+
+      if (isMatch(weapon, fallingGem)) {
+        handleMatch(weapon);
       } else {
-        isMatch(weapon, fallingGem) ? handleMatch(weapon) : handleNoMatch(weapon, fallingGem);
+        if (weaponIsFull(weapon)) {
+          handleFullWeapon(weapon);
+        } else {
+          handleNoMatch(weapon, fallingGem);
+        }        
       }
 
       for(int j = i; j < fallingGemCount; j++) {
