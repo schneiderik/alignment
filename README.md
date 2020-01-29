@@ -29,7 +29,7 @@ Gems decend one to three at a time down columns onto the play area. Swap columns
 
 ### Art/Animation
 - [x] Add weapon art under columns (Sword, Bow & Arrow, Magic Staff, Hammer)
-- [ ] Add enemy art
+- [x] Add enemy art
 - [ ] Add match animation
 - [ ] Add weapon clear animation
 - [ ] Add damage animation (flash total damage over enemy, then reduce health bar)
@@ -40,7 +40,7 @@ Gems decend one to three at a time down columns onto the play area. Swap columns
 - [ ] Alter damage based on enemy properties
 
 ### Additional Enemies
-- [ ] Add art for five total enemies.
+- [x] Add art for five total enemies.
 - [x] Transition between enemies on win scenario.
 - [x] Add custom poperties for each enemy (Max Health, Resistances, Vulnerabilities)
 
