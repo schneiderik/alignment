@@ -70,11 +70,15 @@
 
 #define FALLING_GEM_MAX 2
 #define PREVIEW_GEM_MAX 2
+#define POPPING_GEM_MAX 4
 
 #define PREVIEW_GEM_X 92
 #define PREVIEW_THRESHOLD_X 89
 
 #define INITIAL_GAME_SPEED 8
+
+#define GEM_POPPING_ANIMATION_START_FRAME 5
+#define GEM_POPPING_ANIMATION_END_FRAME 7
 
 Arduboy2 arduboy;
 Sprites sprites;
@@ -125,8 +129,10 @@ int weaponGems[WEAPON_COUNT][WEAPON_GEMS_MAX][GEM_DATA_LENGTH];
 int weapons[WEAPON_COUNT][WEAPON_DATA_LENGTH];
 int previewGemCount = 0;
 int fallingGemCount = 0;
+int poppingGemCount = 0;
 int previewGems[PREVIEW_GEM_MAX][GEM_DATA_LENGTH];
 int fallingGems[FALLING_GEM_MAX][GEM_DATA_LENGTH];
+int poppingGems[POPPING_GEM_MAX][GEM_DATA_LENGTH];
 
 
 
@@ -468,11 +474,19 @@ bool isMatch(int* weapon, int* fallingGem) {
   return weaponTopGem[GEM_DATA_TYPE] == fallingGem[GEM_DATA_TYPE];
 }
 
-void handleMatch(int* weapon) {
+void handleMatch(int* weapon, int* fallingGem) {
   weapon[WEAPON_DATA_GEM_COUNT]--;
   enemyHealth -= 5;
   score += 100;
   enemyHealthBarWidth = (int)ceil(((float)enemyHealth / (float)ENEMY_DATA[enemyType][ENEMY_DATA_HEALTH]) * (float)ENEMY_HEALTH_BAR_WIDTH_MAX);
+
+  copyArray(poppingGems[poppingGemCount], fallingGem, GEM_DATA_LENGTH);
+  poppingGems[poppingGemCount][GEM_DATA_TYPE] = GEM_POPPING_ANIMATION_START_FRAME;
+  poppingGemCount++;
+  
+  copyArray(poppingGems[poppingGemCount], weaponGems[weapon[WEAPON_DATA_TYPE]][weapon[WEAPON_DATA_GEM_COUNT]], GEM_DATA_LENGTH);
+  poppingGems[poppingGemCount][GEM_DATA_TYPE] = GEM_POPPING_ANIMATION_START_FRAME;
+  poppingGemCount++;
 }
 
 void handleNoMatch(int* weapon, int* fallingGem) {
@@ -502,7 +516,7 @@ void resolveFallingGems() {
 
 
       if (isMatch(weapon, fallingGem)) {
-        handleMatch(weapon);
+        handleMatch(weapon, fallingGem);
       } else {
         if (weaponIsFull(weapon)) {
           handleFullWeapon(weapon);
@@ -521,6 +535,23 @@ void resolveFallingGems() {
   }  
 }
 
+void popGems() {
+  if (arduboy.everyXFrames(5)) {
+    for (int i = 0; i < poppingGemCount; i++) {
+      if (poppingGems[i][GEM_DATA_TYPE] == GEM_POPPING_ANIMATION_END_FRAME) {
+        for(int j = i + 1; j < poppingGemCount; j++) {
+          copyArray(poppingGems[i], poppingGems[j], GEM_DATA_LENGTH);
+        }
+        
+        poppingGemCount--;
+        i--;
+      } else {
+        poppingGems[i][GEM_DATA_TYPE]++;
+      }
+    }
+  }
+}
+
 void update() {
   switch (gameState) {
     case GAME_STATE_QUEST:
@@ -531,12 +562,13 @@ void update() {
       handlePlayerDefeated();
       handleEnemyDefeated();
       adjustWeapons();
+      popGems();
       adjustFallingGems();
       if (arduboy.everyXFrames(gameSpeed)) {
         if (shouldGeneratePreviewGems()) generatePreviewGems();        
         if (shouldDropPreviewGems()) dropPreviewGems();
         resolveFallingGems();
-      }
+      } 
       break;
   }  
 }
@@ -708,6 +740,15 @@ void render() {
             gem[GEM_DATA_TYPE]
           );          
         }
+      }
+
+      for (int i = 0; i < poppingGemCount; i++) {      
+        sprites.drawPlusMask(
+          poppingGems[i][GEM_DATA_X], 
+          poppingGems[i][GEM_DATA_Y], 
+          gemSpritePlusMask, 
+          poppingGems[i][GEM_DATA_TYPE]
+        );     
       }
 
       // Render Preview Gems
