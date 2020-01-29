@@ -87,11 +87,11 @@ ArduboyTones sound(arduboy.audio.enabled);
 //////////////////////////////
 
 const int ENEMY_DATA[ENEMY_COUNT][ENEMY_DATA_LENGTH] = {
-  {100, 0, 0, 0, 0, 5, 6},
-  {200, 0, 0, 0, 0, 29, 24},
-  {200, 0, 1, -1, 1, 53, 6},
-  {150, -1, -1, 1, 0, 77, 24},
-  {250, 1, -1, -1, -1, 101, 6}
+  {100, 0, 0, 0, 0, 5, 16},
+  {200, 0, 0, 0, 0, 29, 31},
+  {200, 0, 1, -1, 1, 53, 16},
+  {150, -1, -1, 1, 0, 77, 31},
+  {250, 1, -1, -1, -1, 101, 16}
 };
 const int weaponYOffsets[WEAPON_COUNT] = {13, 25, 37, 49};
 const int gemYOffsets[WEAPON_COUNT] = {14, 26, 38, 50};
@@ -630,6 +630,8 @@ void render() {
       sprites.drawOverwrite(11, 4, infoImage, 0);
       break;
     case GAME_STATE_QUEST:
+      sprites.drawOverwrite(32, 2, questText, 0);   
+
       // Render Quest Cursor
       sprites.drawOverwrite(
         ENEMY_DATA[enemyType][ENEMY_DATA_QUEST_X] + 8,
@@ -637,6 +639,11 @@ void render() {
         questCursorImage,
         0
       );
+
+      sprites.drawOverwrite(16, 50, pathImage, 0);
+      sprites.drawOverwrite(54, 50, pathReverseImage, 0);
+      sprites.drawOverwrite(64, 50, pathImage, 0);
+      sprites.drawOverwrite(102, 50, pathReverseImage, 0);  
 
       // Render Quest Enemies
       for (int i = 0; i < ENEMY_COUNT; i++) {
@@ -723,10 +730,10 @@ void render() {
       }
 
       // Render Enemy Portrait
-      sprites.drawOverwrite(106, 12, enemySprite, enemyType);
+      sprites.drawOverwrite(104, 12, enemySprite, enemyType);
 
       // Render Enemy Health
-      arduboy.fillRect(106, 60, enemyHealthBarWidth, 2, 0);
+      arduboy.fillRect(106, 62, enemyHealthBarWidth, 1, 1);
 
       // Render Paused
       if (paused) sprites.drawOverwrite(50, 28, pausedTextImage, 0); 
