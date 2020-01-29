@@ -30,7 +30,7 @@ Gems decend one to three at a time down columns onto the play area. Swap columns
 ### Art/Animation
 - [x] Add weapon art under columns (Sword, Bow & Arrow, Magic Staff, Hammer)
 - [x] Add enemy art
-- [ ] Add match animation
+- [x] Add match animation
 - [ ] Add weapon clear animation
 - [ ] Add damage animation (flash total damage over enemy, then reduce health bar)
 
