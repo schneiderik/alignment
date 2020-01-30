@@ -87,6 +87,12 @@
 #define CLEARING_GEM_ANIMATION_DATA_VELOCITY_X 0
 #define CLEARING_GEM_ANIMATION_DATA_VELOCITY_Y 1
 
+#define ENEMY_TAKE_DAMAGE_ANIMATION_FRAME_LENGTH 3
+#define ENEMY_TAKE_DAMAGE_ANIMATION_START_FRAME 0
+#define ENEMY_TAKE_DAMAGE_ANIMATION_END_FRAME 10
+#define ENEMY_TAKE_DAMAGE_FLASH_LENGTH 5
+#define ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX 5
+
 
 Arduboy2 arduboy;
 Sprites sprites;
@@ -144,6 +150,10 @@ int fallingGems[FALLING_GEMS_MAX][GEM_DATA_LENGTH];
 int poppingGems[POPPING_GEMS_MAX][GEM_DATA_LENGTH];
 int clearingGems[CLEARING_GEMS_MAX][GEM_DATA_LENGTH];
 int clearingGemAnimationData[CLEARING_GEMS_MAX][CLEARING_GEM_ANIMATION_DATA_LENGTH];
+int enemyTakeDamageAnimationFrame = ENEMY_TAKE_DAMAGE_ANIMATION_END_FRAME;
+int enemyTakeDamageFlashCount = ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX;
+int enemyPortraitOffset = 0;
+int enemyPortraitVelocity = 1;
 
 
 
@@ -226,6 +236,10 @@ void startBattle() {
   previewGemCount = 0;
   poppingGemCount = 0;
   clearingGemCount = 0;
+  enemyTakeDamageAnimationFrame = ENEMY_TAKE_DAMAGE_ANIMATION_END_FRAME;
+  enemyTakeDamageFlashCount = ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX;
+  enemyPortraitOffset = 0;
+  enemyPortraitVelocity = 1;
 
   for (int i = 0; i < WEAPON_COUNT; i++) {
     copyArray(weapons[i], defaultWeapons[i], WEAPON_DATA_LENGTH);
@@ -522,6 +536,9 @@ void handleMatch(int* weapon, int* fallingGem) {
   poppingGemCount++;
   
   confirmSound();
+
+  enemyTakeDamageFlashCount = 0;
+  enemyTakeDamageAnimationFrame = ENEMY_TAKE_DAMAGE_ANIMATION_START_FRAME;
 }
 
 void handleNoMatch(int* weapon, int* fallingGem) {
@@ -612,6 +629,20 @@ void update() {
       handlePlayerDefeated();
       handleEnemyDefeated();
       adjustWeapons();
+      
+      if (arduboy.everyXFrames(ENEMY_TAKE_DAMAGE_FLASH_LENGTH) && enemyTakeDamageFlashCount < ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX) enemyTakeDamageFlashCount++;
+
+      if (arduboy.everyXFrames(ENEMY_TAKE_DAMAGE_ANIMATION_FRAME_LENGTH)) {
+        if (enemyTakeDamageAnimationFrame < ENEMY_TAKE_DAMAGE_ANIMATION_END_FRAME) {
+          if (enemyPortraitOffset > 1) enemyPortraitVelocity = -1;
+          if (enemyPortraitOffset < -1) enemyPortraitVelocity = 1;
+          enemyPortraitOffset += enemyPortraitVelocity;
+          enemyTakeDamageAnimationFrame++;
+        } else {
+          enemyPortraitOffset = 0;
+        }
+      }
+      
       if (clearingGemCount > 0) {
         clearGems();
       } else {
@@ -830,7 +861,9 @@ void render() {
       }
 
       // Render Enemy Portrait
-      sprites.drawOverwrite(104, 12, enemySprite, enemyType);
+      if (enemyTakeDamageFlashCount == ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX || enemyTakeDamageFlashCount % 2) {
+        sprites.drawOverwrite(104 + enemyPortraitOffset, 12, enemySprite, enemyType);
+      }
 
       // Render Enemy Health
       arduboy.fillRect(106, 62, enemyHealthBarWidth, 1, 1);
