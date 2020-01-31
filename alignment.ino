@@ -1,6 +1,7 @@
 #include <Arduboy2.h>
 #include <ArduboyTones.h>
 #include "images.h"
+#include "Gem.h"
 
 #define FPS 60
 #define INTERVAL_LENGTH 30
@@ -152,7 +153,7 @@ int previewGemCount = 0;
 int fallingGemCount = 0;
 int poppingGemCount = 0;
 int clearingGemCount = 0;
-int previewGems[PREVIEW_GEMS_MAX][GEM_DATA_LENGTH];
+Gem previewGems[PREVIEW_GEMS_MAX];
 int fallingGems[FALLING_GEMS_MAX][GEM_DATA_LENGTH];
 int poppingGems[POPPING_GEMS_MAX][GEM_DATA_LENGTH];
 int clearingGems[CLEARING_GEMS_MAX][GEM_DATA_LENGTH];
@@ -408,7 +409,7 @@ int randomUniqueRow() {
   bool existing = false;
   
   for (int i = 0; i < previewGemCount; i++) {
-    if (previewGems[i][GEM_DATA_ROW] == num) existing = true;
+    if (previewGems[i].row == num) existing = true;
   }
 
   return existing ? randomUniqueRow() : num;
@@ -458,12 +459,12 @@ bool shouldGeneratePreviewGems() {
 }
 
 void generatePreviewGem() {
-  int* previewGem = previewGems[previewGemCount];
+  Gem& previewGem = previewGems[previewGemCount];
 
-  previewGem[GEM_DATA_TYPE] = random(0, GEM_TYPE_COUNT);
-  previewGem[GEM_DATA_ROW] = randomUniqueRow();
-  previewGem[GEM_DATA_X] = PREVIEW_GEM_X;
-  previewGem[GEM_DATA_Y] = gemYOffsets[previewGem[GEM_DATA_ROW]];
+  previewGem.type = random(0, GEM_TYPE_COUNT);
+  previewGem.row = randomUniqueRow();
+  previewGem.x = PREVIEW_GEM_X;
+  previewGem.y = gemYOffsets[previewGem.row];
   previewGemCount++;  
 }
 
@@ -486,7 +487,10 @@ bool shouldDropPreviewGems() {
 void dropPreviewGems() {
   int limit = previewGemCount;
   for (int i = 0; i < limit; i++) {
-    copyArray(fallingGems[i], previewGems[i], GEM_DATA_LENGTH);
+    fallingGems[i][GEM_DATA_TYPE] = previewGems[i].type;
+    fallingGems[i][GEM_DATA_ROW] = previewGems[i].row;
+    fallingGems[i][GEM_DATA_X] = previewGems[i].x;
+    fallingGems[i][GEM_DATA_Y] = previewGems[i].y;
     fallingGemCount++;
     previewGemCount--;
   }
@@ -570,13 +574,12 @@ bool weaponIsFull(int* weapon) {
   return weapon[WEAPON_DATA_GEM_COUNT] == WEAPON_GEMS_MAX;
 }
 
-void resolveFallingGems() {
+void resolveFallingGems() {  
   for(int i = 0; i < fallingGemCount; i++) {
     int* fallingGem = fallingGems[i];
     
     if (shouldResolveFallingGem(fallingGem)) {
       int* weapon = weaponForGem(fallingGem);
-
 
       if (isMatch(weapon, fallingGem)) {
         handleMatch(weapon, fallingGem);
@@ -869,13 +872,13 @@ void render() {
 
       // Render Preview Gems
       for(int previewGemIndex = 0; previewGemIndex < PREVIEW_GEMS_MAX; previewGemIndex++) {
-        int* previewGem = previewGems[previewGemIndex];
+        Gem& previewGem = previewGems[previewGemIndex];
         
         sprites.drawPlusMask(
-          previewGem[GEM_DATA_X], 
-          gemYOffsets[previewGem[GEM_DATA_ROW]], 
+          previewGem.x, 
+          gemYOffsets[previewGem.row], 
           gemSpritePlusMask, 
-          previewGem[GEM_DATA_TYPE]
+          previewGem.type
         );
       }
 
