@@ -249,6 +249,7 @@ void startBattle() {
   enemyTakeDamageFlashCount = ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX;
   enemyPortraitOffset = 0;
   enemyPortraitVelocity = 1;
+  enemyTakeDamageIndicatorFrame = ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME;
 
   for (int i = 0; i < WEAPON_COUNT; i++) {
     copyArray(weapons[i], defaultWeapons[i], WEAPON_DATA_LENGTH);
@@ -720,7 +721,7 @@ int numberWidth(int num) {
 
 void renderNumberAlignRight(int num, int x, int y, bool black) {
   if (num == 0) {
-    renderDigit(0, x, y, black);
+    renderDigit(0, x - numberSprite[0], y, black);
     return;
   }
 
@@ -732,21 +733,21 @@ void renderNumberAlignRight(int num, int x, int y, bool black) {
     int digit = absNum % 10;
     offset = (index * (numberSprite[0] + 2));
 
-    renderDigit(digit, x - offset, y, black);  
+    renderDigit(digit, x - offset - numberSprite[0], y, black);  
 
     absNum /= 10;
     index++;
   }
 
   if (num < 0) {
-    arduboy.fillRect(x - offset - 5, y + (numberSprite[1]/2) - 1, 3, 1, !black);  
+    arduboy.fillRect(x - offset - 5 - numberSprite[0], y + (numberSprite[1]/2) - 1, 3, 1, !black);  
   }
 }
 
 void renderNumberAlignCenter(int num, int x, int y, bool black) {
   int numWidth = numberWidth(num);
           
-  renderNumberAlignRight(num, x - (numWidth / 2), y, black);
+  renderNumberAlignRight(num, x + (numWidth / 2), y, black);
 }
 
 void render() {
@@ -825,7 +826,7 @@ void render() {
         );
       }
 
-      renderNumberAlignRight(score, 121, 2, true);
+      renderNumberAlignRight(score, 126, 2, true);
       
       // Render Preview Divider
       arduboy.fillRect(89, 14, 1, 48);
@@ -902,7 +903,7 @@ void render() {
         
         arduboy.fillRect(SCREEN_WIDTH - 27 + (width/2), enemyTakeDamageIndicatorY - 1, width + 2, height + 2, 1);
         arduboy.fillRect(SCREEN_WIDTH - 26 + (width/2), enemyTakeDamageIndicatorY, width, height, 0);
-        renderNumberAlignRight(enemyTakeDamageIndicatorNum, SCREEN_WIDTH - 12, enemyTakeDamageIndicatorY + 2, false);
+        renderNumberAlignCenter(enemyTakeDamageIndicatorNum, 116, enemyTakeDamageIndicatorY + 2, false);
       }
 
       // Render Enemy Health
