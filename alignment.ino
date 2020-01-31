@@ -89,9 +89,16 @@
 
 #define ENEMY_TAKE_DAMAGE_ANIMATION_FRAME_LENGTH 3
 #define ENEMY_TAKE_DAMAGE_ANIMATION_START_FRAME 0
-#define ENEMY_TAKE_DAMAGE_ANIMATION_END_FRAME 10
+#define ENEMY_TAKE_DAMAGE_ANIMATION_END_FRAME 12
+
 #define ENEMY_TAKE_DAMAGE_FLASH_LENGTH 5
 #define ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX 5
+
+#define ENEMY_TAKE_DAMAGE_INDICATOR_FRAME_LENGTH 5
+#define ENEMY_TAKE_DAMAGE_INDICATOR_START_FRAME 0
+#define ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME 6
+#define ENEMY_TAKE_DAMAGE_INDICATOR_X 111
+#define ENEMY_TAKE_DAMAGE_INDICATOR_INITIAL_Y 36
 
 
 Arduboy2 arduboy;
@@ -154,7 +161,9 @@ int enemyTakeDamageAnimationFrame = ENEMY_TAKE_DAMAGE_ANIMATION_END_FRAME;
 int enemyTakeDamageFlashCount = ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX;
 int enemyPortraitOffset = 0;
 int enemyPortraitVelocity = 1;
-
+int enemyTakeDamageIndicatorFrame = ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME;
+int enemyTakeDamageIndicatorY = ENEMY_TAKE_DAMAGE_INDICATOR_INITIAL_Y;
+int enemyTakeDamageIndicatorNum = 0;
 
 
 //////////////////////////////
@@ -538,7 +547,11 @@ void handleMatch(int* weapon, int* fallingGem) {
   confirmSound();
 
   enemyTakeDamageFlashCount = 0;
+  enemyPortraitOffset = 0;
   enemyTakeDamageAnimationFrame = ENEMY_TAKE_DAMAGE_ANIMATION_START_FRAME;
+  enemyTakeDamageIndicatorFrame = ENEMY_TAKE_DAMAGE_INDICATOR_START_FRAME;
+  enemyTakeDamageIndicatorY = ENEMY_TAKE_DAMAGE_INDICATOR_INITIAL_Y;
+  enemyTakeDamageIndicatorNum = -5;
 }
 
 void handleNoMatch(int* weapon, int* fallingGem) {
@@ -638,8 +651,14 @@ void update() {
           if (enemyPortraitOffset < -1) enemyPortraitVelocity = 1;
           enemyPortraitOffset += enemyPortraitVelocity;
           enemyTakeDamageAnimationFrame++;
-        } else {
-          enemyPortraitOffset = 0;
+        }
+      }
+
+
+      if (enemyTakeDamageIndicatorFrame < ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME) {
+        if (arduboy.everyXFrames(ENEMY_TAKE_DAMAGE_INDICATOR_FRAME_LENGTH)) {
+          enemyTakeDamageIndicatorY--;      
+          enemyTakeDamageIndicatorFrame++;
         }
       }
       
@@ -669,54 +688,64 @@ void renderTitleCursor(int x, int y, int textWidth) {
   arduboy.fillRect(x + textWidth + 3, y + 1, 2, 2);
 }
 
-void renderScoreRight(int x, int y, bool black) {
-  unsigned long int score_ = score;
+void renderDigitBlack(int digit, int x, int y) {
+  sprites.drawErase(x, y, numberSprite, digit);
+}
 
-  if (score_ == 0) {
-    if (black) {
-      sprites.drawErase(x, y, numberSprite, 0);
-    } else {
-      sprites.drawOverwrite(x, y, numberSprite, 0);
-    }
+void renderDigitWhite(int digit, int x, int y) {
+  sprites.drawOverwrite(x, y, numberSprite, digit);   
+}
+
+void renderDigit(int digit, int x, int y, bool black) {
+  black 
+   ? renderDigitBlack(digit, x, y) 
+   : renderDigitWhite(digit, x, y);
+}
+
+int digitCount(int num) {
+  int digitCount = 1;
+  
+  while (num /= 10) digitCount++;  
+
+  return digitCount;
+}
+
+int numberWidth(int num) {
+  int count = digitCount(num);
+  int digitWidth = numberSprite[0] + 2;
+  
+  return (count * digitWidth) - 2 + (num < 0 ? 5 : 0);  
+}
+
+void renderNumberAlignRight(int num, int x, int y, bool black) {
+  if (num == 0) {
+    renderDigit(0, x, y, black);
     return;
   }
 
   int index = 0;
+  int offset = 0;
+  int absNum = abs(num);
 
-  while (score_) {
-    int digit = score_ % 10;
+  while (absNum) {
+    int digit = absNum % 10;
+    offset = (index * (numberSprite[0] + 2));
 
-    if (black) {
-     sprites.drawErase(
-        x - (index * (numberSprite[0] + 2)),
-        y,
-        numberSprite,
-        digit
-      );     
-    } else {
-      sprites.drawOverwrite(
-        x - (index * (numberSprite[0] + 2)),
-        y,
-        numberSprite,
-        digit
-      );
-    }
+    renderDigit(digit, x - offset, y, black);  
 
-    score_ /= 10;
+    absNum /= 10;
     index++;
+  }
+
+  if (num < 0) {
+    arduboy.fillRect(x - offset - 5, y + (numberSprite[1]/2) - 1, 3, 1, !black);  
   }
 }
 
-void renderScoreCenter(int x, int y, bool black) {
-  unsigned long int score_ = score;
-  int digitCount = 0;
-  
-  while (score_ /= 10) digitCount++;
-  
-  int digitWidth = numberSprite[0] + 2;
-  int scoreWidth = (digitCount * digitWidth) - 2;
-  
-  renderScoreRight(x + (scoreWidth / 2), y, black);
+void renderNumberAlignCenter(int num, int x, int y, bool black) {
+  int numWidth = numberWidth(num);
+          
+  renderNumberAlignRight(num, x - (numWidth / 2), y, black);
 }
 
 void render() {
@@ -795,7 +824,7 @@ void render() {
         );
       }
 
-      renderScoreRight(121, 2, true);
+      renderNumberAlignRight(score, 121, 2, true);
       
       // Render Preview Divider
       arduboy.fillRect(89, 14, 1, 48);
@@ -865,6 +894,16 @@ void render() {
         sprites.drawOverwrite(104 + enemyPortraitOffset, 12, enemySprite, enemyType);
       }
 
+      //Render Enemy Damage
+      if (enemyTakeDamageIndicatorFrame < ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME) {
+        int height = numberSprite[1] + 2;
+        int width = numberWidth(enemyTakeDamageIndicatorNum) + 4;
+        
+        arduboy.fillRect(SCREEN_WIDTH - 27 + (width/2), enemyTakeDamageIndicatorY - 1, width + 2, height + 2, 1);
+        arduboy.fillRect(SCREEN_WIDTH - 26 + (width/2), enemyTakeDamageIndicatorY, width, height, 0);
+        renderNumberAlignRight(enemyTakeDamageIndicatorNum, SCREEN_WIDTH - 12, enemyTakeDamageIndicatorY + 2, false);
+      }
+
       // Render Enemy Health
       arduboy.fillRect(106, 62, enemyHealthBarWidth, 1, 1);
 
@@ -884,13 +923,13 @@ void render() {
       sprites.drawOverwrite(21, 3, victoryImage, 0);
       sprites.drawOverwrite(6, 33, winTextImage, 0);    
       sprites.drawOverwrite(53, 46, dividerImage, 0);
-      renderScoreCenter(64, 54, false);
+      renderNumberAlignCenter(score, 64, 54, false);
       break;
     case GAME_STATE_LOSE:
       sprites.drawOverwrite(23, 9, youDiedImage, 0);
       sprites.drawOverwrite(48, 35, tryAgainImage, 0);   
       sprites.drawOverwrite(53, 42, dividerImage, 0);
-      renderScoreCenter(64, 50, false);
+      renderNumberAlignCenter(score, 64, 50, false);
       break;
   }
 }

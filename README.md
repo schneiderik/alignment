@@ -2,7 +2,7 @@
 A fantasy puzzle adventure for Arduboy
 
 ## Gameplay
-Gems decend one to three at a time down columns onto the play area. Swap columns along with the gems currently on them to control where they land. Align gems in groups of three or more to clear them and attack an enemy.  Each column represents a fantasy weapon. Horizontal matches attack with multiple weapons, and vertical matches trigger a more powerful attack with a single weapon. Matching more blocks create combos for more powerful attacks. The level is complete whent the enemy's health reaches zero.  A player has three health. Health is lost if gems in a column exceed the max. Additionally, all gems in that column are cleared. The game is over if all three health are lost.
+Gems decend two at a time down rows onto the play area. Swap rows along with the gems currently on them to control where they land. Match two gems to clear them and attack an enemy.  Each row represents a fantasy weapon which affect enemies differently. The level is complete when the enemy's health reaches zero. A player has three health. Health is lost if gems in a column exceed the max. Additionally, all gems in that column are cleared. The game is over if all three health are lost or the player defeats the evil sorcerer.
 
 ## Features
 
@@ -34,6 +34,7 @@ Gems decend one to three at a time down columns onto the play area. Swap columns
 - [x] Add weapon clear animation
 - [x] Make sure multiple weapons can clear at the same time.
 - [x] Add damage animation (flash enemy, display damage over enemy (ex. -5))
+- [ ] Make sure double matches display correct damage in single indicator (ex. -10 instead of -5)
 
 ### Advanced Damage Calculation, Enemy Vulnerabilities/Resistances
 - [ ] Track what weapons inflict damage.
