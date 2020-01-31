@@ -114,9 +114,9 @@ ArduboyTones sound(arduboy.audio.enabled);
 const int ENEMY_DATA[ENEMY_COUNT][ENEMY_DATA_LENGTH] = {
   {100, 0, 0, 0, 0, 5, 16},
   {200, 0, 0, 0, 0, 29, 31},
-  {200, 0, 1, -1, 1, 53, 16},
-  {150, -1, -1, 1, 0, 77, 31},
-  {250, 1, -1, -1, -1, 101, 16}
+  {200, -1, 2, -2, 1, 53, 16},
+  {150, -1, -1, 2, 0, 77, 31},
+  {250, 2, -1, -1, -2, 101, 16}
 };
 const int weaponYOffsets[WEAPON_COUNT] = {13, 25, 37, 49};
 const int gemYOffsets[WEAPON_COUNT] = {14, 26, 38, 50};
@@ -531,8 +531,9 @@ bool isMatch(int* weapon, int* fallingGem) {
 }
 
 void handleMatch(int* weapon, int* fallingGem) {
+  int damage = 5 + ENEMY_DATA[enemyType][ENEMY_DATA_MODIFIER + weaponForGem(fallingGem)[WEAPON_DATA_TYPE]];
   weapon[WEAPON_DATA_GEM_COUNT]--;
-  enemyHealth -= 5;
+  enemyHealth -= damage;
   score += 100;
   enemyHealthBarWidth = (int)ceil(((float)enemyHealth / (float)ENEMY_DATA[enemyType][ENEMY_DATA_HEALTH]) * (float)ENEMY_HEALTH_BAR_WIDTH_MAX);
 
@@ -551,7 +552,7 @@ void handleMatch(int* weapon, int* fallingGem) {
   enemyTakeDamageAnimationFrame = ENEMY_TAKE_DAMAGE_ANIMATION_START_FRAME;
   enemyTakeDamageIndicatorFrame = ENEMY_TAKE_DAMAGE_INDICATOR_START_FRAME;
   enemyTakeDamageIndicatorY = ENEMY_TAKE_DAMAGE_INDICATOR_INITIAL_Y;
-  enemyTakeDamageIndicatorNum = -5;
+  enemyTakeDamageIndicatorNum = -damage;
 }
 
 void handleNoMatch(int* weapon, int* fallingGem) {

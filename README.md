@@ -37,9 +37,9 @@ Gems decend two at a time down rows onto the play area. Swap rows along with the
 - [ ] Make sure double matches display correct damage in single indicator (ex. -10 instead of -5)
 
 ### Advanced Damage Calculation, Enemy Vulnerabilities/Resistances
-- [ ] Track what weapons inflict damage.
-- [ ] Add weapon resistances and vulnerabilities to enemy
-- [ ] Alter damage based on enemy properties
+- [x] Track what weapons inflict damage.
+- [x] Add weapon resistances and vulnerabilities to enemy
+- [x] Alter damage based on enemy properties
 
 ### Additional Enemies
 - [x] Add art for five total enemies.
