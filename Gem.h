@@ -1,6 +1,8 @@
 #ifndef GEM_H
 #define GEM_H
 
+#include "global.h";
+
 class Gem {
   public:
     Gem& operator=(const Gem& gem) {
@@ -16,7 +18,14 @@ class Gem {
     int type;
     int row;
     int x;
-    int y; 
+    int y;
+
+    void render();
+    void update();
+    void updateX();
+    void updateY();
+    int* weapon();
+    int topOfCurrentRow();
 };
 
 #endif

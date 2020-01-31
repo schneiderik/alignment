@@ -1,135 +1,5 @@
-#include <Arduboy2.h>
-#include <ArduboyTones.h>
-#include "images.h"
+#include "global.h"
 #include "Gem.h"
-
-#define FPS 60
-#define INTERVAL_LENGTH 30
-#define SCREEN_WIDTH 128
-#define SCREEN_HEIGHT 64
-
-#define GAME_STATE_TITLE 0
-#define GAME_STATE_INFO 1
-#define GAME_STATE_QUEST 2
-#define GAME_STATE_BATTLE 3
-#define GAME_STATE_WIN 4
-#define GAME_STATE_LOSE 5
-
-#define TITLE_STATE_PLAY 0
-#define TITLE_STATE_INFO 1
-#define TITLE_STATE_SFX 2
-
-#define TITLE_STATE_COUNT 3
-#define LAST_TITLE_STATE TITLE_STATE_COUNT - 1
-
-#define QUEST_SPRITE_GRAVE_INDEX 6
-#define QUEST_SPRITE_MYSTERY_INDEX 5
-
-#define HEALTH_MAX 3
-
-#define ENEMY_COUNT 5
-#define LAST_ENEMY ENEMY_COUNT - 1
-
-#define ENEMY_HEALTH_BAR_WIDTH_MAX 20
-
-#define ENEMY_TYPE_SKELETON 0
-#define ENEMY_TYPE_ORC 1
-#define ENEMY_TYPE_GOLEM 2
-#define ENEMY_TYPE_DEMON 3
-#define ENEMY_TYPE_SORCERER 4
-
-#define ENEMY_DATA_LENGTH 7
-#define ENEMY_DATA_HEALTH 0
-#define ENEMY_DATA_MODIFIER 1
-#define ENEMY_DATA_QUEST_X 5
-#define ENEMY_DATA_QUEST_Y 6
-
-#define BATTLE_CURSOR_MIN 0
-#define BATTLE_CURSOR_MAX 2
-
-#define WEAPON_COUNT 4
-
-#define WEAPON_TYPE_SWORD 0
-#define WEAPON_TYPE_HAMMER 1
-#define WEAPON_TYPE_ARROW 2
-#define WEAPON_TYPE_STAFF 3
-
-#define WEAPON_DATA_LENGTH 3
-#define WEAPON_DATA_TYPE 0
-#define WEAPON_DATA_Y 1
-#define WEAPON_DATA_GEM_COUNT 2
-
-#define WEAPON_GEMS_MAX 6
-
-#define GEM_TYPE_COUNT 5
-
-#define GEM_DATA_LENGTH 4
-#define GEM_DATA_TYPE 0
-#define GEM_DATA_ROW 1
-#define GEM_DATA_X 2
-#define GEM_DATA_Y 3
-
-#define FALLING_GEMS_MAX 2
-#define PREVIEW_GEMS_MAX 2
-#define POPPING_GEMS_MAX 4
-#define CLEARING_GEMS_MAX 14
-
-#define PREVIEW_GEM_X 92
-#define PREVIEW_THRESHOLD_X 89
-
-#define INITIAL_GAME_SPEED 8
-
-#define GEM_POPPING_ANIMATION_START_FRAME 5
-#define GEM_POPPING_ANIMATION_END_FRAME 7
-
-#define GRAVITY_ACCELERATION 1
-
-#define CLEARING_GEM_ANIMATION_DATA_LENGTH 2
-#define CLEARING_GEM_ANIMATION_DATA_VELOCITY_X 0
-#define CLEARING_GEM_ANIMATION_DATA_VELOCITY_Y 1
-
-#define ENEMY_TAKE_DAMAGE_ANIMATION_FRAME_LENGTH 3
-#define ENEMY_TAKE_DAMAGE_ANIMATION_START_FRAME 0
-#define ENEMY_TAKE_DAMAGE_ANIMATION_END_FRAME 12
-
-#define ENEMY_TAKE_DAMAGE_FLASH_LENGTH 5
-#define ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX 5
-
-#define ENEMY_TAKE_DAMAGE_INDICATOR_FRAME_LENGTH 5
-#define ENEMY_TAKE_DAMAGE_INDICATOR_START_FRAME 0
-#define ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME 6
-#define ENEMY_TAKE_DAMAGE_INDICATOR_X 111
-#define ENEMY_TAKE_DAMAGE_INDICATOR_INITIAL_Y 36
-
-
-Arduboy2 arduboy;
-Sprites sprites;
-ArduboyTones sound(arduboy.audio.enabled);
-
-
-
-//////////////////////////////
-// CONSTANTS
-//////////////////////////////
-
-const int ENEMY_DATA[ENEMY_COUNT][ENEMY_DATA_LENGTH] = {
-  {100, 0, 0, 0, 0, 5, 16},
-  {200, 0, 0, 0, 0, 29, 31},
-  {200, -1, 2, -2, 1, 53, 16},
-  {150, -1, -1, 2, 0, 77, 31},
-  {250, 2, -1, -1, -2, 101, 16}
-};
-const int weaponYOffsets[WEAPON_COUNT] = {13, 25, 37, 49};
-const int gemYOffsets[WEAPON_COUNT] = {14, 26, 38, 50};
-const int gemXOffsets[WEAPON_GEMS_MAX + 1] = {17, 29, 41, 53, 65, 77, 89};
-const int defaultWeapons[WEAPON_COUNT][WEAPON_DATA_LENGTH] = {
-  {0, weaponYOffsets[0], 0},
-  {1, weaponYOffsets[1], 0},
-  {2, weaponYOffsets[2], 0},
-  {3, weaponYOffsets[3], 0}
-};
-
-
 
 //////////////////////////////
 // GLOBAL VARIABLES
@@ -148,13 +18,12 @@ int health = HEALTH_MAX;
 int paused = false;
 int battleCursorIndex = 0;
 int weaponGems[WEAPON_COUNT][WEAPON_GEMS_MAX][GEM_DATA_LENGTH];
-int weapons[WEAPON_COUNT][WEAPON_DATA_LENGTH];
 int previewGemCount = 0;
 int fallingGemCount = 0;
 int poppingGemCount = 0;
 int clearingGemCount = 0;
 Gem previewGems[PREVIEW_GEMS_MAX];
-int fallingGems[FALLING_GEMS_MAX][GEM_DATA_LENGTH];
+Gem fallingGems[FALLING_GEMS_MAX];
 int poppingGems[POPPING_GEMS_MAX][GEM_DATA_LENGTH];
 int clearingGems[CLEARING_GEMS_MAX][GEM_DATA_LENGTH];
 int clearingGemAnimationData[CLEARING_GEMS_MAX][CLEARING_GEM_ANIMATION_DATA_LENGTH];
@@ -165,7 +34,6 @@ int enemyPortraitVelocity = 1;
 int enemyTakeDamageIndicatorFrame = ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME;
 int enemyTakeDamageIndicatorY = ENEMY_TAKE_DAMAGE_INDICATOR_INITIAL_Y;
 int enemyTakeDamageIndicatorNum = 0;
-
 
 //////////////////////////////
 // SETUP
@@ -178,8 +46,6 @@ void setup() {
     
   arduboy.clear();
 }
-
-
 
 //////////////////////////////
 // SOUNDS
@@ -222,6 +88,10 @@ void swapArrays(int *ptr1, int *ptr2, int arrLength) {
 
 int* weaponForGem(int* gem) {
   return weapons[gem[GEM_DATA_ROW]];
+}
+
+int* weaponForGem(Gem& gem) {
+  return weapons[gem.row];
 }
 
 
@@ -318,16 +188,16 @@ void swapWeapons() {
   int weapon2Type = weapon2[WEAPON_DATA_TYPE];
   
   for(int i = 0; i < fallingGemCount; i++) {
-    int* fallingGem = fallingGems[i];
-    bool fallingGemInRow1 = battleCursorIndex == fallingGem[GEM_DATA_ROW];
-    bool fallingGemInRow2 = battleCursorIndex + 1 == fallingGem[GEM_DATA_ROW];
-    bool fallingGemMustMoveToRow2 = fallingGem[GEM_DATA_X] < gemXOffsets[weapon2GemCount];
-    bool fallingGemMustMoveToRow1 = fallingGem[GEM_DATA_X] < gemXOffsets[weapon1GemCount];
+    Gem& fallingGem = fallingGems[i];
+    bool fallingGemInRow1 = battleCursorIndex == fallingGem.row;
+    bool fallingGemInRow2 = battleCursorIndex + 1 == fallingGem.row;
+    bool fallingGemMustMoveToRow2 = fallingGem.x < gemXOffsets[weapon2GemCount];
+    bool fallingGemMustMoveToRow1 = fallingGem.x < gemXOffsets[weapon1GemCount];
   
     if (fallingGemInRow1 && fallingGemMustMoveToRow2) {
-      fallingGem[GEM_DATA_ROW] = battleCursorIndex + 1;
+      fallingGem.row = battleCursorIndex + 1;
     } else if (fallingGemInRow2 && fallingGemMustMoveToRow1) {
-      fallingGem[GEM_DATA_ROW] = battleCursorIndex;
+      fallingGem.row = battleCursorIndex;
     }
 
     swapSound();
@@ -451,7 +321,7 @@ void adjustWeapons() {
 }
 
 void adjustFallingGems() {  
-  for(int i = 0; i < fallingGemCount; i++) adjustGem(fallingGems[i]);
+  for(int i = 0; i < fallingGemCount; i++) fallingGems[i].update();
 }
 
 bool shouldGeneratePreviewGems() {
@@ -474,7 +344,7 @@ void generatePreviewGems() {
 
 bool fallingGemsBelowPreviewThreshold() {
   for (int i = 0; i < fallingGemCount; i++) {
-    if (fallingGems[i][GEM_DATA_X] > PREVIEW_THRESHOLD_X) return false;
+    if (fallingGems[i].x > PREVIEW_THRESHOLD_X) return false;
   }
 
   return true;
@@ -487,23 +357,20 @@ bool shouldDropPreviewGems() {
 void dropPreviewGems() {
   int limit = previewGemCount;
   for (int i = 0; i < limit; i++) {
-    fallingGems[i][GEM_DATA_TYPE] = previewGems[i].type;
-    fallingGems[i][GEM_DATA_ROW] = previewGems[i].row;
-    fallingGems[i][GEM_DATA_X] = previewGems[i].x;
-    fallingGems[i][GEM_DATA_Y] = previewGems[i].y;
+    fallingGems[i] = previewGems[i];
     fallingGemCount++;
     previewGemCount--;
   }
 }
 
-bool shouldResolveFallingGem(int* fallingGem) {
+bool shouldResolveFallingGem(Gem& fallingGem) {
   int* weapon = weaponForGem(fallingGem);
   int weaponGemCount = weapon[WEAPON_DATA_GEM_COUNT];
   
-  return gemXOffsets[weaponGemCount] >= fallingGem[GEM_DATA_X];
+  return gemXOffsets[weaponGemCount] >= fallingGem.x;
 }
 
-void handleFullWeapon(int* weapon, int* fallingGem) {
+void handleFullWeapon(int* weapon, Gem& fallingGem) {
   int weaponGemCount = weapon[WEAPON_DATA_GEM_COUNT];
   int weaponType = weapon[WEAPON_DATA_TYPE];
   
@@ -514,7 +381,12 @@ void handleFullWeapon(int* weapon, int* fallingGem) {
     clearingGemCount++;
   }
 
-  copyArray(clearingGems[clearingGemCount], fallingGem, GEM_DATA_LENGTH);
+  clearingGems[clearingGemCount][GEM_DATA_TYPE] = fallingGem.type;
+  clearingGems[clearingGemCount][GEM_DATA_ROW] = fallingGem.row;
+  clearingGems[clearingGemCount][GEM_DATA_X] = fallingGem.x;
+  clearingGems[clearingGemCount][GEM_DATA_Y] = fallingGem.y;
+  
+  
   clearingGemAnimationData[clearingGemCount][CLEARING_GEM_ANIMATION_DATA_VELOCITY_X] = random(0, 3) - 1;
   clearingGemAnimationData[clearingGemCount][CLEARING_GEM_ANIMATION_DATA_VELOCITY_Y] = random(0, 3) - 2;
   clearingGemCount++;
@@ -524,7 +396,7 @@ void handleFullWeapon(int* weapon, int* fallingGem) {
   loseHeartSound();
 }
 
-bool isMatch(int* weapon, int* fallingGem) {
+bool isMatch(int* weapon, Gem& fallingGem) {
   int weaponGemCount = weapon[WEAPON_DATA_GEM_COUNT];
 
   if (weaponGemCount == 0) return false;
@@ -532,17 +404,21 @@ bool isMatch(int* weapon, int* fallingGem) {
   int weaponType = weapon[WEAPON_DATA_TYPE];
   int* weaponTopGem = weaponGems[weaponType][weaponGemCount - 1];
 
-  return weaponTopGem[GEM_DATA_TYPE] == fallingGem[GEM_DATA_TYPE];
+  return weaponTopGem[GEM_DATA_TYPE] == fallingGem.type;
 }
 
-void handleMatch(int* weapon, int* fallingGem) {
+void handleMatch(int* weapon, Gem& fallingGem) {
   int damage = 5 + ENEMY_DATA[enemyType][ENEMY_DATA_MODIFIER + weaponForGem(fallingGem)[WEAPON_DATA_TYPE]];
   weapon[WEAPON_DATA_GEM_COUNT]--;
   enemyHealth -= damage;
   score += 100;
   enemyHealthBarWidth = (int)ceil(((float)enemyHealth / (float)ENEMY_DATA[enemyType][ENEMY_DATA_HEALTH]) * (float)ENEMY_HEALTH_BAR_WIDTH_MAX);
 
-  copyArray(poppingGems[poppingGemCount], fallingGem, GEM_DATA_LENGTH);
+  poppingGems[poppingGemCount][GEM_DATA_TYPE] = fallingGem.type;
+  poppingGems[poppingGemCount][GEM_DATA_ROW] = fallingGem.row;
+  poppingGems[poppingGemCount][GEM_DATA_X] = fallingGem.x;
+  poppingGems[poppingGemCount][GEM_DATA_Y] = fallingGem.y;
+  
   poppingGems[poppingGemCount][GEM_DATA_TYPE] = GEM_POPPING_ANIMATION_START_FRAME;
   poppingGemCount++;
   
@@ -560,13 +436,16 @@ void handleMatch(int* weapon, int* fallingGem) {
   enemyTakeDamageIndicatorNum = -damage;
 }
 
-void handleNoMatch(int* weapon, int* fallingGem) {
+void handleNoMatch(int* weapon, Gem& fallingGem) {
   int weaponGemCount = weapon[WEAPON_DATA_GEM_COUNT];
   int weaponType = weapon[WEAPON_DATA_TYPE];
   int* weaponNextGem = weaponGems[weaponType][weaponGemCount];
   
   score += 10;            
-  copyArray(weaponNextGem, fallingGem, GEM_DATA_LENGTH);
+  weaponNextGem[GEM_DATA_TYPE] = fallingGem.type;
+  weaponNextGem[GEM_DATA_ROW] = fallingGem.row;
+  weaponNextGem[GEM_DATA_X] = fallingGem.x;
+  weaponNextGem[GEM_DATA_Y] = fallingGem.y;
   weapon[WEAPON_DATA_GEM_COUNT]++;  
 }
 
@@ -576,7 +455,7 @@ bool weaponIsFull(int* weapon) {
 
 void resolveFallingGems() {  
   for(int i = 0; i < fallingGemCount; i++) {
-    int* fallingGem = fallingGems[i];
+    Gem& fallingGem = fallingGems[i];
     
     if (shouldResolveFallingGem(fallingGem)) {
       int* weapon = weaponForGem(fallingGem);
@@ -591,9 +470,7 @@ void resolveFallingGems() {
         }        
       }
 
-      for(int j = i; j < fallingGemCount; j++) {
-        copyArray(fallingGem, fallingGems[j], GEM_DATA_LENGTH);
-      }
+      for(int j = i; j < fallingGemCount; j++) fallingGem = fallingGems[j];        
       
       fallingGemCount--;
       i--;
@@ -883,16 +760,7 @@ void render() {
       }
 
       // Render Falling Gems
-      for(int fallingGemIndex = 0; fallingGemIndex < fallingGemCount; fallingGemIndex++) {
-        int* fallingGem = fallingGems[fallingGemIndex];
-
-        sprites.drawPlusMask(
-          fallingGem[GEM_DATA_X], 
-          fallingGem[GEM_DATA_Y], 
-          gemSpritePlusMask, 
-          fallingGem[GEM_DATA_TYPE]
-        );
-      }
+      for(int i = 0; i < fallingGemCount; i++) fallingGems[i].render();
 
       // Render Enemy Portrait
       if (enemyTakeDamageFlashCount == ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX || enemyTakeDamageFlashCount % 2) {
