@@ -35,6 +35,8 @@ int enemyTakeDamageIndicatorFrame = ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME;
 int enemyTakeDamageIndicatorY = ENEMY_TAKE_DAMAGE_INDICATOR_INITIAL_Y;
 int enemyTakeDamageIndicatorNum = 0;
 
+
+
 //////////////////////////////
 // SETUP
 //////////////////////////////
@@ -84,14 +86,6 @@ void swapArrays(int *ptr1, int *ptr2, int arrLength) {
   copyArray(tmp, ptr1, arrLength);
   copyArray(ptr1, ptr2, arrLength);
   copyArray(ptr2, tmp, arrLength);  
-}
-
-int* weaponForGem(int* gem) {
-  return weapons[gem[GEM_DATA_ROW]];
-}
-
-int* weaponForGem(Gem& gem) {
-  return weapons[gem.row];
 }
 
 
@@ -285,23 +279,6 @@ int randomUniqueRow() {
   return existing ? randomUniqueRow() : num;
 }
 
-void adjustGemX(int* gem) {
-  if (arduboy.everyXFrames(gameSpeed) && gemXOffsets[weapons[gem[GEM_DATA_ROW]][WEAPON_DATA_GEM_COUNT]] < gem[GEM_DATA_X]) { 
-    gem[GEM_DATA_X] -= 3;
-  }    
-}
-
-void adjustGemY(int* gem) {
-  if (gem[GEM_DATA_Y] != gemYOffsets[gem[GEM_DATA_ROW]]) {
-    gem[GEM_DATA_Y] += gem[GEM_DATA_Y] < gemYOffsets[gem[GEM_DATA_ROW]] ? 3 : -3;
-  }  
-}
-
-void adjustGem(int* gem) {  
-  adjustGemY(gem);
-  adjustGemX(gem);
-}
-
 void adjustWeaponY(int* weapon, int row) {
   if (weapon[WEAPON_DATA_Y] != weaponYOffsets[row]) {
     weapon[WEAPON_DATA_Y] += weapon[WEAPON_DATA_Y] < weaponYOffsets[row] ? 3 : -3;
@@ -364,7 +341,7 @@ void dropPreviewGems() {
 }
 
 bool shouldResolveFallingGem(Gem& fallingGem) {
-  int* weapon = weaponForGem(fallingGem);
+  int* weapon = fallingGem.weapon();
   int weaponGemCount = weapon[WEAPON_DATA_GEM_COUNT];
   
   return gemXOffsets[weaponGemCount] >= fallingGem.x;
@@ -403,7 +380,7 @@ bool isMatch(int* weapon, Gem& fallingGem) {
 }
 
 void handleMatch(int* weapon, Gem& fallingGem) {
-  int damage = 5 + ENEMY_DATA[enemyType][ENEMY_DATA_MODIFIER + weaponForGem(fallingGem)[WEAPON_DATA_TYPE]];
+  int damage = 5 + ENEMY_DATA[enemyType][ENEMY_DATA_MODIFIER + fallingGem.weapon()[WEAPON_DATA_TYPE]];
   weapon[WEAPON_DATA_GEM_COUNT]--;
   enemyHealth -= damage;
   score += 100;
@@ -427,13 +404,14 @@ void handleMatch(int* weapon, Gem& fallingGem) {
   enemyTakeDamageIndicatorNum = -damage;
 }
 
-void handleNoMatch(int* weapon, Gem& fallingGem) {
+void handleNoMatch(Gem& fallingGem) {
+  int* weapon = fallingGem.weapon();
   int weaponGemCount = weapon[WEAPON_DATA_GEM_COUNT];
   int weaponType = weapon[WEAPON_DATA_TYPE];
   
   score += 10;            
   weaponGems[weaponType][weaponGemCount] = fallingGem;
-  weapon[WEAPON_DATA_GEM_COUNT]++;  
+  weapons[fallingGem.row][WEAPON_DATA_GEM_COUNT]++;  
 }
 
 bool weaponIsFull(int* weapon) {
@@ -445,7 +423,7 @@ void resolveFallingGems() {
     Gem& fallingGem = fallingGems[i];
     
     if (shouldResolveFallingGem(fallingGem)) {
-      int* weapon = weaponForGem(fallingGem);
+      int* weapon = fallingGem.weapon();
 
       if (isMatch(weapon, fallingGem)) {
         handleMatch(weapon, fallingGem);
@@ -453,7 +431,7 @@ void resolveFallingGems() {
         if (weaponIsFull(weapon)) {
           handleFullWeapon(weapon, fallingGem);
         } else {
-          handleNoMatch(weapon, fallingGem);
+          handleNoMatch(fallingGem);
         }        
       }
 
@@ -709,6 +687,13 @@ void render() {
         // Render Weapon Icon Divider
         arduboy.fillRect(14, weapon[WEAPON_DATA_Y] + 1, 1, 10);
 
+        
+        arduboy.setCursor(32, 0);
+        arduboy.print(weapons[0][WEAPON_DATA_GEM_COUNT]);
+        arduboy.print(weapons[1][WEAPON_DATA_GEM_COUNT]);
+        arduboy.print(weapons[2][WEAPON_DATA_GEM_COUNT]);
+        arduboy.print(weapons[3][WEAPON_DATA_GEM_COUNT]);
+      
         for (int i = 0; i < weapon[WEAPON_DATA_GEM_COUNT]; i++) weaponGems[weapon[WEAPON_DATA_TYPE]][i].render();
       }
 

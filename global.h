@@ -70,12 +70,6 @@ extern ArduboyTones sound;
 
 #define GEM_TYPE_COUNT 5
 
-#define GEM_DATA_LENGTH 4
-#define GEM_DATA_TYPE 0
-#define GEM_DATA_ROW 1
-#define GEM_DATA_X 2
-#define GEM_DATA_Y 3
-
 #define FALLING_GEMS_MAX 2
 #define PREVIEW_GEMS_MAX 2
 #define POPPING_GEMS_MAX 4
@@ -128,6 +122,7 @@ const int defaultWeapons[WEAPON_COUNT][WEAPON_DATA_LENGTH] = {
   {2, weaponYOffsets[2], 0},
   {3, weaponYOffsets[3], 0}
 };
-const int weapons[WEAPON_COUNT][WEAPON_DATA_LENGTH];
+
+extern int weapons[WEAPON_COUNT][WEAPON_DATA_LENGTH];
 
 #endif
