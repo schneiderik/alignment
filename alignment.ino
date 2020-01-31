@@ -24,7 +24,7 @@ int poppingGemCount = 0;
 int clearingGemCount = 0;
 Gem previewGems[PREVIEW_GEMS_MAX];
 Gem fallingGems[FALLING_GEMS_MAX];
-int poppingGems[POPPING_GEMS_MAX][GEM_DATA_LENGTH];
+Gem poppingGems[POPPING_GEMS_MAX];
 int clearingGems[CLEARING_GEMS_MAX][GEM_DATA_LENGTH];
 int clearingGemAnimationData[CLEARING_GEMS_MAX][CLEARING_GEM_ANIMATION_DATA_LENGTH];
 int enemyTakeDamageAnimationFrame = ENEMY_TAKE_DAMAGE_ANIMATION_END_FRAME;
@@ -414,16 +414,14 @@ void handleMatch(int* weapon, Gem& fallingGem) {
   score += 100;
   enemyHealthBarWidth = (int)ceil(((float)enemyHealth / (float)ENEMY_DATA[enemyType][ENEMY_DATA_HEALTH]) * (float)ENEMY_HEALTH_BAR_WIDTH_MAX);
 
-  poppingGems[poppingGemCount][GEM_DATA_TYPE] = fallingGem.type;
-  poppingGems[poppingGemCount][GEM_DATA_ROW] = fallingGem.row;
-  poppingGems[poppingGemCount][GEM_DATA_X] = fallingGem.x;
-  poppingGems[poppingGemCount][GEM_DATA_Y] = fallingGem.y;
-  
-  poppingGems[poppingGemCount][GEM_DATA_TYPE] = GEM_POPPING_ANIMATION_START_FRAME;
+  poppingGems[poppingGemCount] = fallingGem;
+  poppingGems[poppingGemCount].type = GEM_POPPING_ANIMATION_START_FRAME;
   poppingGemCount++;
-  
-  copyArray(poppingGems[poppingGemCount], weaponGems[weapon[WEAPON_DATA_TYPE]][weapon[WEAPON_DATA_GEM_COUNT]], GEM_DATA_LENGTH);
-  poppingGems[poppingGemCount][GEM_DATA_TYPE] = GEM_POPPING_ANIMATION_START_FRAME;
+
+  poppingGems[poppingGemCount].row = weaponGems[weapon[WEAPON_DATA_TYPE]][weapon[WEAPON_DATA_GEM_COUNT]][GEM_DATA_ROW];
+  poppingGems[poppingGemCount].x = weaponGems[weapon[WEAPON_DATA_TYPE]][weapon[WEAPON_DATA_GEM_COUNT]][GEM_DATA_X];
+  poppingGems[poppingGemCount].y = weaponGems[weapon[WEAPON_DATA_TYPE]][weapon[WEAPON_DATA_GEM_COUNT]][GEM_DATA_Y];
+  poppingGems[poppingGemCount].type = GEM_POPPING_ANIMATION_START_FRAME;
   poppingGemCount++;
   
   confirmSound();
@@ -481,15 +479,13 @@ void resolveFallingGems() {
 void popGems() {
   if (arduboy.everyXFrames(5)) {
     for (int i = 0; i < poppingGemCount; i++) {
-      if (poppingGems[i][GEM_DATA_TYPE] == GEM_POPPING_ANIMATION_END_FRAME) {
-        for(int j = i + 1; j < poppingGemCount; j++) {
-          copyArray(poppingGems[i], poppingGems[j], GEM_DATA_LENGTH);
-        }
-        
+      if (poppingGems[i].type == GEM_POPPING_ANIMATION_END_FRAME) {
+        for(int j = i + 1; j < poppingGemCount; j++) poppingGems[i] = poppingGems[j];
+      
         poppingGemCount--;
         i--;
       } else {
-        poppingGems[i][GEM_DATA_TYPE]++;
+        poppingGems[i].type++;
       }
     }
   }
@@ -738,14 +734,7 @@ void render() {
         }
       }
 
-      for (int i = 0; i < poppingGemCount; i++) {      
-        sprites.drawPlusMask(
-          poppingGems[i][GEM_DATA_X], 
-          poppingGems[i][GEM_DATA_Y], 
-          gemSpritePlusMask, 
-          poppingGems[i][GEM_DATA_TYPE]
-        );     
-      }
+      for (int i = 0; i < poppingGemCount; i++) poppingGems[i].render();
 
       // Render Preview Gems
       for(int previewGemIndex = 0; previewGemIndex < PREVIEW_GEMS_MAX; previewGemIndex++) {
