@@ -25,7 +25,7 @@ int clearingGemCount = 0;
 Gem previewGems[PREVIEW_GEMS_MAX];
 Gem fallingGems[FALLING_GEMS_MAX];
 Gem poppingGems[POPPING_GEMS_MAX];
-int clearingGems[CLEARING_GEMS_MAX][GEM_DATA_LENGTH];
+Gem clearingGems[CLEARING_GEMS_MAX];
 int clearingGemAnimationData[CLEARING_GEMS_MAX][CLEARING_GEM_ANIMATION_DATA_LENGTH];
 int enemyTakeDamageAnimationFrame = ENEMY_TAKE_DAMAGE_ANIMATION_END_FRAME;
 int enemyTakeDamageFlashCount = ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX;
@@ -375,17 +375,16 @@ void handleFullWeapon(int* weapon, Gem& fallingGem) {
   int weaponType = weapon[WEAPON_DATA_TYPE];
   
   for (int i = 0; i < weaponGemCount; i++) {
-    copyArray(clearingGems[clearingGemCount], weaponGems[weaponType][i], GEM_DATA_LENGTH);
+    clearingGems[clearingGemCount].type = weaponGems[weaponType][i][GEM_DATA_TYPE];
+    clearingGems[clearingGemCount].row = weaponGems[weaponType][i][GEM_DATA_ROW];
+    clearingGems[clearingGemCount].x = weaponGems[weaponType][i][GEM_DATA_X];
+    clearingGems[clearingGemCount].y = weaponGems[weaponType][i][GEM_DATA_Y];
     clearingGemAnimationData[clearingGemCount][CLEARING_GEM_ANIMATION_DATA_VELOCITY_X] = random(0, 3) - 1;
     clearingGemAnimationData[clearingGemCount][CLEARING_GEM_ANIMATION_DATA_VELOCITY_Y] = random(0, 3) - 2;
     clearingGemCount++;
   }
 
-  clearingGems[clearingGemCount][GEM_DATA_TYPE] = fallingGem.type;
-  clearingGems[clearingGemCount][GEM_DATA_ROW] = fallingGem.row;
-  clearingGems[clearingGemCount][GEM_DATA_X] = fallingGem.x;
-  clearingGems[clearingGemCount][GEM_DATA_Y] = fallingGem.y;
-  
+  clearingGems[clearingGemCount] = fallingGem;
   
   clearingGemAnimationData[clearingGemCount][CLEARING_GEM_ANIMATION_DATA_VELOCITY_X] = random(0, 3) - 1;
   clearingGemAnimationData[clearingGemCount][CLEARING_GEM_ANIMATION_DATA_VELOCITY_Y] = random(0, 3) - 2;
@@ -494,14 +493,12 @@ void popGems() {
 void clearGems() {
   if (arduboy.everyXFrames(5)) {  
     for (int i = 0; i < clearingGemCount; i++) {
-      if (clearingGems[i][GEM_DATA_Y] < SCREEN_HEIGHT) {
-        clearingGems[i][GEM_DATA_Y] += clearingGemAnimationData[i][CLEARING_GEM_ANIMATION_DATA_VELOCITY_Y];
-        clearingGems[i][GEM_DATA_X] += clearingGemAnimationData[i][CLEARING_GEM_ANIMATION_DATA_VELOCITY_X];
+      if (clearingGems[i].y < SCREEN_HEIGHT) {
+        clearingGems[i].y += clearingGemAnimationData[i][CLEARING_GEM_ANIMATION_DATA_VELOCITY_Y];
+        clearingGems[i].x += clearingGemAnimationData[i][CLEARING_GEM_ANIMATION_DATA_VELOCITY_X];
         clearingGemAnimationData[i][CLEARING_GEM_ANIMATION_DATA_VELOCITY_Y] += GRAVITY_ACCELERATION;
       } else {
-        for(int j = i + 1; j < clearingGemCount; j++) {
-          copyArray(clearingGems[i], clearingGems[j], GEM_DATA_LENGTH);
-        }
+        for(int j = i + 1; j < clearingGemCount; j++) clearingGems[i] = clearingGems[j];
         
         clearingGemCount--;
         i--;
@@ -769,14 +766,7 @@ void render() {
       // Render Enemy Health
       arduboy.fillRect(106, 62, enemyHealthBarWidth, 1, 1);
 
-      for (int i = 0; i < clearingGemCount; i++) {      
-        sprites.drawPlusMask(
-          clearingGems[i][GEM_DATA_X], 
-          clearingGems[i][GEM_DATA_Y], 
-          gemSpritePlusMask, 
-          clearingGems[i][GEM_DATA_TYPE]
-        );     
-      }
+      for (int i = 0; i < clearingGemCount; i++) clearingGems[i].render(); 
 
       // Render Paused
       if (paused) sprites.drawOverwrite(50, 28, pausedTextImage, 0); 
