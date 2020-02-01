@@ -13,13 +13,44 @@ void Gem::updateY() {
   }  
 }
 
+void Gem::updateClear() {
+  if (arduboy.everyXFrames(5)) {
+    if (y < SCREEN_HEIGHT) {
+      y += velocityY;
+      x += velocityX;
+      velocityY += GRAVITY_ACCELERATION;
+    } else {
+      state = GEM_STATE_INACTIVE;
+    }
+  }
+}
+
 void Gem::update() {
-  updateX();
-  updateY(); 
+  switch(state) {
+    case GEM_STATE_CLEARING:
+      updateClear();
+      break;
+    case GEM_STATE_ACTIVE:
+      updateX();
+      updateY(); 
+      break;
+  }
 }
 
 void Gem::render() {
   sprites.drawPlusMask(x, y, gemSpritePlusMask, type);
+}
+
+bool Gem::isInactive() {
+  return state == GEM_STATE_INACTIVE;
+}
+
+bool Gem::isActive() {
+  return state == GEM_STATE_ACTIVE;
+}
+
+bool Gem::isClearing() {
+  return state == GEM_STATE_CLEARING;
 }
 
 Weapon& Gem::getWeapon() {
@@ -28,4 +59,10 @@ Weapon& Gem::getWeapon() {
 
 bool Gem::atEndOfRowX() {
   return getWeapon().endOfRowX() >= x;
+}
+
+void Gem::clear() {
+  velocityX = random(0, 3) - 1;
+  velocityY = random(0, 3) - 2;
+  state = GEM_STATE_CLEARING;
 }

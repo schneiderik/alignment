@@ -22,7 +22,6 @@ int previewGemCount = 0;
 int fallingGemCount = 0;
 int poppingGemCount = 0;
 int clearingGemCount = 0;
-int clearingGemAnimationData[CLEARING_GEMS_MAX][CLEARING_GEM_ANIMATION_DATA_LENGTH];
 int enemyTakeDamageAnimationFrame = ENEMY_TAKE_DAMAGE_ANIMATION_END_FRAME;
 int enemyTakeDamageFlashCount = ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX;
 int enemyPortraitOffset = 0;
@@ -298,15 +297,13 @@ void handleFullWeapon(Gem& fallingGem) {
   
   for (int i = 0; i < weapon.gemCount; i++) {
     *clearingGems[clearingGemCount] = *weapon.gems[i];
-    clearingGemAnimationData[clearingGemCount][CLEARING_GEM_ANIMATION_DATA_VELOCITY_X] = random(0, 3) - 1;
-    clearingGemAnimationData[clearingGemCount][CLEARING_GEM_ANIMATION_DATA_VELOCITY_Y] = random(0, 3) - 2;
+    clearingGems[clearingGemCount]->clear();
     clearingGemCount++;
   }
 
   *clearingGems[clearingGemCount] = fallingGem;
   
-  clearingGemAnimationData[clearingGemCount][CLEARING_GEM_ANIMATION_DATA_VELOCITY_X] = random(0, 3) - 1;
-  clearingGemAnimationData[clearingGemCount][CLEARING_GEM_ANIMATION_DATA_VELOCITY_Y] = random(0, 3) - 2;
+  clearingGems[clearingGemCount]->clear();
   clearingGemCount++;
   
   weapon.gemCount = 0;
@@ -400,18 +397,16 @@ void popGems() {
 }
 
 void clearGems() {
-  if (arduboy.everyXFrames(5)) {  
-    for (int i = 0; i < clearingGemCount; i++) {
-      if (clearingGems[i]->y < SCREEN_HEIGHT) {
-        clearingGems[i]->y += clearingGemAnimationData[i][CLEARING_GEM_ANIMATION_DATA_VELOCITY_Y];
-        clearingGems[i]->x += clearingGemAnimationData[i][CLEARING_GEM_ANIMATION_DATA_VELOCITY_X];
-        clearingGemAnimationData[i][CLEARING_GEM_ANIMATION_DATA_VELOCITY_Y] += GRAVITY_ACCELERATION;
-      } else {
-        for(int j = i + 1; j < clearingGemCount; j++) *clearingGems[i] = *clearingGems[j];
-        
-        clearingGemCount--;
-        i--;
-      }
+  for (int i = 0; i < clearingGemCount; i++) {
+    Gem& gem = *clearingGems[i];
+    
+    if (gem.isClearing()) {
+      gem.update();
+    } else {
+      for(int j = i + 1; j < clearingGemCount; j++) *clearingGems[j - 1] = *clearingGems[j];
+      
+      clearingGemCount--;
+      i--;
     }
   }
 }
