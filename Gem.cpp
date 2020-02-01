@@ -1,7 +1,8 @@
 #include "Gem.h"
+#include "Weapon.h"
 
 void Gem::updateX() {
-  if (arduboy.everyXFrames(INITIAL_GAME_SPEED) && topOfCurrentRow() < x) { 
+  if (arduboy.everyXFrames(INITIAL_GAME_SPEED) && getWeapon().endOfRowX() < x) { 
     x -= 3;
   }    
 }
@@ -21,10 +22,10 @@ void Gem::render() {
   sprites.drawPlusMask(x, y, gemSpritePlusMask, type);
 }
 
-int* Gem::weapon() {
-  return weapons[row];
+Weapon& Gem::getWeapon() {
+  return *weapons[row];
 }
 
-int Gem::topOfCurrentRow() {
-  return gemXOffsets[weapon()[WEAPON_DATA_GEM_COUNT]];
+bool Gem::atEndOfRowX() {
+  return getWeapon().endOfRowX() >= x;
 }

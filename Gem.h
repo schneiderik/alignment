@@ -24,8 +24,9 @@ class Gem {
     void update();
     void updateX();
     void updateY();
-    int* weapon();
-    int topOfCurrentRow();
+    
+    Weapon& getWeapon();
+    bool atEndOfRowX();
 };
 
 #endif

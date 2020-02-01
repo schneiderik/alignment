@@ -4,9 +4,11 @@ Arduboy2 arduboy;
 Sprites sprites;
 ArduboyTones sound(arduboy.audio.enabled);
 
-int weapons[WEAPON_COUNT][WEAPON_DATA_LENGTH] = {
-  {0, weaponYOffsets[0], 0},
-  {1, weaponYOffsets[1], 0},
-  {2, weaponYOffsets[2], 0},
-  {3, weaponYOffsets[3], 0}
-};
+Gem* tmpGem;
+Weapon* tmpWeapon;
+Weapon* weapons[WEAPON_COUNT];
+Gem* weaponGems[WEAPON_COUNT][WEAPON_GEMS_MAX];
+Gem* previewGems[PREVIEW_GEMS_MAX];
+Gem* fallingGems[FALLING_GEMS_MAX];
+Gem* poppingGems[POPPING_GEMS_MAX];
+Gem* clearingGems[CLEARING_GEMS_MAX];

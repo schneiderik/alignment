@@ -10,6 +10,9 @@ extern ArduboyTones sound;
 
 #include "images.h"
 
+class Gem;
+class Weapon;
+
 #define FPS 60
 #define INTERVAL_LENGTH 30
 #define SCREEN_WIDTH 128
@@ -116,13 +119,14 @@ const int ENEMY_DATA[ENEMY_COUNT][ENEMY_DATA_LENGTH] = {
 const int weaponYOffsets[WEAPON_COUNT] = {13, 25, 37, 49};
 const int gemYOffsets[WEAPON_COUNT] = {14, 26, 38, 50};
 const int gemXOffsets[WEAPON_GEMS_MAX + 1] = {17, 29, 41, 53, 65, 77, 89};
-const int defaultWeapons[WEAPON_COUNT][WEAPON_DATA_LENGTH] = {
-  {0, weaponYOffsets[0], 0},
-  {1, weaponYOffsets[1], 0},
-  {2, weaponYOffsets[2], 0},
-  {3, weaponYOffsets[3], 0}
-};
 
-extern int weapons[WEAPON_COUNT][WEAPON_DATA_LENGTH];
+extern Gem* tmpGem;
+extern Weapon* tmpWeapon;
+extern Weapon* weapons[WEAPON_COUNT];
+extern Gem* weaponGems[WEAPON_COUNT][WEAPON_GEMS_MAX];
+extern Gem* previewGems[PREVIEW_GEMS_MAX];
+extern Gem* fallingGems[FALLING_GEMS_MAX];
+extern Gem* poppingGems[POPPING_GEMS_MAX];
+extern Gem* clearingGems[CLEARING_GEMS_MAX];
 
 #endif
