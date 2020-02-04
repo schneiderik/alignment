@@ -381,6 +381,14 @@ void resolveFallingGems() {
   }  
 }
 
+void removeGemFromArray(Gem** gems, int i, int& size) {
+  size--;
+  
+  for(int j = i; j < size; j++) *clearingGems[j] = *clearingGems[j + 1];
+  
+  return i - 1;
+}
+
 void popGems() {
   if (arduboy.everyXFrames(5)) {
     for (int i = 0; i < poppingGemCount; i++) {
@@ -399,15 +407,10 @@ void popGems() {
 void clearGems() {
   for (int i = 0; i < clearingGemCount; i++) {
     Gem& gem = *clearingGems[i];
+
+    gem.update();
     
-    if (gem.isClearing()) {
-      gem.update();
-    } else {
-      for(int j = i + 1; j < clearingGemCount; j++) *clearingGems[j - 1] = *clearingGems[j];
-      
-      clearingGemCount--;
-      i--;
-    }
+    if (!gem.isClearing()) removeGemFromArray(clearingGems, i, clearingGemCount);
   }
 }
 
