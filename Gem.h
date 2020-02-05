@@ -9,6 +9,8 @@
 
 class Gem {
   public:
+    Gem();
+    
     Gem& operator=(const Gem& gem) {
       if (this != &gem) {
         type = gem.type;
@@ -28,6 +30,7 @@ class Gem {
     int y;
     int velocityX;
     int velocityY;
+    int initialVelocityY;
     int state = GEM_STATE_ACTIVE;
 
     void render();
