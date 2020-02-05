@@ -12,7 +12,7 @@ void Gem::updateX() {
     if (!atEndOfRowX()) { 
       x -= 3;
     } else {
-      state = GEM_STATE_INACTIVE;
+      state = GEM_STATE_STACKED;
     }
   }    
 }
@@ -41,14 +41,12 @@ void Gem::updatePop() {
     if (type < GEM_POPPING_ANIMATION_END_FRAME) {
       type++;
     } else {
-      state = GEM_STATE_INACTIVE;
+      state = GEM_STATE_POPPED;
     }
   }
 }
 
 void Gem::update() {
-  updateY();
-  
   switch(state) {
     case GEM_STATE_CLEARING:
       updateClear();
@@ -56,8 +54,11 @@ void Gem::update() {
     case GEM_STATE_POPPING:
       updatePop();
       break;
-    case GEM_STATE_ACTIVE:
-      updateX();   
+    case GEM_STATE_FALLING:
+      updateY();
+      updateX();
+    case GEM_STATE_STACKED:
+      updateY();   
       break;
   }
 }
@@ -70,8 +71,12 @@ bool Gem::isInactive() {
   return state == GEM_STATE_INACTIVE;
 }
 
-bool Gem::isActive() {
-  return state == GEM_STATE_ACTIVE;
+bool Gem::isFalling() {
+  return state == GEM_STATE_FALLING;
+}
+
+bool Gem::isStacked() {
+  return state == GEM_STATE_STACKED;
 }
 
 bool Gem::isClearing() {
@@ -80,6 +85,10 @@ bool Gem::isClearing() {
 
 bool Gem::isPopping() {
   return state == GEM_STATE_POPPING;
+}
+
+bool Gem::isPopped() {
+  return state == GEM_STATE_POPPED;
 }
 
 Weapon& Gem::getWeapon() {
@@ -91,7 +100,7 @@ bool Gem::atEndOfRowX() {
 }
 
 void Gem::drop() {
-  state = GEM_STATE_ACTIVE;
+  state = GEM_STATE_FALLING;
 }
 
 void Gem::clear() {

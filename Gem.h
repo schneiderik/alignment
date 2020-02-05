@@ -4,9 +4,11 @@
 #include "global.h";
 
 #define GEM_STATE_INACTIVE 0
-#define GEM_STATE_ACTIVE 1
-#define GEM_STATE_CLEARING 2
-#define GEM_STATE_POPPING 3
+#define GEM_STATE_FALLING 1
+#define GEM_STATE_STACKED 2
+#define GEM_STATE_CLEARING 3
+#define GEM_STATE_POPPING 4
+#define GEM_STATE_POPPED 5
 
 class Gem {
   public:
@@ -42,9 +44,11 @@ class Gem {
     void updatePop();
 
     bool isInactive();
-    bool isActive();
+    bool isFalling();
+    bool isStacked();
     bool isClearing();
     bool isPopping();
+    bool isPopped();
     
     Weapon& getWeapon();
     bool atEndOfRowX();

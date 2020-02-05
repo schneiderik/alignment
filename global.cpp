@@ -10,5 +10,4 @@ Weapon* weapons[WEAPON_COUNT];
 Gem* weaponGems[WEAPON_COUNT][WEAPON_GEMS_MAX];
 Gem* previewGems[PREVIEW_GEMS_MAX];
 Gem* fallingGems[FALLING_GEMS_MAX];
-Gem* poppingGems[POPPING_GEMS_MAX];
 Gem* clearingGems[CLEARING_GEMS_MAX];

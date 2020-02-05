@@ -19,7 +19,6 @@ int paused = false;
 int battleCursorIndex = 0;
 int previewGemCount = 0;
 int fallingGemCount = 0;
-int poppingGemCount = 0;
 int clearingGemCount = 0;
 
 
@@ -37,7 +36,6 @@ void setup() {
   for (int i = 0; i < WEAPON_COUNT; i++) weapons[i] = new Weapon(i);
   for (int i = 0; i < PREVIEW_GEMS_MAX; i++) previewGems[i] = new Gem();
   for (int i = 0; i < FALLING_GEMS_MAX; i++) fallingGems[i] = new Gem();
-  for (int i = 0; i < POPPING_GEMS_MAX; i++) poppingGems[i] = new Gem();
   for (int i = 0; i < CLEARING_GEMS_MAX; i++) clearingGems[i] = new Gem();
     
   arduboy.clear();
@@ -81,7 +79,6 @@ void startBattle() {
   battleCursorIndex = BATTLE_CURSOR_MIN;
   fallingGemCount = 0;
   previewGemCount = 0;
-  poppingGemCount = 0;
   clearingGemCount = 0;
   enemy.reset();
   
@@ -281,7 +278,7 @@ void handleFullWeapon(Gem& fallingGem) {
 
   addGemToArray(clearingGems, fallingGem, clearingGemCount).clear();
   
-  weapon.gemCount = 0;
+  weapon.empty();
   health--;
   loseHeartSound();
 }
@@ -291,16 +288,15 @@ bool isMatch(Gem& fallingGem) {
 
   if (weapon.gemCount == 0) return false;
 
-  return weapon.lastGem().type == fallingGem.type;
+  return weapon.getLastGem().type == fallingGem.type;
 }
 
 void handleMatch(Gem& fallingGem) {
   Weapon& weapon = fallingGem.getWeapon();
   
-  weapon.gemCount--;
   score += 100;
-  addGemToArray(poppingGems, fallingGem, poppingGemCount).pop();
-  addGemToArray(poppingGems, *weapon.gems[weapon.gemCount], poppingGemCount).pop();
+  fallingGem.pop();
+  weapon.popLastGem();
   confirmSound();
   enemy.takeDamage(5, weapon.type);
 }
@@ -326,45 +322,26 @@ void handleGemStack(Gem& gem) {
   }  
 }
 
-void removeGemFromArray(Gem** gems, int i, int& size) {
-  size--;
-  
-  for(int j = i; j < size; j++) *gems[j] = *gems[j + 1];
-}
-
-Gem& addGemToArray(Gem** gems, Gem& gem, int& size) {
-  Gem& nextGem = *gems[size];
-  nextGem = gem;
-  size++;
-
-  return nextGem;
-}
-
 void dropGems() {  
   for(int i = 0; i < fallingGemCount; i++) {
     Gem& gem = *fallingGems[i];
     
     gem.update();
-       
-    if (!gem.isActive()) {
+
+    if (gem.isStacked()) {
       handleGemStack(gem);
+      
+      if (gem.isStacked()) {
+        removeGemFromArray(fallingGems, i, fallingGemCount);
+        i--;
+      }
+    }
+
+    if (gem.isPopped()) {
       removeGemFromArray(fallingGems, i, fallingGemCount);
       i--;
     }
   }  
-}
-
-void popGems() {
-  for (int i = 0; i < poppingGemCount; i++) {
-    Gem& gem = *poppingGems[i];
-
-    gem.update();
-
-    if (!gem.isPopping()) {
-      removeGemFromArray(poppingGems, i, poppingGemCount);
-      i--;
-    }
-  }
 }
 
 void clearGems() {
@@ -391,14 +368,13 @@ void update() {
       handleEnemyDefeated();
       for (int i = 0; i < WEAPON_COUNT; i++) weapons[i]->update();
       enemy.update();
-      popGems();
       
       if (clearingGemCount > 0) {
         clearGems();
-      } else {             
+      } else {
+        dropGems();             
         if (shouldGeneratePreviewGems()) generatePreviewGems();        
-        if (shouldDropPreviewGems()) dropPreviewGems();
-        dropGems();
+        if (shouldDropPreviewGems()) dropPreviewGems();       
       }
       break;
   }  
@@ -499,7 +475,6 @@ void render() {
       enemy.render();
       
       for (int i = 0; i < WEAPON_COUNT; i++) weapons[i]->render(i == battleCursorIndex || i == battleCursorIndex + 1);
-      for (int i = 0; i < poppingGemCount; i++) poppingGems[i]->render();
       for (int i = 0; i < previewGemCount; i++) previewGems[i]->render();
       for (int i = 0; i < fallingGemCount; i++) fallingGems[i]->render();
       for (int i = 0; i < clearingGemCount; i++) clearingGems[i]->render(); 

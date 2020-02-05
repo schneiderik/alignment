@@ -9,10 +9,11 @@ extern Sprites sprites;
 extern ArduboyTones sound;
 
 #include "images.h"
-#include "helpers.h"
 
 class Gem;
 class Weapon;
+
+#include "helpers.h"
 
 #define FPS 60
 #define INTERVAL_LENGTH 30
@@ -85,7 +86,6 @@ extern Weapon* weapons[WEAPON_COUNT];
 extern Gem* weaponGems[WEAPON_COUNT][WEAPON_GEMS_MAX];
 extern Gem* previewGems[PREVIEW_GEMS_MAX];
 extern Gem* fallingGems[FALLING_GEMS_MAX];
-extern Gem* poppingGems[POPPING_GEMS_MAX];
 extern Gem* clearingGems[CLEARING_GEMS_MAX];
 
 #endif

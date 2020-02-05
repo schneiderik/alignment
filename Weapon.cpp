@@ -4,7 +4,7 @@
 Weapon::Weapon(int i) {
   type = i;
   y = weaponYOffsets[i];
-  gemCount = 0;
+  empty();
 
   for (int i = 0; i < WEAPON_GEMS_MAX; i++) {
     gems[i] = new Gem();
@@ -16,17 +16,41 @@ Weapon& Weapon::operator=(const Weapon& weapon) {
     type = weapon.type;
     y = weapon.y;
     gemCount = weapon.gemCount;
+    stackCount = weapon.stackCount;
   }
   return *this;
 }
 
 bool Weapon::isFull() {
-  return gemCount == WEAPON_GEMS_MAX;
+  return stackCount == WEAPON_GEMS_MAX;
 }
 
 void Weapon::addGem(Gem& gem) {
-  *gems[gemCount] = gem;
+  getNextGem() = gem;
   gemCount++;
+  stackCount++;
+}
+
+Gem& Weapon::getGem(int i) {
+  return *gems[i];
+}
+
+Gem& Weapon::getLastGem() {
+  return getGem(stackCount - 1);
+}
+
+Gem& Weapon::getNextGem() {
+  return getGem(stackCount);
+}
+
+void Weapon::popLastGem() {
+  getLastGem().pop();
+  stackCount--;
+}
+
+void Weapon::empty() {
+  gemCount = 0;
+  stackCount = 0;
 }
 
 void Weapon::render(bool active) {
@@ -83,7 +107,7 @@ int Weapon::endOfRowX() {
 void Weapon::reset(int order) {
   type = order;
   y = weaponYOffsets[order];
-  gemCount = 0;
+  empty();
 }
 
 void Weapon::update() {
@@ -98,9 +122,14 @@ void Weapon::updateY() {
 }
 
 void Weapon::updateGems() {
-  for (int i = 0; i < gemCount; i++) gems[i]->update();
-}      
+  for (int i = 0; i < gemCount; i++) {
+    Gem& gem = getGem(i);
+    
+    gem.update();
 
-Gem& Weapon::lastGem() {
-  return *gems[gemCount - 1];
+    if (gem.isPopped()) {
+      removeGemFromArray(gems, i, gemCount);
+      i--;
+    }
+  }
 }

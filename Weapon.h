@@ -12,10 +12,16 @@ class Weapon {
     int type;
     int y;
     int gemCount;
+    int stackCount;
     Gem* gems[WEAPON_GEMS_MAX];
 
     bool isFull();
     void addGem(Gem&);
+    Gem& getGem(int);
+    Gem& getLastGem();
+    Gem& getNextGem();
+    void popLastGem();
+    void empty();
     void reset(int);
     void render(bool);
     void renderIcon(bool);
@@ -27,7 +33,6 @@ class Weapon {
     void updateY();
     void updateGems();
     int endOfRowX();
-    Gem& lastGem();
 };
 
 #endif
