@@ -353,10 +353,12 @@ Gem& addGemToArray(Gem** gems, Gem& gem, int& size) {
   return nextGem;
 }
 
-void resolveFallingGems() {  
+void dropGems() {  
   for(int i = 0; i < fallingGemCount; i++) {
     Gem& fallingGem = *fallingGems[i];
     
+    fallingGem.update();
+       
     if (fallingGem.atEndOfRowX()) {
       Weapon& weapon = fallingGem.getWeapon();
 
@@ -431,17 +433,15 @@ void update() {
           enemyTakeDamageIndicatorFrame++;
         }
       }
+
+      popGems();
       
       if (clearingGemCount > 0) {
         clearGems();
-      } else {
-        popGems();
-        for(int i = 0; i < fallingGemCount; i++) fallingGems[i]->update();
-        if (arduboy.everyXFrames(gameSpeed)) {
-          if (shouldGeneratePreviewGems()) generatePreviewGems();        
-          if (shouldDropPreviewGems()) dropPreviewGems();
-          resolveFallingGems();
-        } 
+      } else {             
+        if (shouldGeneratePreviewGems()) generatePreviewGems();        
+        if (shouldDropPreviewGems()) dropPreviewGems();
+        dropGems();
       }
       break;
   }  
