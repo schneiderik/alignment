@@ -9,6 +9,7 @@ extern Sprites sprites;
 extern ArduboyTones sound;
 
 #include "images.h"
+#include "helpers.h"
 
 class Gem;
 class Weapon;
