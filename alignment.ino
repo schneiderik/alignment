@@ -249,10 +249,6 @@ int randomUniqueRow() {
   return existing ? randomUniqueRow() : num;
 }
 
-void adjustFallingGems() {  
-
-}
-
 bool shouldGeneratePreviewGems() {
   return previewGemCount == 0 && (fallingGemCount == 0 || fallingGemsBelowPreviewThreshold());
 }
@@ -284,27 +280,21 @@ bool shouldDropPreviewGems() {
 }
 
 void dropPreviewGems() {
-  int limit = previewGemCount;
-  for (int i = 0; i < limit; i++) {
-    *fallingGems[i] = *previewGems[i];
-    fallingGemCount++;
-    previewGemCount--;
+  for (int i = 0; i < previewGemCount; i++) {
+    addGemToArray(fallingGems, *previewGems[i], fallingGemCount);
   }
+  
+  previewGemCount = 0;
 }
 
 void handleFullWeapon(Gem& fallingGem) {
   Weapon& weapon = fallingGem.getWeapon();
   
   for (int i = 0; i < weapon.gemCount; i++) {
-    *clearingGems[clearingGemCount] = *weapon.gems[i];
-    clearingGems[clearingGemCount]->clear();
-    clearingGemCount++;
+    addGemToArray(clearingGems, *weapon.gems[i], clearingGemCount).clear();
   }
 
-  *clearingGems[clearingGemCount] = fallingGem;
-  
-  clearingGems[clearingGemCount]->clear();
-  clearingGemCount++;
+  addGemToArray(clearingGems, fallingGem, clearingGemCount).clear();
   
   weapon.gemCount = 0;
   health--;
@@ -319,13 +309,6 @@ bool isMatch(Gem& fallingGem) {
   return weapon.lastGem().type == fallingGem.type;
 }
 
-void setPoppingGem(Gem& gem) {
-  Gem& poppingGem = *poppingGems[poppingGemCount];
-  poppingGem = gem;
-  poppingGem.pop();
-  poppingGemCount++;  
-}
-
 void handleMatch(Gem& fallingGem) {
   Weapon& weapon = fallingGem.getWeapon();
   
@@ -335,8 +318,8 @@ void handleMatch(Gem& fallingGem) {
   score += 100;
   enemyHealthBarWidth = (int)ceil(((float)enemyHealth / (float)ENEMY_DATA[enemyType][ENEMY_DATA_HEALTH]) * (float)ENEMY_HEALTH_BAR_WIDTH_MAX);
 
-  setPoppingGem(fallingGem);
-  setPoppingGem(*weapon.gems[weapon.gemCount]);
+  addGemToArray(poppingGems, fallingGem, poppingGemCount).pop();
+  addGemToArray(poppingGems, *weapon.gems[weapon.gemCount], poppingGemCount).pop();
   
   confirmSound();
 
@@ -360,6 +343,14 @@ void removeGemFromArray(Gem** gems, int i, int& size) {
   size--;
   
   for(int j = i; j < size; j++) *gems[j] = *gems[j + 1];
+}
+
+Gem& addGemToArray(Gem** gems, Gem& gem, int& size) {
+  Gem& nextGem = *gems[size];
+  nextGem = gem;
+  size++;
+
+  return nextGem;
 }
 
 void resolveFallingGems() {  
