@@ -19,7 +19,6 @@ int paused = false;
 int battleCursorIndex = 0;
 int previewGemCount = 0;
 int fallingGemCount = 0;
-int clearingGemCount = 0;
 
 
 //////////////////////////////
@@ -36,7 +35,6 @@ void setup() {
   for (int i = 0; i < WEAPON_COUNT; i++) weapons[i] = new Weapon(i);
   for (int i = 0; i < PREVIEW_GEMS_MAX; i++) previewGems[i] = new Gem();
   for (int i = 0; i < FALLING_GEMS_MAX; i++) fallingGems[i] = new Gem();
-  for (int i = 0; i < CLEARING_GEMS_MAX; i++) clearingGems[i] = new Gem();
     
   arduboy.clear();
 }
@@ -79,7 +77,6 @@ void startBattle() {
   battleCursorIndex = BATTLE_CURSOR_MIN;
   fallingGemCount = 0;
   previewGemCount = 0;
-  clearingGemCount = 0;
   enemy.reset();
   
   for (int i = 0; i < WEAPON_COUNT; i++) weapons[i]->reset(i);
@@ -178,7 +175,7 @@ void handleInput() {
       break;
     case GAME_STATE_BATTLE:
       if (arduboy.justPressed(RIGHT_BUTTON)) paused = !paused;
-      if (paused || clearingGemCount > 0) return;
+      if (paused || isClearing()) return;
       if (arduboy.justPressed(UP_BUTTON)) decrementBattleCursorIndex();
       if (arduboy.justPressed(DOWN_BUTTON)) incrementBattleCursorIndex();
       if (arduboy.justPressed(A_BUTTON)) swapWeapons();
@@ -231,6 +228,12 @@ int randomUniqueRow() {
   return existing ? randomUniqueRow() : num;
 }
 
+bool isClearing() {
+  for (int i = 0; i < WEAPON_COUNT; i++) if (weapons[i]->isClearing()) return true;
+  for (int i = 0; i < fallingGemCount; i++) if (fallingGems[i]->isClearing()) return true;
+  return false;  
+}
+
 bool shouldGeneratePreviewGems() {
   return previewGemCount == 0 && (fallingGemCount == 0 || fallingGemsBelowPreviewThreshold());
 }
@@ -272,13 +275,9 @@ void dropPreviewGems() {
 void handleFullWeapon(Gem& fallingGem) {
   Weapon& weapon = fallingGem.getWeapon();
   
-  for (int i = 0; i < weapon.gemCount; i++) {
-    addGemToArray(clearingGems, *weapon.gems[i], clearingGemCount).clear();
-  }
+  weapon.clearGems();
+  fallingGem.clear();
 
-  addGemToArray(clearingGems, fallingGem, clearingGemCount).clear();
-  
-  weapon.empty();
   health--;
   loseHeartSound();
 }
@@ -325,36 +324,27 @@ void handleGemStack(Gem& gem) {
 void dropGems() {  
   for(int i = 0; i < fallingGemCount; i++) {
     Gem& gem = *fallingGems[i];
-    
-    gem.update();
 
-    if (gem.isStacked()) {
-      handleGemStack(gem);
-      
+    if (isClearing()) {
+      if (gem.isClearing()) gem.update();
+    } else {
+      gem.update(); 
+  
       if (gem.isStacked()) {
+        handleGemStack(gem);
+        
+        if (gem.isStacked()) {
+          removeGemFromArray(fallingGems, i, fallingGemCount);
+          i--;
+        }
+      }
+  
+      if (gem.isPopped() || gem.isCleared()) {
         removeGemFromArray(fallingGems, i, fallingGemCount);
         i--;
       }
     }
-
-    if (gem.isPopped()) {
-      removeGemFromArray(fallingGems, i, fallingGemCount);
-      i--;
-    }
   }  
-}
-
-void clearGems() {
-  for (int i = 0; i < clearingGemCount; i++) {
-    Gem& gem = *clearingGems[i];
-
-    gem.update();
-    
-    if (!gem.isClearing()) {
-      removeGemFromArray(clearingGems, i, clearingGemCount);
-      i--;
-    }
-  }
 }
 
 void update() {
@@ -368,14 +358,13 @@ void update() {
       handleEnemyDefeated();
       for (int i = 0; i < WEAPON_COUNT; i++) weapons[i]->update();
       enemy.update();
-      
-      if (clearingGemCount > 0) {
-        clearGems();
-      } else {
-        dropGems();             
+    
+      if (!isClearing()) {              
         if (shouldGeneratePreviewGems()) generatePreviewGems();        
         if (shouldDropPreviewGems()) dropPreviewGems();       
       }
+
+      dropGems();
       break;
   }  
 }
@@ -477,7 +466,6 @@ void render() {
       for (int i = 0; i < WEAPON_COUNT; i++) weapons[i]->render(i == battleCursorIndex || i == battleCursorIndex + 1);
       for (int i = 0; i < previewGemCount; i++) previewGems[i]->render();
       for (int i = 0; i < fallingGemCount; i++) fallingGems[i]->render();
-      for (int i = 0; i < clearingGemCount; i++) clearingGems[i]->render(); 
 
       // Render Paused
       if (paused) sprites.drawOverwrite(50, 28, pausedTextImage, 0); 

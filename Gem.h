@@ -7,8 +7,9 @@
 #define GEM_STATE_FALLING 1
 #define GEM_STATE_STACKED 2
 #define GEM_STATE_CLEARING 3
-#define GEM_STATE_POPPING 4
-#define GEM_STATE_POPPED 5
+#define GEM_STATE_CLEARED 4
+#define GEM_STATE_POPPING 5
+#define GEM_STATE_POPPED 6
 
 class Gem {
   public:
@@ -47,6 +48,7 @@ class Gem {
     bool isFalling();
     bool isStacked();
     bool isClearing();
+    bool isCleared();
     bool isPopping();
     bool isPopped();
     

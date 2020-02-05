@@ -31,7 +31,7 @@ void Gem::updateClear() {
       velocityY += GRAVITY_ACCELERATION;
     } else {
       velocityY = initialVelocityY;
-      state = GEM_STATE_INACTIVE;
+      state = GEM_STATE_CLEARED;
     }
   }
 }
@@ -81,6 +81,10 @@ bool Gem::isStacked() {
 
 bool Gem::isClearing() {
   return state == GEM_STATE_CLEARING;
+}
+
+bool Gem::isCleared() {
+  return state == GEM_STATE_CLEARED;
 }
 
 bool Gem::isPopping() {

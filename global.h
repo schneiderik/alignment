@@ -86,6 +86,5 @@ extern Weapon* weapons[WEAPON_COUNT];
 extern Gem* weaponGems[WEAPON_COUNT][WEAPON_GEMS_MAX];
 extern Gem* previewGems[PREVIEW_GEMS_MAX];
 extern Gem* fallingGems[FALLING_GEMS_MAX];
-extern Gem* clearingGems[CLEARING_GEMS_MAX];
 
 #endif

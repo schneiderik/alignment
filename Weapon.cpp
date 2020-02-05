@@ -48,6 +48,17 @@ void Weapon::popLastGem() {
   stackCount--;
 }
 
+void Weapon::clearGems() {
+  for (int i = 0; i < gemCount; i++) getGem(i).clear(); 
+  stackCount = 0;
+}
+
+bool Weapon::isClearing() {
+  for (int i = 0; i < gemCount; i++) if (getGem(i).isClearing()) return true;
+
+  return false;
+}
+
 void Weapon::empty() {
   gemCount = 0;
   stackCount = 0;
@@ -73,7 +84,7 @@ void Weapon::renderDivider() {
 }
 
 void Weapon::renderGems() {
-  for (int i = 0; i < gemCount; i++) gems[i]->render(); 
+  for (int i = 0; i < gemCount; i++) getGem(i).render(); 
 }
 
 void Weapon::swap(Weapon& otherWeapon) {  
@@ -127,7 +138,7 @@ void Weapon::updateGems() {
     
     gem.update();
 
-    if (gem.isPopped()) {
+    if (gem.isPopped() || gem.isCleared()) {
       removeGemFromArray(gems, i, gemCount);
       i--;
     }
