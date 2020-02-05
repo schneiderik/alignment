@@ -34,8 +34,12 @@ void Enemy::takeDamage(int rawDamage, int weaponType) {
 }
 
 void Enemy::update() {
-  if (arduboy.everyXFrames(ENEMY_TAKE_DAMAGE_FLASH_LENGTH) && damageFlashCount < ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX) damageFlashCount++;
+  updateFlashAnimation();
+  updateX();
+  updateDamageIndicator();
+}
 
+void Enemy::updateX() {
   if (arduboy.everyXFrames(ENEMY_TAKE_DAMAGE_ANIMATION_FRAME_LENGTH)) {
     if (damageAnimationFrame < ENEMY_TAKE_DAMAGE_ANIMATION_END_FRAME) {
       if (offsetX > 1) velocityX = -1;
@@ -43,8 +47,14 @@ void Enemy::update() {
       offsetX += velocityX;
       damageAnimationFrame++;
     }
-  }
+  }  
+}
 
+void Enemy::updateFlashAnimation() {
+  if (arduboy.everyXFrames(ENEMY_TAKE_DAMAGE_FLASH_LENGTH) && damageFlashCount < ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX) damageFlashCount++;  
+}
+
+void Enemy::updateDamageIndicator() {
   if (damageIndicatorFrame < ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME) {
     if (arduboy.everyXFrames(ENEMY_TAKE_DAMAGE_INDICATOR_FRAME_LENGTH)) {
       damageIndicatorY--;      

@@ -45,11 +45,16 @@ class Enemy {
     void set(int);
     void reset();
     void takeDamage(int, int);
+    
     void render();
     void renderPortrait();
     void renderHealthBar();
     void renderDamageIndicator();
+    
     void update();
+    void updateX();
+    void updateFlashAnimation();
+    void updateDamageIndicator();
 
     int type;
     int health;
