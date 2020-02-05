@@ -11,12 +11,12 @@ void Enemy::set(int i) {
 }
 
 void Enemy::reset() {
-  enemyTakeDamageAnimationFrame = ENEMY_TAKE_DAMAGE_ANIMATION_END_FRAME;
-  enemyTakeDamageFlashCount = ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX;
-  enemyPortraitOffset = 0;
-  enemyPortraitVelocity = 1;
-  enemyTakeDamageIndicatorFrame = ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME;
-  enemyTakeDamageIndicatorNum = 0;
+  damageAnimationFrame = ENEMY_TAKE_DAMAGE_ANIMATION_END_FRAME;
+  damageFlashCount = ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX;
+  offsetX = 0;
+  velocityX = 1;
+  damageIndicatorFrame = ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME;
+  damageIndicatorNum = 0;
 }
 
 void Enemy::takeDamage(int rawDamage, int weaponType) {
@@ -25,48 +25,48 @@ void Enemy::takeDamage(int rawDamage, int weaponType) {
   health -= damage;
   healthBarWidth = (int)ceil(((float)health / (float)ENEMY_DATA[type][ENEMY_DATA_HEALTH]) * (float)ENEMY_HEALTH_BAR_WIDTH_MAX);
   
-  enemyTakeDamageFlashCount = 0;
-  enemyPortraitOffset = 0;
-  enemyTakeDamageAnimationFrame = ENEMY_TAKE_DAMAGE_ANIMATION_START_FRAME;
-  enemyTakeDamageIndicatorFrame = ENEMY_TAKE_DAMAGE_INDICATOR_START_FRAME;
-  enemyTakeDamageIndicatorY = ENEMY_TAKE_DAMAGE_INDICATOR_INITIAL_Y;
-  enemyTakeDamageIndicatorNum = -damage;
+  damageFlashCount = 0;
+  offsetX = 0;
+  damageAnimationFrame = ENEMY_TAKE_DAMAGE_ANIMATION_START_FRAME;
+  damageIndicatorFrame = ENEMY_TAKE_DAMAGE_INDICATOR_START_FRAME;
+  damageIndicatorY = ENEMY_TAKE_DAMAGE_INDICATOR_INITIAL_Y;
+  damageIndicatorNum = -damage;
 }
 
 void Enemy::update() {
-  if (arduboy.everyXFrames(ENEMY_TAKE_DAMAGE_FLASH_LENGTH) && enemyTakeDamageFlashCount < ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX) enemyTakeDamageFlashCount++;
+  if (arduboy.everyXFrames(ENEMY_TAKE_DAMAGE_FLASH_LENGTH) && damageFlashCount < ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX) damageFlashCount++;
 
   if (arduboy.everyXFrames(ENEMY_TAKE_DAMAGE_ANIMATION_FRAME_LENGTH)) {
-    if (enemyTakeDamageAnimationFrame < ENEMY_TAKE_DAMAGE_ANIMATION_END_FRAME) {
-      if (enemyPortraitOffset > 1) enemyPortraitVelocity = -1;
-      if (enemyPortraitOffset < -1) enemyPortraitVelocity = 1;
-      enemyPortraitOffset += enemyPortraitVelocity;
-      enemyTakeDamageAnimationFrame++;
+    if (damageAnimationFrame < ENEMY_TAKE_DAMAGE_ANIMATION_END_FRAME) {
+      if (offsetX > 1) velocityX = -1;
+      if (offsetX < -1) velocityX = 1;
+      offsetX += velocityX;
+      damageAnimationFrame++;
     }
   }
 
-  if (enemyTakeDamageIndicatorFrame < ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME) {
+  if (damageIndicatorFrame < ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME) {
     if (arduboy.everyXFrames(ENEMY_TAKE_DAMAGE_INDICATOR_FRAME_LENGTH)) {
-      enemyTakeDamageIndicatorY--;      
-      enemyTakeDamageIndicatorFrame++;
+      damageIndicatorY--;      
+      damageIndicatorFrame++;
     }
   }  
 }
 
 void Enemy::render() {
   // Render Enemy Portrait
-  if (enemyTakeDamageFlashCount == ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX || enemyTakeDamageFlashCount % 2) {
-    sprites.drawOverwrite(104 + enemyPortraitOffset, 12, enemySprite, type);
+  if (damageFlashCount == ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX || damageFlashCount % 2) {
+    sprites.drawOverwrite(104 + offsetX, 12, enemySprite, type);
   }
 
   //Render Enemy Damage
-  if (enemyTakeDamageIndicatorFrame < ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME) {
+  if (damageIndicatorFrame < ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME) {
     int height = numberSprite[1] + 2;
-    int width = numberWidth(enemyTakeDamageIndicatorNum) + 4;
+    int width = numberWidth(damageIndicatorNum) + 4;
     
-    arduboy.fillRect(SCREEN_WIDTH - 27 + (width/2), enemyTakeDamageIndicatorY - 1, width + 2, height + 2, 1);
-    arduboy.fillRect(SCREEN_WIDTH - 26 + (width/2), enemyTakeDamageIndicatorY, width, height, 0);
-    renderNumberAlignCenter(enemyTakeDamageIndicatorNum, 116, enemyTakeDamageIndicatorY + 2, false);
+    arduboy.fillRect(SCREEN_WIDTH - 27 + (width/2), damageIndicatorY - 1, width + 2, height + 2, 1);
+    arduboy.fillRect(SCREEN_WIDTH - 26 + (width/2), damageIndicatorY, width, height, 0);
+    renderNumberAlignCenter(damageIndicatorNum, 116, damageIndicatorY + 2, false);
   }
 
   // Render Enemy Health
