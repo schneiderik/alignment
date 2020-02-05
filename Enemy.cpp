@@ -54,12 +54,22 @@ void Enemy::update() {
 }
 
 void Enemy::render() {
-  // Render Enemy Portrait
+  renderPortrait();
+  renderHealthBar();
+  renderDamageIndicator();
+}
+
+void Enemy::renderPortrait() {
   if (damageFlashCount == ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX || damageFlashCount % 2) {
     sprites.drawOverwrite(104 + offsetX, 12, enemySprite, type);
-  }
+  }  
+}
 
-  //Render Enemy Damage
+void Enemy::renderHealthBar() {
+  arduboy.fillRect(106, 62, healthBarWidth, 1, 1); 
+}
+
+void Enemy::renderDamageIndicator() {
   if (damageIndicatorFrame < ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME) {
     int height = numberSprite[1] + 2;
     int width = numberWidth(damageIndicatorNum) + 4;
@@ -67,8 +77,5 @@ void Enemy::render() {
     arduboy.fillRect(SCREEN_WIDTH - 27 + (width/2), damageIndicatorY - 1, width + 2, height + 2, 1);
     arduboy.fillRect(SCREEN_WIDTH - 26 + (width/2), damageIndicatorY, width, height, 0);
     renderNumberAlignCenter(damageIndicatorNum, 116, damageIndicatorY + 2, false);
-  }
-
-  // Render Enemy Health
-  arduboy.fillRect(106, 62, healthBarWidth, 1, 1);  
+  }  
 }

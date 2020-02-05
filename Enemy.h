@@ -46,6 +46,9 @@ class Enemy {
     void reset();
     void takeDamage(int, int);
     void render();
+    void renderPortrait();
+    void renderHealthBar();
+    void renderDamageIndicator();
     void update();
 
     int type;
