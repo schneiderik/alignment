@@ -47,6 +47,8 @@ void Gem::updatePop() {
 }
 
 void Gem::update() {
+  updateY();
+  
   switch(state) {
     case GEM_STATE_CLEARING:
       updateClear();
@@ -55,8 +57,7 @@ void Gem::update() {
       updatePop();
       break;
     case GEM_STATE_ACTIVE:
-      updateX();
-      updateY(); 
+      updateX();   
       break;
   }
 }

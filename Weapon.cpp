@@ -98,7 +98,7 @@ void Weapon::updateY() {
 }
 
 void Weapon::updateGems() {
-  for (int i = 0; i < gemCount; i++) gems[i]->updateY();
+  for (int i = 0; i < gemCount; i++) gems[i]->update();
 }      
 
 Gem& Weapon::lastGem() {
