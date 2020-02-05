@@ -602,24 +602,10 @@ void render() {
       // Render Preview Divider
       arduboy.fillRect(89, 14, 1, 48);
 
-      // Render Weapons
       for (int i = 0; i < WEAPON_COUNT; i++) weapons[i]->render(i == battleCursorIndex || i == battleCursorIndex + 1);
       for (int i = 0; i < poppingGemCount; i++) poppingGems[i]->render();
-
-      // Render Preview Gems
-      for(int previewGemIndex = 0; previewGemIndex < PREVIEW_GEMS_MAX; previewGemIndex++) {
-        Gem& previewGem = *previewGems[previewGemIndex];
-        
-        sprites.drawPlusMask(
-          previewGem.x, 
-          gemYOffsets[previewGem.row], 
-          gemSpritePlusMask, 
-          previewGem.type
-        );
-      }
-
-      // Render Falling Gems
-      for(int i = 0; i < fallingGemCount; i++) fallingGems[i]->render();
+      for (int i = 0; i < previewGemCount; i++) previewGems[i]->render();
+      for (int i = 0; i < fallingGemCount; i++) fallingGems[i]->render();
 
       // Render Enemy Portrait
       if (enemyTakeDamageFlashCount == ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX || enemyTakeDamageFlashCount % 2) {
