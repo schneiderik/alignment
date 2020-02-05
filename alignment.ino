@@ -1,6 +1,7 @@
 #include "global.h"
 #include "Gem.h"
 #include "Weapon.h"
+#include "Enemy.h"
 
 //////////////////////////////
 // GLOBAL VARIABLES
@@ -11,10 +12,8 @@ int titleState = TITLE_STATE_PLAY;
 int questCursorOffset = 0;
 int questCursorVelocity = -1;
 unsigned long int score = 0;
+Enemy enemy;
 int gameSpeed = INITIAL_GAME_SPEED;
-int enemyType = ENEMY_TYPE_SKELETON;
-int enemyHealth = ENEMY_DATA[enemyType][ENEMY_DATA_HEALTH];
-int enemyHealthBarWidth = ENEMY_HEALTH_BAR_WIDTH_MAX;
 int health = HEALTH_MAX;
 int paused = false;
 int battleCursorIndex = 0;
@@ -22,14 +21,6 @@ int previewGemCount = 0;
 int fallingGemCount = 0;
 int poppingGemCount = 0;
 int clearingGemCount = 0;
-int enemyTakeDamageAnimationFrame = ENEMY_TAKE_DAMAGE_ANIMATION_END_FRAME;
-int enemyTakeDamageFlashCount = ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX;
-int enemyPortraitOffset = 0;
-int enemyPortraitVelocity = 1;
-int enemyTakeDamageIndicatorFrame = ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME;
-int enemyTakeDamageIndicatorY = ENEMY_TAKE_DAMAGE_INDICATOR_INITIAL_Y;
-int enemyTakeDamageIndicatorNum = 0;
-
 
 
 //////////////////////////////
@@ -80,26 +71,20 @@ void loseHeartSound() {
 
 void resetGame() {
   titleState = TITLE_STATE_PLAY;
-  enemyType = ENEMY_TYPE_SKELETON;
+  enemy.set(ENEMY_TYPE_SKELETON);
   score = 0;
   gameState = GAME_STATE_TITLE;
 }
 
 void startBattle() { 
   health = HEALTH_MAX;
-  enemyHealth = ENEMY_DATA[enemyType][ENEMY_DATA_HEALTH];
-  enemyHealthBarWidth = ENEMY_HEALTH_BAR_WIDTH_MAX;
   battleCursorIndex = BATTLE_CURSOR_MIN;
   fallingGemCount = 0;
   previewGemCount = 0;
   poppingGemCount = 0;
   clearingGemCount = 0;
-  enemyTakeDamageAnimationFrame = ENEMY_TAKE_DAMAGE_ANIMATION_END_FRAME;
-  enemyTakeDamageFlashCount = ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX;
-  enemyPortraitOffset = 0;
-  enemyPortraitVelocity = 1;
-  enemyTakeDamageIndicatorFrame = ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME;
-
+  enemy.reset();
+  
   for (int i = 0; i < WEAPON_COUNT; i++) weapons[i]->reset(i);
   
   confirmSound();
@@ -227,11 +212,11 @@ void handlePlayerDefeated() {
 }
 
 void handleEnemyDefeated() {
-  if (enemyHealth <= 0) {
-    if (enemyType == LAST_ENEMY) {
+  if (enemy.health <= 0) {
+    if (enemy.type == LAST_ENEMY) {
       gameState = GAME_STATE_WIN;
     } else { 
-      enemyType++;
+      enemy.set(enemy.type + 1);
       gameState = GAME_STATE_QUEST;
     }
   }
@@ -312,23 +297,12 @@ bool isMatch(Gem& fallingGem) {
 void handleMatch(Gem& fallingGem) {
   Weapon& weapon = fallingGem.getWeapon();
   
-  int damage = 5 + ENEMY_DATA[enemyType][ENEMY_DATA_MODIFIER + weapon.type];
   weapon.gemCount--;
-  enemyHealth -= damage;
   score += 100;
-  enemyHealthBarWidth = (int)ceil(((float)enemyHealth / (float)ENEMY_DATA[enemyType][ENEMY_DATA_HEALTH]) * (float)ENEMY_HEALTH_BAR_WIDTH_MAX);
-
   addGemToArray(poppingGems, fallingGem, poppingGemCount).pop();
   addGemToArray(poppingGems, *weapon.gems[weapon.gemCount], poppingGemCount).pop();
-  
   confirmSound();
-
-  enemyTakeDamageFlashCount = 0;
-  enemyPortraitOffset = 0;
-  enemyTakeDamageAnimationFrame = ENEMY_TAKE_DAMAGE_ANIMATION_START_FRAME;
-  enemyTakeDamageIndicatorFrame = ENEMY_TAKE_DAMAGE_INDICATOR_START_FRAME;
-  enemyTakeDamageIndicatorY = ENEMY_TAKE_DAMAGE_INDICATOR_INITIAL_Y;
-  enemyTakeDamageIndicatorNum = -damage;
+  enemy.takeDamage(5, weapon.type);
 }
 
 void handleNoMatch(Gem& fallingGem) {
@@ -417,26 +391,7 @@ void update() {
       handlePlayerDefeated();
       handleEnemyDefeated();
       for (int i = 0; i < WEAPON_COUNT; i++) weapons[i]->update();
-      
-      if (arduboy.everyXFrames(ENEMY_TAKE_DAMAGE_FLASH_LENGTH) && enemyTakeDamageFlashCount < ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX) enemyTakeDamageFlashCount++;
-
-      if (arduboy.everyXFrames(ENEMY_TAKE_DAMAGE_ANIMATION_FRAME_LENGTH)) {
-        if (enemyTakeDamageAnimationFrame < ENEMY_TAKE_DAMAGE_ANIMATION_END_FRAME) {
-          if (enemyPortraitOffset > 1) enemyPortraitVelocity = -1;
-          if (enemyPortraitOffset < -1) enemyPortraitVelocity = 1;
-          enemyPortraitOffset += enemyPortraitVelocity;
-          enemyTakeDamageAnimationFrame++;
-        }
-      }
-
-
-      if (enemyTakeDamageIndicatorFrame < ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME) {
-        if (arduboy.everyXFrames(ENEMY_TAKE_DAMAGE_INDICATOR_FRAME_LENGTH)) {
-          enemyTakeDamageIndicatorY--;      
-          enemyTakeDamageIndicatorFrame++;
-        }
-      }
-
+      enemy.update();
       popGems();
       
       if (clearingGemCount > 0) {
@@ -498,8 +453,8 @@ void render() {
 
       // Render Quest Cursor
       sprites.drawOverwrite(
-        ENEMY_DATA[enemyType][ENEMY_DATA_QUEST_X] + 8,
-        ENEMY_DATA[enemyType][ENEMY_DATA_QUEST_Y] - 4 - questCursorOffset,
+        ENEMY_DATA[enemy.type][ENEMY_DATA_QUEST_X] + 8,
+        ENEMY_DATA[enemy.type][ENEMY_DATA_QUEST_Y] - 4 - questCursorOffset,
         questCursorImage,
         0
       );
@@ -515,9 +470,9 @@ void render() {
           ENEMY_DATA[i][ENEMY_DATA_QUEST_X],
           ENEMY_DATA[i][ENEMY_DATA_QUEST_Y],
           questSprite,
-          enemyType == i
+          enemy.type == i
             ? i
-            : i < enemyType
+            : i < enemy.type
               ? QUEST_SPRITE_GRAVE_INDEX
               : QUEST_SPRITE_MYSTERY_INDEX
         );  
@@ -541,30 +496,13 @@ void render() {
       
       // Render Preview Divider
       arduboy.fillRect(89, 14, 1, 48);
-
+      
+      enemy.render();
+      
       for (int i = 0; i < WEAPON_COUNT; i++) weapons[i]->render(i == battleCursorIndex || i == battleCursorIndex + 1);
       for (int i = 0; i < poppingGemCount; i++) poppingGems[i]->render();
       for (int i = 0; i < previewGemCount; i++) previewGems[i]->render();
       for (int i = 0; i < fallingGemCount; i++) fallingGems[i]->render();
-
-      // Render Enemy Portrait
-      if (enemyTakeDamageFlashCount == ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX || enemyTakeDamageFlashCount % 2) {
-        sprites.drawOverwrite(104 + enemyPortraitOffset, 12, enemySprite, enemyType);
-      }
-
-      //Render Enemy Damage
-      if (enemyTakeDamageIndicatorFrame < ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME) {
-        int height = numberSprite[1] + 2;
-        int width = numberWidth(enemyTakeDamageIndicatorNum) + 4;
-        
-        arduboy.fillRect(SCREEN_WIDTH - 27 + (width/2), enemyTakeDamageIndicatorY - 1, width + 2, height + 2, 1);
-        arduboy.fillRect(SCREEN_WIDTH - 26 + (width/2), enemyTakeDamageIndicatorY, width, height, 0);
-        renderNumberAlignCenter(enemyTakeDamageIndicatorNum, 116, enemyTakeDamageIndicatorY + 2, false);
-      }
-
-      // Render Enemy Health
-      arduboy.fillRect(106, 62, enemyHealthBarWidth, 1, 1);
-
       for (int i = 0; i < clearingGemCount; i++) clearingGems[i]->render(); 
 
       // Render Paused
