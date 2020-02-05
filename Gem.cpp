@@ -32,10 +32,23 @@ void Gem::updateClear() {
   }
 }
 
+void Gem::updatePop() {
+  if (arduboy.everyXFrames(5)) {
+    if (type < GEM_POPPING_ANIMATION_END_FRAME) {
+      type++;
+    } else {
+      state = GEM_STATE_INACTIVE;
+    }
+  }
+}
+
 void Gem::update() {
   switch(state) {
     case GEM_STATE_CLEARING:
       updateClear();
+      break;
+    case GEM_STATE_POPPING:
+      updatePop();
       break;
     case GEM_STATE_ACTIVE:
       updateX();
@@ -60,6 +73,10 @@ bool Gem::isClearing() {
   return state == GEM_STATE_CLEARING;
 }
 
+bool Gem::isPopping() {
+  return state == GEM_STATE_POPPING;
+}
+
 Weapon& Gem::getWeapon() {
   return *weapons[row];
 }
@@ -70,4 +87,9 @@ bool Gem::atEndOfRowX() {
 
 void Gem::clear() {
   state = GEM_STATE_CLEARING;
+}
+
+void Gem::pop() {
+  type = GEM_POPPING_ANIMATION_START_FRAME;
+  state = GEM_STATE_POPPING;
 }

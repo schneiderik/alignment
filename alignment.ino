@@ -322,7 +322,7 @@ bool isMatch(Gem& fallingGem) {
 void setPoppingGem(Gem& gem) {
   Gem& poppingGem = *poppingGems[poppingGemCount];
   poppingGem = gem;
-  poppingGem.type = GEM_POPPING_ANIMATION_START_FRAME;
+  poppingGem.pop();
   poppingGemCount++;  
 }
 
@@ -356,6 +356,12 @@ void handleNoMatch(Gem& fallingGem) {
   score += 10; 
 }
 
+void removeGemFromArray(Gem** gems, int i, int& size) {
+  size--;
+  
+  for(int j = i; j < size; j++) *gems[j] = *gems[j + 1];
+}
+
 void resolveFallingGems() {  
   for(int i = 0; i < fallingGemCount; i++) {
     Gem& fallingGem = *fallingGems[i];
@@ -373,29 +379,21 @@ void resolveFallingGems() {
         }        
       }
 
-      for(int j = i; j < fallingGemCount; j++) fallingGem = *fallingGems[j];        
-      
-      fallingGemCount--;
+      removeGemFromArray(fallingGems, i, fallingGemCount);
       i--;
     }
   }  
 }
 
-void removeGemFromArray(Gem** gems, int i, int& size) {
-  size--;
-  
-  for(int j = i; j < size; j++) *clearingGems[j] = *clearingGems[j + 1];
-}
-
 void popGems() {
   for (int i = 0; i < poppingGemCount; i++) {
-    if (arduboy.everyXFrames(5)) {
-      if (poppingGems[i]->type < GEM_POPPING_ANIMATION_END_FRAME) {
-        poppingGems[i]->type++;
-      } else {
-        removeGemFromArray(poppingGems, i, poppingGemCount);
-        i--;
-      }
+    Gem& gem = *poppingGems[i];
+
+    gem.update();
+
+    if (!gem.isPopping()) {
+      removeGemFromArray(poppingGems, i, poppingGemCount);
+      i--;
     }
   }
 }

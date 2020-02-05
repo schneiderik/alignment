@@ -6,6 +6,7 @@
 #define GEM_STATE_INACTIVE 0
 #define GEM_STATE_ACTIVE 1
 #define GEM_STATE_CLEARING 2
+#define GEM_STATE_POPPING 3
 
 class Gem {
   public:
@@ -38,14 +39,17 @@ class Gem {
     void updateX();
     void updateY();
     void updateClear();
+    void updatePop();
 
     bool isInactive();
     bool isActive();
     bool isClearing();
+    bool isPopping();
     
     Weapon& getWeapon();
     bool atEndOfRowX();
     void clear();
+    void pop();
 };
 
 #endif
