@@ -281,7 +281,7 @@ bool shouldDropPreviewGems() {
 
 void dropPreviewGems() {
   for (int i = 0; i < previewGemCount; i++) {
-    addGemToArray(fallingGems, *previewGems[i], fallingGemCount);
+    addGemToArray(fallingGems, *previewGems[i], fallingGemCount).drop();
   }
   
   previewGemCount = 0;
@@ -339,6 +339,20 @@ void handleNoMatch(Gem& fallingGem) {
   score += 10; 
 }
 
+void handleGemStack(Gem& gem) {
+  Weapon& weapon = gem.getWeapon();
+
+  if (isMatch(gem)) {
+    handleMatch(gem);
+  } else {
+    if (weapon.isFull()) {
+      handleFullWeapon(gem);
+    } else {
+      handleNoMatch(gem);
+    }        
+  }  
+}
+
 void removeGemFromArray(Gem** gems, int i, int& size) {
   size--;
   
@@ -355,23 +369,12 @@ Gem& addGemToArray(Gem** gems, Gem& gem, int& size) {
 
 void dropGems() {  
   for(int i = 0; i < fallingGemCount; i++) {
-    Gem& fallingGem = *fallingGems[i];
+    Gem& gem = *fallingGems[i];
     
-    fallingGem.update();
+    gem.update();
        
-    if (fallingGem.atEndOfRowX()) {
-      Weapon& weapon = fallingGem.getWeapon();
-
-      if (isMatch(fallingGem)) {
-        handleMatch(fallingGem);
-      } else {
-        if (weapon.isFull()) {
-          handleFullWeapon(fallingGem);
-        } else {
-          handleNoMatch(fallingGem);
-        }        
-      }
-
+    if (!gem.isActive()) {
+      handleGemStack(gem);
       removeGemFromArray(fallingGems, i, fallingGemCount);
       i--;
     }

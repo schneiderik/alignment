@@ -32,7 +32,7 @@ class Gem {
     int velocityX;
     int velocityY;
     int initialVelocityY;
-    int state = GEM_STATE_ACTIVE;
+    int state = GEM_STATE_INACTIVE;
 
     void render();
     void update();
@@ -48,6 +48,7 @@ class Gem {
     
     Weapon& getWeapon();
     bool atEndOfRowX();
+    void drop();
     void clear();
     void pop();
 };

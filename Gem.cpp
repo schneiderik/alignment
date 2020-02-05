@@ -8,8 +8,12 @@ Gem::Gem() {
 }
 
 void Gem::updateX() {
-  if (arduboy.everyXFrames(INITIAL_GAME_SPEED) && getWeapon().endOfRowX() < x) { 
-    x -= 3;
+  if (arduboy.everyXFrames(INITIAL_GAME_SPEED)) {
+    if (!atEndOfRowX()) { 
+      x -= 3;
+    } else {
+      state = GEM_STATE_INACTIVE;
+    }
   }    
 }
 
@@ -83,6 +87,10 @@ Weapon& Gem::getWeapon() {
 
 bool Gem::atEndOfRowX() {
   return getWeapon().endOfRowX() >= x;
+}
+
+void Gem::drop() {
+  state = GEM_STATE_ACTIVE;
 }
 
 void Gem::clear() {
