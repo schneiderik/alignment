@@ -309,7 +309,6 @@ void handleNoMatch(Gem& fallingGem) {
   Weapon& weapon = fallingGem.getWeapon();
           
   weapon.addGem(fallingGem);
-  weapon.gemCount++;
   score += 10; 
 }
 

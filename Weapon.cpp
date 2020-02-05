@@ -26,6 +26,7 @@ bool Weapon::isFull() {
 
 void Weapon::addGem(Gem& gem) {
   *gems[gemCount] = gem;
+  gemCount++;
 }
 
 void Weapon::render(bool active) {
