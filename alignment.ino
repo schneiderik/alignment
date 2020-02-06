@@ -17,9 +17,9 @@ Enemy enemy;
 int gameSpeed = INITIAL_GAME_SPEED;
 int health = HEALTH_MAX;
 int paused = false;
-int battleCursorIndex = 0;
 int previewGemCount = 0;
 int fallingGemCount = 0;
+
 
 
 //////////////////////////////
@@ -55,13 +55,10 @@ void resetGame() {
 
 void startBattle() { 
   health = HEALTH_MAX;
-  battleCursorIndex = BATTLE_CURSOR_MIN;
   fallingGemCount = 0;
   previewGemCount = 0;
   enemy.reset();
-  
-  for (int i = 0; i < WEAPON_COUNT; i++) weapons->get(i).reset(i);
-  
+  weapons->reset();
   confirmSound();
   gameState = GAME_STATE_BATTLE;
 }
@@ -101,41 +98,25 @@ void selectTitleOption() {
   confirmSound();
 }
 
-void decrementBattleCursorIndex() {
-  if (battleCursorIndex > BATTLE_CURSOR_MIN) {
-    battleCursorIndex--;  
-    moveSound();
-  }
-}
-
-void incrementBattleCursorIndex() {
-  if (battleCursorIndex < BATTLE_CURSOR_MAX) {
-    battleCursorIndex++;
-    moveSound();
-  }
-}
-
 void swapWeapons() {
-  Weapon& weapon1 = weapons->get(battleCursorIndex);
-  Weapon& weapon2 = weapons->get(battleCursorIndex + 1);
+  Weapon& weapon1 = weapons->get(weapons->activeIndex);
+  Weapon& weapon2 = weapons->get(weapons->activeIndex + 1);
   
   for(int i = 0; i < fallingGemCount; i++) {
     Gem& fallingGem = *fallingGems[i];
-    bool fallingGemInRow1 = battleCursorIndex == fallingGem.row;
-    bool fallingGemInRow2 = battleCursorIndex + 1 == fallingGem.row;
+    bool fallingGemInRow1 = weapons->activeIndex == fallingGem.row;
+    bool fallingGemInRow2 = weapons->activeIndex + 1 == fallingGem.row;
     bool fallingGemMustMoveToRow2 = fallingGem.x < gemXOffsets[weapon2.gemCount];
     bool fallingGemMustMoveToRow1 = fallingGem.x < gemXOffsets[weapon1.gemCount];
   
     if (fallingGemInRow1 && fallingGemMustMoveToRow2) {
-      fallingGem.row = battleCursorIndex + 1;
+      fallingGem.row = weapons->activeIndex + 1;
     } else if (fallingGemInRow2 && fallingGemMustMoveToRow1) {
-      fallingGem.row = battleCursorIndex;
-    }
-
-    swapSound();
+      fallingGem.row = weapons->activeIndex;
+    }  
   }
-
-  weapon1.swap(weapon2);
+  
+  weapons->swap(); 
 }
 
 void handleInput() {
@@ -157,9 +138,9 @@ void handleInput() {
     case GAME_STATE_BATTLE:
       if (arduboy.justPressed(RIGHT_BUTTON)) paused = !paused;
       if (paused || isClearing()) return;
-      if (arduboy.justPressed(UP_BUTTON)) decrementBattleCursorIndex();
-      if (arduboy.justPressed(DOWN_BUTTON)) incrementBattleCursorIndex();
-      if (arduboy.justPressed(A_BUTTON)) swapWeapons();
+      if (arduboy.justPressed(UP_BUTTON)) weapons->decrementActiveIndex();
+      if (arduboy.justPressed(DOWN_BUTTON)) weapons->incrementActiveIndex();
+      if (arduboy.justPressed(A_BUTTON)) weapons->swap();
       break;
     case GAME_STATE_WIN:
     case GAME_STATE_LOSE:
@@ -444,7 +425,7 @@ void render() {
       
       enemy.render();
 
-      weapons->render(battleCursorIndex);
+      weapons->render();
       for (int i = 0; i < previewGemCount; i++) previewGems[i]->render();
       for (int i = 0; i < fallingGemCount; i++) fallingGems[i]->render();
 

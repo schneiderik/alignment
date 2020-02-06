@@ -61,6 +61,10 @@ void renderNumberAlignCenter(int num, int x, int y, bool black) {
   renderNumberAlignRight(num, x + (numWidth / 2), y, black);
 }
 
+//////////////////////////////
+// GEM ARRAYS
+//////////////////////////////
+
 void removeGemFromArray(Gem** gems, int i, int& size) {
   size--;
   

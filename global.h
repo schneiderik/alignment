@@ -43,9 +43,6 @@ class WeaponManager;
 #define ENEMY_COUNT 5
 #define LAST_ENEMY ENEMY_COUNT - 1
 
-#define BATTLE_CURSOR_MIN 0
-#define BATTLE_CURSOR_MAX 2
-
 #define WEAPON_COUNT 4
 
 #define WEAPON_TYPE_SWORD 0
