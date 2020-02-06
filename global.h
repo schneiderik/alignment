@@ -12,6 +12,7 @@ extern ArduboyTones sound;
 
 class Gem;
 class Weapon;
+class WeaponManager;
 
 #include "helpers.h"
 
@@ -82,8 +83,7 @@ const int gemXOffsets[WEAPON_GEMS_MAX + 1] = {17, 29, 41, 53, 65, 77, 89};
 
 extern Gem* tmpGem;
 extern Weapon* tmpWeapon;
-extern Weapon* weapons[WEAPON_COUNT];
-extern Gem* weaponGems[WEAPON_COUNT][WEAPON_GEMS_MAX];
+extern WeaponManager* weapons;
 extern Gem* previewGems[PREVIEW_GEMS_MAX];
 extern Gem* fallingGems[FALLING_GEMS_MAX];
 

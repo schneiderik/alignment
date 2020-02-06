@@ -1,5 +1,6 @@
-#include "Weapon.h";
-#include "Gem.h";
+#include "Weapon.h"
+#include "Gem.h"
+#include "WeaponManager.h"
 
 Weapon::Weapon(int i) {
   type = i;
@@ -107,7 +108,7 @@ void Weapon::swap(Weapon& otherWeapon) {
 
 int Weapon::getOrder() {
   for (int i = 0; i < WEAPON_COUNT; i++) {
-    if (type == weapons[i]->type) return i;
+    if (type == weapons->get(i).type) return i;
   }
 }
 

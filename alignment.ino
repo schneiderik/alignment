@@ -2,6 +2,7 @@
 #include "Gem.h"
 #include "Weapon.h"
 #include "Enemy.h"
+#include "WeaponManager.h"
 
 //////////////////////////////
 // GLOBAL VARIABLES
@@ -32,7 +33,7 @@ void setup() {
 
   tmpGem = new Gem();
   tmpWeapon = new Weapon(9);
-  for (int i = 0; i < WEAPON_COUNT; i++) weapons[i] = new Weapon(i);
+  weapons = new WeaponManager();
   for (int i = 0; i < PREVIEW_GEMS_MAX; i++) previewGems[i] = new Gem();
   for (int i = 0; i < FALLING_GEMS_MAX; i++) fallingGems[i] = new Gem();
     
@@ -79,7 +80,7 @@ void startBattle() {
   previewGemCount = 0;
   enemy.reset();
   
-  for (int i = 0; i < WEAPON_COUNT; i++) weapons[i]->reset(i);
+  for (int i = 0; i < WEAPON_COUNT; i++) weapons->get(i).reset(i);
   
   confirmSound();
   gameState = GAME_STATE_BATTLE;
@@ -135,8 +136,8 @@ void incrementBattleCursorIndex() {
 }
 
 void swapWeapons() {
-  Weapon& weapon1 = *weapons[battleCursorIndex];
-  Weapon& weapon2 = *weapons[battleCursorIndex + 1];
+  Weapon& weapon1 = weapons->get(battleCursorIndex);
+  Weapon& weapon2 = weapons->get(battleCursorIndex + 1);
   
   for(int i = 0; i < fallingGemCount; i++) {
     Gem& fallingGem = *fallingGems[i];
@@ -229,7 +230,7 @@ int randomUniqueRow() {
 }
 
 bool isClearing() {
-  for (int i = 0; i < WEAPON_COUNT; i++) if (weapons[i]->isClearing()) return true;
+  if (weapons->isClearing()) return true;
   for (int i = 0; i < fallingGemCount; i++) if (fallingGems[i]->isClearing()) return true;
   return false;  
 }
@@ -356,7 +357,7 @@ void update() {
       if (paused) return;
       handlePlayerDefeated();
       handleEnemyDefeated();
-      for (int i = 0; i < WEAPON_COUNT; i++) weapons[i]->update();
+      weapons->update();
       enemy.update();
     
       if (!isClearing()) {              
@@ -462,8 +463,8 @@ void render() {
       arduboy.fillRect(89, 14, 1, 48);
       
       enemy.render();
-      
-      for (int i = 0; i < WEAPON_COUNT; i++) weapons[i]->render(i == battleCursorIndex || i == battleCursorIndex + 1);
+
+      weapons->render(battleCursorIndex);
       for (int i = 0; i < previewGemCount; i++) previewGems[i]->render();
       for (int i = 0; i < fallingGemCount; i++) fallingGems[i]->render();
 

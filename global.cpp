@@ -6,7 +6,6 @@ ArduboyTones sound(arduboy.audio.enabled);
 
 Gem* tmpGem;
 Weapon* tmpWeapon;
-Weapon* weapons[WEAPON_COUNT];
-Gem* weaponGems[WEAPON_COUNT][WEAPON_GEMS_MAX];
+WeaponManager* weapons;
 Gem* previewGems[PREVIEW_GEMS_MAX];
 Gem* fallingGems[FALLING_GEMS_MAX];

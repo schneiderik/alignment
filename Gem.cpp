@@ -1,5 +1,6 @@
 #include "Gem.h"
 #include "Weapon.h"
+#include "WeaponManager.h"
 
 Gem::Gem() {
   velocityX = random(0, 3) - 1;
@@ -96,7 +97,7 @@ bool Gem::isPopped() {
 }
 
 Weapon& Gem::getWeapon() {
-  return *weapons[row];
+  return weapons->get(row);
 }
 
 bool Gem::atEndOfRowX() {
