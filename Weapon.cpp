@@ -12,16 +12,6 @@ Weapon::Weapon(int i) {
   }
 }
 
-Weapon& Weapon::operator=(const Weapon& weapon) {
-  if (this != &weapon) {
-    type = weapon.type;
-    y = weapon.y;
-    gemCount = weapon.gemCount;
-    stackCount = weapon.stackCount;
-  }
-  return *this;
-}
-
 bool Weapon::isFull() {
   return stackCount == WEAPON_GEMS_MAX;
 }
@@ -92,24 +82,6 @@ void Weapon::renderGems() {
   for (int i = 0; i < gemCount; i++) getGem(i).render(); 
 }
 
-void Weapon::swap(Weapon& otherWeapon) {  
-  int order1 = getOrder();
-  int order2 = otherWeapon.getOrder(); 
-
-  *tmpWeapon = otherWeapon;
-  otherWeapon = *this;
-  *this = *tmpWeapon;
-
-  for (int i = 0; i < WEAPON_GEMS_MAX; i++) {
-    *tmpGem = *otherWeapon.gems[i];
-    *otherWeapon.gems[i] = *gems[i];
-    *gems[i] = *tmpGem;
-
-    gems[i]->row = order1;
-    otherWeapon.gems[i]->row = order2;
-  }
-}
-
 int Weapon::getOrder() {
   for (int i = 0; i < WEAPON_COUNT; i++) {
     if (type == weapons->get(i).type) return i;
@@ -148,4 +120,8 @@ void Weapon::updateGems() {
       i--;
     }
   }
+}
+
+void Weapon::setGemRows(int row) {
+  for (int i = 0; i < WEAPON_GEMS_MAX; i++) getGem(i).row = row;
 }

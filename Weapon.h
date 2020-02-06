@@ -6,9 +6,7 @@
 class Weapon {
   public:
     Weapon(int i);
-    
-    Weapon& operator=(const Weapon&);
-    
+        
     int type;
     int y;
     int gemCount;
@@ -30,12 +28,12 @@ class Weapon {
     void renderIcon(bool);
     void renderDivider();
     void renderGems();
-    void swap(Weapon&);
     int getOrder();
     void update();
     void updateY();
     void updateGems();
     int endOfRowX();
+    void setGemRows(int);
 };
 
 #endif

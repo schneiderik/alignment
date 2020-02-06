@@ -31,8 +31,6 @@ void setup() {
   arduboy.begin();
   arduboy.setFrameRate(FPS);
 
-  tmpGem = new Gem();
-  tmpWeapon = new Weapon(9);
   weapons = new WeaponManager();
   for (int i = 0; i < PREVIEW_GEMS_MAX; i++) previewGems[i] = new Gem();
   for (int i = 0; i < FALLING_GEMS_MAX; i++) fallingGems[i] = new Gem();
@@ -103,16 +101,16 @@ void swapWeapons() {
   Weapon& weapon2 = weapons->get(weapons->activeIndex + 1);
   
   for(int i = 0; i < fallingGemCount; i++) {
-    Gem& fallingGem = *fallingGems[i];
-    bool fallingGemInRow1 = weapons->activeIndex == fallingGem.row;
-    bool fallingGemInRow2 = weapons->activeIndex + 1 == fallingGem.row;
-    bool fallingGemMustMoveToRow2 = fallingGem.x < gemXOffsets[weapon2.gemCount];
-    bool fallingGemMustMoveToRow1 = fallingGem.x < gemXOffsets[weapon1.gemCount];
-  
-    if (fallingGemInRow1 && fallingGemMustMoveToRow2) {
-      fallingGem.row = weapons->activeIndex + 1;
-    } else if (fallingGemInRow2 && fallingGemMustMoveToRow1) {
-      fallingGem.row = weapons->activeIndex;
+    Gem& gem = *fallingGems[i];
+
+    if (weapons->activeIndex == gem.row) {
+      if (gem.x < gemXOffsets[weapon2.gemCount]) {
+        gem.row = weapons->activeIndex + 1;
+      }
+    } else if (weapons->activeIndex + 1 == gem.row) {
+      if (gem.x < gemXOffsets[weapon1.gemCount]) {
+        gem.row = weapons->activeIndex;
+      }
     }  
   }
   
@@ -140,7 +138,7 @@ void handleInput() {
       if (paused || isClearing()) return;
       if (arduboy.justPressed(UP_BUTTON)) weapons->decrementActiveIndex();
       if (arduboy.justPressed(DOWN_BUTTON)) weapons->incrementActiveIndex();
-      if (arduboy.justPressed(A_BUTTON)) weapons->swap();
+      if (arduboy.justPressed(A_BUTTON)) swapWeapons();
       break;
     case GAME_STATE_WIN:
     case GAME_STATE_LOSE:
