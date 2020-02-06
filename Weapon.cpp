@@ -26,6 +26,10 @@ bool Weapon::isFull() {
   return stackCount == WEAPON_GEMS_MAX;
 }
 
+bool Weapon::isEmpty() {
+  return stackCount == 0;
+}
+
 void Weapon::addGem(Gem& gem) {
   getNextGem() = gem;
   gemCount++;

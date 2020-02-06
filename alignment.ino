@@ -244,28 +244,28 @@ void handleFullWeapon(Gem& fallingGem) {
   loseHeartSound();
 }
 
-bool isMatch(Gem& fallingGem) {
-  Weapon& weapon = fallingGem.getWeapon();
+bool isMatch(Gem& gem) {
+  Weapon& weapon = gem.getWeapon();
 
-  if (weapon.gemCount == 0) return false;
+  if (weapon.isEmpty()) return false;
 
-  return weapon.getLastGem().type == fallingGem.type;
+  return weapon.getLastGem().type == gem.type;
 }
 
-void handleMatch(Gem& fallingGem) {
-  Weapon& weapon = fallingGem.getWeapon();
+void handleMatch(Gem& gem) {
+  Weapon& weapon = gem.getWeapon();
   
   score += 100;
-  fallingGem.pop();
+  gem.pop();
   weapon.popLastGem();
   confirmSound();
   enemy.takeDamage(5, weapon.type);
 }
 
-void handleNoMatch(Gem& fallingGem) {
-  Weapon& weapon = fallingGem.getWeapon();
+void handleNoMatch(Gem& gem) {
+  Weapon& weapon = gem.getWeapon();
           
-  weapon.addGem(fallingGem);
+  weapon.addGem(gem);
   score += 10; 
 }
 

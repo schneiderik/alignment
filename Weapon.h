@@ -16,6 +16,7 @@ class Weapon {
     Gem* gems[WEAPON_GEMS_MAX];
 
     bool isFull();
+    bool isEmpty();
     void addGem(Gem&);
     Gem& getGem(int);
     Gem& getLastGem();
