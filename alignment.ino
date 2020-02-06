@@ -4,22 +4,21 @@
 #include "Enemy.h"
 #include "WeaponManager.h"
 #include "Title.h"
+#include "Quest.h"
 
 //////////////////////////////
 // GLOBAL VARIABLES
 //////////////////////////////
 
 int gameState = GAME_STATE_TITLE;
-int questCursorOffset = 0;
-int questCursorVelocity = -1;
 unsigned long int score = 0;
-Enemy enemy;
 int gameSpeed = INITIAL_GAME_SPEED;
 int health = HEALTH_MAX;
 int paused = false;
 int previewGemCount = 0;
 int fallingGemCount = 0;
 Title title;
+Quest quest;
 
 
 
@@ -32,6 +31,7 @@ void setup() {
   arduboy.begin();
   arduboy.setFrameRate(FPS);
 
+  enemy = new Enemy();
   weapons = new WeaponManager();
   for (int i = 0; i < PREVIEW_GEMS_MAX; i++) previewGems[i] = new Gem();
   for (int i = 0; i < FALLING_GEMS_MAX; i++) fallingGems[i] = new Gem();
@@ -47,19 +47,17 @@ void setup() {
 
 void resetGame() {
   title.reset();
-  enemy.set(ENEMY_TYPE_SKELETON);
+  enemy->set(ENEMY_TYPE_SKELETON);
   score = 0;
   gameState = GAME_STATE_TITLE;
 }
 
-void startBattle() { 
+void resetBattle() { 
   health = HEALTH_MAX;
   fallingGemCount = 0;
   previewGemCount = 0;
-  enemy.reset();
+  enemy->reset();
   weapons->reset();
-  confirmSound();
-  gameState = GAME_STATE_BATTLE;
 }
 
 void swapWeapons() {
@@ -95,7 +93,7 @@ void handleInput() {
       }
       break;
     case GAME_STATE_QUEST:
-      if (arduboy.justPressed(A_BUTTON)) startBattle();
+      quest.handleInput(gameState);
       break;
     case GAME_STATE_BATTLE:
       if (arduboy.justPressed(RIGHT_BUTTON)) paused = !paused;
@@ -117,26 +115,22 @@ void handleInput() {
 // UPDATE
 //////////////////////////////
 
-void animateQuestCursor() {
-  if (arduboy.everyXFrames(gameSpeed)) {
-    if (questCursorOffset > 0) questCursorVelocity = -1;
-    if (questCursorOffset < 0) questCursorVelocity = 1;
-    questCursorOffset += questCursorVelocity;
-  }  
-}
-
 void handlePlayerDefeated() {
-  if (health == 0) gameState = GAME_STATE_LOSE;  
+  if (health == 0) {
+    gameState = GAME_STATE_LOSE; 
+    resetBattle(); 
+  }
 }
 
 void handleEnemyDefeated() {
-  if (enemy.health <= 0) {
-    if (enemy.type == LAST_ENEMY) {
+  if (enemy->health <= 0) {
+    if (enemy->type == LAST_ENEMY) {
       gameState = GAME_STATE_WIN;
     } else { 
-      enemy.set(enemy.type + 1);
+      enemy->set(enemy->type + 1);
       gameState = GAME_STATE_QUEST;
     }
+    resetBattle();
   }
 }
 
@@ -221,7 +215,7 @@ void handleMatch(Gem& gem) {
   gem.pop();
   weapon.popLastGem();
   confirmSound();
-  enemy.takeDamage(5, weapon.type);
+  enemy->takeDamage(5, weapon.type);
 }
 
 void handleNoMatch(Gem& gem) {
@@ -274,14 +268,14 @@ void dropGems() {
 void update() {
   switch (gameState) {
     case GAME_STATE_QUEST:
-      animateQuestCursor();
+      quest.update();
       break;
     case GAME_STATE_BATTLE:
       if (paused) return;
       handlePlayerDefeated();
       handleEnemyDefeated();
       weapons->update();
-      enemy.update();
+      enemy->update();
     
       if (!isClearing()) {              
         if (shouldGeneratePreviewGems()) generatePreviewGems();        
@@ -308,34 +302,7 @@ void render() {
       sprites.drawOverwrite(11, 4, infoImage, 0);
       break;
     case GAME_STATE_QUEST:
-      sprites.drawOverwrite(32, 2, questText, 0);   
-
-      // Render Quest Cursor
-      sprites.drawOverwrite(
-        ENEMY_DATA[enemy.type][ENEMY_DATA_QUEST_X] + 8,
-        ENEMY_DATA[enemy.type][ENEMY_DATA_QUEST_Y] - 4 - questCursorOffset,
-        questCursorImage,
-        0
-      );
-
-      sprites.drawOverwrite(16, 50, pathImage, 0);
-      sprites.drawOverwrite(54, 50, pathReverseImage, 0);
-      sprites.drawOverwrite(64, 50, pathImage, 0);
-      sprites.drawOverwrite(102, 50, pathReverseImage, 0);  
-
-      // Render Quest Enemies
-      for (int i = 0; i < ENEMY_COUNT; i++) {
-        sprites.drawOverwrite(
-          ENEMY_DATA[i][ENEMY_DATA_QUEST_X],
-          ENEMY_DATA[i][ENEMY_DATA_QUEST_Y],
-          questSprite,
-          enemy.type == i
-            ? i
-            : i < enemy.type
-              ? QUEST_SPRITE_GRAVE_INDEX
-              : QUEST_SPRITE_MYSTERY_INDEX
-        );  
-      } 
+      quest.render();
       break;
     case GAME_STATE_BATTLE:
       // Render Top Panel
@@ -356,7 +323,7 @@ void render() {
       // Render Preview Divider
       arduboy.fillRect(89, 14, 1, 48);
       
-      enemy.render();
+      enemy->render();
 
       weapons->render();
       for (int i = 0; i < previewGemCount; i++) previewGems[i]->render();
