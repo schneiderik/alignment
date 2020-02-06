@@ -3,13 +3,13 @@
 #include "Weapon.h"
 #include "Enemy.h"
 #include "WeaponManager.h"
+#include "Title.h"
 
 //////////////////////////////
 // GLOBAL VARIABLES
 //////////////////////////////
 
 int gameState = GAME_STATE_TITLE;
-int titleState = TITLE_STATE_PLAY;
 int questCursorOffset = 0;
 int questCursorVelocity = -1;
 unsigned long int score = 0;
@@ -19,6 +19,7 @@ int health = HEALTH_MAX;
 int paused = false;
 int previewGemCount = 0;
 int fallingGemCount = 0;
+Title title;
 
 
 
@@ -45,7 +46,7 @@ void setup() {
 //////////////////////////////
 
 void resetGame() {
-  titleState = TITLE_STATE_PLAY;
+  title.reset();
   enemy.set(ENEMY_TYPE_SKELETON);
   score = 0;
   gameState = GAME_STATE_TITLE;
@@ -59,41 +60,6 @@ void startBattle() {
   weapons->reset();
   confirmSound();
   gameState = GAME_STATE_BATTLE;
-}
-
-void decrementTitleState() {
-  if (titleState > 0) {
-    titleState--;  
-    moveSound();
-  }
-}
-
-void incrementTitleState() {
-  if (titleState < LAST_TITLE_STATE) {
-    titleState++;
-    moveSound();
-  }
-}
-
-void selectTitleOption() {
-  switch(titleState) {
-    case TITLE_STATE_PLAY:
-      gameState = GAME_STATE_QUEST;
-      break;
-    case TITLE_STATE_INFO:
-      gameState = GAME_STATE_INFO;
-      break;
-    case TITLE_STATE_SFX:
-      if (arduboy.audio.enabled()) {
-        arduboy.audio.off();
-      } else {
-        arduboy.audio.on();
-      }
-    
-      arduboy.audio.saveOnOff();
-      break;
-  };
-  confirmSound();
 }
 
 void swapWeapons() {
@@ -120,9 +86,7 @@ void swapWeapons() {
 void handleInput() {
   switch (gameState) {
     case GAME_STATE_TITLE:
-      if (arduboy.justPressed(UP_BUTTON)) decrementTitleState();   
-      if (arduboy.justPressed(DOWN_BUTTON)) incrementTitleState();
-      if (arduboy.justPressed(A_BUTTON)) selectTitleOption();     
+      title.handleInput(gameState);   
       break;
     case GAME_STATE_INFO:
       if (arduboy.justPressed(A_BUTTON)) {
@@ -335,39 +299,10 @@ void update() {
 // RENDER
 //////////////////////////////
 
-void renderTitleCursor(int x, int y, int textWidth) {
-  arduboy.fillRect(x - 5, y + 1, 2, 2);
-  arduboy.fillRect(x + textWidth + 3, y + 1, 2, 2);
-}
-
 void render() {
   switch (gameState) {
     case GAME_STATE_TITLE:
-      sprites.drawOverwrite(0, 5, titleImage, 0);
-      sprites.drawOverwrite(56, 38, playTextImage, 0);   
-      sprites.drawOverwrite(56, 45, infoTextImage, 0); 
-    
-      if (arduboy.audio.enabled()) {
-        sprites.drawOverwrite(52, 52, sfxOnTextImage, 0); 
-      } else {
-        sprites.drawOverwrite(50, 52, sfxOffTextImage, 0); 
-      }
-
-      switch(titleState) {
-        case TITLE_STATE_PLAY:
-          renderTitleCursor(56, 38, playTextImage[0]);
-          break;
-        case TITLE_STATE_INFO:
-          renderTitleCursor(56, 45, infoTextImage[0]);
-          break;
-        case TITLE_STATE_SFX:
-          if (arduboy.audio.enabled()) {
-            renderTitleCursor(52, 52, sfxOnTextImage[0]);
-          } else {
-            renderTitleCursor(50, 52, sfxOffTextImage[0]);  
-          }
-          break;
-      };
+      title.render();
       break;
     case GAME_STATE_INFO:
       sprites.drawOverwrite(11, 4, infoImage, 0);
