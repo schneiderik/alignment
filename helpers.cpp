@@ -74,3 +74,23 @@ Gem& addGemToArray(Gem** gems, Gem& gem, int& size) {
 
   return nextGem;
 }
+
+//////////////////////////////
+// SOUNDS
+//////////////////////////////
+
+void confirmSound() {
+  sound.tone(NOTE_C5, 50);
+}
+
+void moveSound() {
+  sound.tone(NOTE_E4, 50);
+}
+
+void swapSound() {
+  sound.tone(NOTE_C5, 100);
+}
+
+void loseHeartSound() {
+  sound.tone(NOTE_E3, 150);
+}

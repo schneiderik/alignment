@@ -14,4 +14,9 @@ void renderNumberAlignCenter(int, int, int, bool);
 void removeGemFromArray(Gem**, int, int&);
 Gem& addGemToArray(Gem**, Gem&, int&);
 
+void confirmSound();
+void moveSound();
+void swapSound();
+void loseHeartSound();
+
 #endif
