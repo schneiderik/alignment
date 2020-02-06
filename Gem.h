@@ -15,19 +15,6 @@ class Gem {
   public:
     Gem();
     
-    Gem& operator=(const Gem& gem) {
-      if (this != &gem) {
-        type = gem.type;
-        row = gem.row;
-        x = gem.x;
-        y = gem.y;
-        state = gem.state;
-        velocityX = gem.velocityX;
-        velocityY = gem.velocityY;
-      }
-      return *this;
-    }
-    
     int type;
     int row;
     int x;
