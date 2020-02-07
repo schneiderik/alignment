@@ -94,7 +94,11 @@ Weapon& Gem::getWeapon() {
 }
 
 bool Gem::atEndOfRowX() {
-  return getWeapon().endOfRowX() >= x;
+  return x <= getWeapon().endOfRowX();
+}
+
+bool Gem::belowEndOfRowX() {
+  return x < getWeapon().endOfRowX();
 }
 
 bool Gem::belowPreviewThreshold() {
@@ -103,6 +107,10 @@ bool Gem::belowPreviewThreshold() {
 
 void Gem::drop() {
   state = GEM_STATE_FALLING;
+}
+
+void Gem::changeRowIfObstructed(int row1, int row2) {
+  if (belowEndOfRowX()) row = row == row1 ? row2 : row1;
 }
 
 void Gem::clear() {

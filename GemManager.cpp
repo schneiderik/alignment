@@ -75,3 +75,7 @@ bool GemManager::gemsBelowPreviewThreshold() {
 
   return true;
 }
+
+void GemManager::moveGemsInObstructedRows(int row1, int row2) {
+  for(int i = 0; i < count; i++) get(i).changeRowIfObstructed(row1, row2);
+}

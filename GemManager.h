@@ -24,6 +24,7 @@ class GemManager {
     bool isClearing();
     bool isEmpty();
     bool gemsBelowPreviewThreshold();
+    void moveGemsInObstructedRows(int, int);
 
     int count = 0;
     Gem* gems[GEM_MAX];

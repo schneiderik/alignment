@@ -40,8 +40,10 @@ class Gem {
     bool isPopped();
     
     Weapon& getWeapon();
+    bool belowEndOfRowX();
     bool atEndOfRowX();
     bool belowPreviewThreshold();
+    void changeRowIfObstructed(int, int);
     void drop();
     void clear();
     void pop();

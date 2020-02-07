@@ -21,24 +21,8 @@ void Battle::reset() {
 }
 
 void Battle::swapWeapons() {
-  Weapon& weapon1 = weapons->get(weapons->activeIndex);
-  Weapon& weapon2 = weapons->get(weapons->activeIndex + 1);
-  
-  for(int i = 0; i < fallingGems.count; i++) {
-    Gem& gem = fallingGems.get(i);
-
-    if (weapons->activeIndex == gem.row) {
-      if (gem.x < gemXOffsets[weapon2.gemCount]) {
-        gem.row = weapons->activeIndex + 1;
-      }
-    } else if (weapons->activeIndex + 1 == gem.row) {
-      if (gem.x < gemXOffsets[weapon1.gemCount]) {
-        gem.row = weapons->activeIndex;
-      }
-    }  
-  }
-  
-  weapons->swap(); 
+  weapons->swap();
+  fallingGems.moveGemsInObstructedRows(weapons->activeIndex, weapons->activeIndex + 1);
 }
 
 void Battle::update() {
