@@ -1,6 +1,4 @@
 #include "global.h"
-#include "Gem.h"
-#include "Weapon.h"
 #include "Enemy.h"
 #include "WeaponManager.h"
 #include "Title.h"
@@ -84,12 +82,6 @@ void render() {
       break;
   }
 }
-
-
-
-//////////////////////////////
-// GAME LOOP
-//////////////////////////////
 
 void loop() {
   if ((!arduboy.nextFrame())) return;
