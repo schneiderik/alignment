@@ -3,6 +3,9 @@
 
 #include "global.h"
 
+#define FALLING_GEMS_MAX 2
+#define PREVIEW_GEMS_MAX 2
+
 class Battle {
   public:
     Battle();

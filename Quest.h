@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#define QUEST_SPRITE_GRAVE_INDEX 6
+#define QUEST_SPRITE_MYSTERY_INDEX 5
 
 class Quest {
   public:

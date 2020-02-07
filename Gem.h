@@ -11,6 +11,9 @@
 #define GEM_STATE_POPPING 5
 #define GEM_STATE_POPPED 6
 
+#define GEM_POPPING_ANIMATION_START_FRAME 5
+#define GEM_POPPING_ANIMATION_END_FRAME 7
+
 class Gem {
   public:    
     int type;
