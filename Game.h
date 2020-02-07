@@ -30,6 +30,7 @@ class Game {
     void goToLose();
   
     int state = GAME_STATE_TITLE;
+    unsigned long int score;
     
     Title title;
     Battle battle;

@@ -102,7 +102,7 @@ bool Battle::isMatch(Gem& gem) {
 void Battle::handleMatch(Gem& gem) {
   Weapon& weapon = gem.getWeapon();
   
-  score += 100;
+  game->score += 100;
   gem.pop();
   weapon.popLastGem();
   confirmSound();
@@ -113,7 +113,7 @@ void Battle::handleNoMatch(Gem& gem) {
   Weapon& weapon = gem.getWeapon();
           
   weapon.addGem(gem);
-  score += 10; 
+  game->score += 10; 
 }
 
 void Battle::handleGemStack(Gem& gem) {
@@ -158,7 +158,7 @@ void Battle::dropGems() {
 
 void Battle::render() {
   renderTopBar();
-  renderNumberAlignRight(score, 126, 2, true);
+  renderNumberAlignRight(game->score, 126, 2, true);
   renderHealth();
   renderPreviewDivider();
   enemy->render();

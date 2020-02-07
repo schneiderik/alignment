@@ -5,7 +5,7 @@
 
 void resetGame() {
   enemy->set(ENEMY_TYPE_SKELETON);
-  score = 0;
+  game->score = 0;
   game->goToTitle();
 }
 
