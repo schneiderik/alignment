@@ -4,7 +4,7 @@ Arduboy2 arduboy;
 Sprites sprites;
 ArduboyTones sound(arduboy.audio.enabled);
 
-int gameState = GAME_STATE_TITLE;
+Game* game;
 unsigned long int score = 0;
 WeaponManager* weapons;
 Enemy* enemy;

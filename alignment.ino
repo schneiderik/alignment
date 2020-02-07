@@ -1,4 +1,5 @@
 #include "global.h"
+#include "Game.h"
 #include "Enemy.h"
 #include "WeaponManager.h"
 #include "Title.h"
@@ -20,6 +21,7 @@ void setup() {
   arduboy.begin();
   arduboy.setFrameRate(FPS);
 
+  game = new Game();
   enemy = new Enemy();
   weapons = new WeaponManager();
       
@@ -27,7 +29,7 @@ void setup() {
 }
 
 void handleInput() {
-  switch (gameState) {
+  switch (game->state) {
     case GAME_STATE_TITLE:
       title.handleInput();   
       break;
@@ -50,7 +52,7 @@ void handleInput() {
 }
 
 void update() {
-  switch (gameState) {
+  switch (game->state) {
     case GAME_STATE_QUEST:
       quest.update();
       break;
@@ -61,7 +63,7 @@ void update() {
 }
 
 void render() {
-  switch (gameState) {
+  switch (game->state) {
     case GAME_STATE_TITLE:
       title.render();
       break;

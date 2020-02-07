@@ -1,4 +1,5 @@
 #include "Title.h"
+#include "Game.h"
 
 void Title::handleInput() {
   if (arduboy.justPressed(UP_BUTTON)) decrementState();   
@@ -23,10 +24,10 @@ void Title::incrementState() {
 void Title::selectOption() {
   switch(state) {
     case TITLE_STATE_PLAY:
-      gameState = GAME_STATE_QUEST;
+      game->goToQuest();
       break;
     case TITLE_STATE_INFO:
-      gameState = GAME_STATE_INFO;
+      game->goToInfo();
       break;
     case TITLE_STATE_SFX:
       if (arduboy.audio.enabled()) {

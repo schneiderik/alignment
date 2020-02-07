@@ -1,8 +1,9 @@
 #include "Info.h"
+#include "Game.h"
 
 void Info::handleInput() {
   if (arduboy.justPressed(A_BUTTON)) {
-    gameState = GAME_STATE_TITLE;
+    game->goToTitle();
     confirmSound();
   }
 }

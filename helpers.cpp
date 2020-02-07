@@ -1,11 +1,12 @@
 #include "helpers.h"
+#include "Game.h"
 #include "Gem.h"
 #include "Enemy.h"
 
 void resetGame() {
   enemy->set(ENEMY_TYPE_SKELETON);
   score = 0;
-  gameState = GAME_STATE_TITLE;
+  game->goToTitle();
 }
 
 void renderDigitBlack(int digit, int x, int y) {

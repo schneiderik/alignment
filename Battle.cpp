@@ -1,4 +1,5 @@
 #include "Battle.h"
+#include "Game.h"
 #include "Gem.h"
 #include "WeaponManager.h"
 #include "Enemy.h"
@@ -42,7 +43,7 @@ void Battle::update() {
 
 void Battle::handlePlayerDefeated() {
   if (health == 0) {
-    gameState = GAME_STATE_LOSE; 
+    game->goToLose(); 
     reset(); 
   }
 }
@@ -50,10 +51,10 @@ void Battle::handlePlayerDefeated() {
 void Battle::handleEnemyDefeated() {
   if (enemy->health <= 0) {
     if (enemy->type == LAST_ENEMY) {
-      gameState = GAME_STATE_WIN;
+      game->goToWin();
     } else { 
       enemy->set(enemy->type + 1);
-      gameState = GAME_STATE_QUEST;
+      game->goToQuest();
     }
     reset();
   }
