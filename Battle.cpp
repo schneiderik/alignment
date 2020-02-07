@@ -17,7 +17,7 @@ void Battle::reset() {
   health = HEALTH_MAX;
   fallingGems.reset();
   previewGems.reset();
-  enemy->reset();
+  game->enemy.reset();
   weapons->reset();
 }
 
@@ -31,7 +31,7 @@ void Battle::update() {
   handlePlayerDefeated();
   handleEnemyDefeated();
   weapons->update();
-  enemy->update();
+  game->enemy.update();
 
   if (!isClearing()) {              
     if (shouldGeneratePreviewGems()) previewGems.create(2);        
@@ -49,11 +49,11 @@ void Battle::handlePlayerDefeated() {
 }
 
 void Battle::handleEnemyDefeated() {
-  if (enemy->health <= 0) {
-    if (enemy->type == LAST_ENEMY) {
+  if (game->enemy.health <= 0) {
+    if (game->enemy.type == LAST_ENEMY) {
       game->goToWin();
     } else { 
-      enemy->set(enemy->type + 1);
+      game->enemy.set(game->enemy.type + 1);
       game->goToQuest();
     }
     reset();
@@ -106,7 +106,7 @@ void Battle::handleMatch(Gem& gem) {
   gem.pop();
   weapon.popLastGem();
   confirmSound();
-  enemy->takeDamage(5, weapon.type);
+  game->enemy.takeDamage(5, weapon.type);
 }
 
 void Battle::handleNoMatch(Gem& gem) {
@@ -161,7 +161,7 @@ void Battle::render() {
   renderNumberAlignRight(game->score, 126, 2, true);
   renderHealth();
   renderPreviewDivider();
-  enemy->render();
+  game->enemy.render();
   weapons->render();
   previewGems.render();
   fallingGems.render();

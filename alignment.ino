@@ -1,6 +1,5 @@
 #include "global.h"
 #include "Game.h"
-#include "Enemy.h"
 #include "WeaponManager.h"
 
 void setup() {
@@ -9,7 +8,6 @@ void setup() {
   arduboy.setFrameRate(FPS);
 
   game = new Game();
-  enemy = new Enemy();
   weapons = new WeaponManager();
       
   arduboy.clear();

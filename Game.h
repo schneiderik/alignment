@@ -1,13 +1,14 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "global.h";
+#include "global.h"
 #include "Title.h"
 #include "Info.h"
 #include "Quest.h"
 #include "Battle.h"
 #include "Win.h"
 #include "Lose.h"
+#include "Enemy.h"
 
 #define GAME_STATE_TITLE 0
 #define GAME_STATE_INFO 1
@@ -32,6 +33,7 @@ class Game {
     int state = GAME_STATE_TITLE;
     unsigned long int score;
     
+    Enemy enemy;  
     Title title;
     Battle battle;
     Info info;

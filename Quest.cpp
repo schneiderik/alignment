@@ -30,8 +30,8 @@ void Quest::renderText() {
 
 void Quest::renderCursor() {
   sprites.drawOverwrite(
-    ENEMY_DATA[enemy->type][ENEMY_DATA_QUEST_X] + 8,
-    ENEMY_DATA[enemy->type][ENEMY_DATA_QUEST_Y] - 4 - cursorOffset,
+    ENEMY_DATA[game->enemy.type][ENEMY_DATA_QUEST_X] + 8,
+    ENEMY_DATA[game->enemy.type][ENEMY_DATA_QUEST_Y] - 4 - cursorOffset,
     questCursorImage,
     0
   );  
@@ -53,9 +53,9 @@ void Quest::renderEnemy(int i) {
     ENEMY_DATA[i][ENEMY_DATA_QUEST_X],
     ENEMY_DATA[i][ENEMY_DATA_QUEST_Y],
     questSprite,
-    enemy->type == i
+    game->enemy.type == i
       ? i
-      : i < enemy->type
+      : i < game->enemy.type
         ? QUEST_SPRITE_GRAVE_INDEX
         : QUEST_SPRITE_MYSTERY_INDEX
   );   

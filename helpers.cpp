@@ -4,7 +4,7 @@
 #include "Enemy.h"
 
 void resetGame() {
-  enemy->set(ENEMY_TYPE_SKELETON);
+  game->enemy.set(ENEMY_TYPE_SKELETON);
   game->score = 0;
   game->goToTitle();
 }
