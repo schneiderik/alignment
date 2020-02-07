@@ -4,6 +4,7 @@
 #include "Enemy.h"
 #include "WeaponManager.h"
 #include "Title.h"
+#include "Info.h"
 #include "Quest.h"
 
 //////////////////////////////
@@ -18,6 +19,7 @@ int paused = false;
 int previewGemCount = 0;
 int fallingGemCount = 0;
 Title title;
+Info info;
 Quest quest;
 
 
@@ -87,10 +89,7 @@ void handleInput() {
       title.handleInput(gameState);   
       break;
     case GAME_STATE_INFO:
-      if (arduboy.justPressed(A_BUTTON)) {
-        gameState = GAME_STATE_TITLE;
-        confirmSound();
-      }
+      info.handleInput(gameState);
       break;
     case GAME_STATE_QUEST:
       quest.handleInput(gameState);
@@ -299,7 +298,7 @@ void render() {
       title.render();
       break;
     case GAME_STATE_INFO:
-      sprites.drawOverwrite(11, 4, infoImage, 0);
+      info.render();
       break;
     case GAME_STATE_QUEST:
       quest.render();
