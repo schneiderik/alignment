@@ -4,11 +4,6 @@
 #include "Enemy.h"
 #include "Weapon.h"
 
-Battle::Battle() {
-  for (int i = 0; i < PREVIEW_GEMS_MAX; i++) previewGems[i] = new Gem();
-  for (int i = 0; i < FALLING_GEMS_MAX; i++) fallingGems[i] = new Gem();
-}
-
 void Battle::handleInput() {
   if (arduboy.justPressed(RIGHT_BUTTON)) paused = !paused;
   if (paused || isClearing()) return;
@@ -19,8 +14,8 @@ void Battle::handleInput() {
 
 void Battle::reset() { 
   health = HEALTH_MAX;
-  fallingGemCount = 0;
-  previewGemCount = 0;
+  fallingGems.reset();
+  previewGems.reset();
   enemy->reset();
   weapons->reset();
 }
@@ -29,8 +24,8 @@ void Battle::swapWeapons() {
   Weapon& weapon1 = weapons->get(weapons->activeIndex);
   Weapon& weapon2 = weapons->get(weapons->activeIndex + 1);
   
-  for(int i = 0; i < fallingGemCount; i++) {
-    Gem& gem = *fallingGems[i];
+  for(int i = 0; i < fallingGems.count; i++) {
+    Gem& gem = fallingGems.get(i);
 
     if (weapons->activeIndex == gem.row) {
       if (gem.x < gemXOffsets[weapon2.gemCount]) {
@@ -54,7 +49,7 @@ void Battle::update() {
   enemy->update();
 
   if (!isClearing()) {              
-    if (shouldGeneratePreviewGems()) generatePreviewGems();        
+    if (shouldGeneratePreviewGems()) previewGems.create(2);        
     if (shouldDropPreviewGems()) dropPreviewGems();       
   }
 
@@ -80,67 +75,32 @@ void Battle::handleEnemyDefeated() {
   }
 }
 
-int Battle::randomUniqueRow() {
-  int num = random(0, WEAPON_COUNT);
-
-  bool existing = false;
-  
-  for (int i = 0; i < previewGemCount; i++) {
-    if (previewGems[i]->row == num) existing = true;
-  }
-
-  return existing ? randomUniqueRow() : num;
-}
-
 bool Battle::isClearing() {
-  if (weapons->isClearing()) return true;
-  for (int i = 0; i < fallingGemCount; i++) if (fallingGems[i]->isClearing()) return true;
+  if (weapons->isClearing() || fallingGems.isClearing()) return true;
   return false;  
 }
 
 bool Battle::shouldGeneratePreviewGems() {
-  return previewGemCount == 0 && (fallingGemCount == 0 || fallingGemsBelowPreviewThreshold());
-}
-
-void Battle::generatePreviewGem() {
-  Gem& previewGem = *previewGems[previewGemCount];
-
-  previewGem.type = random(0, GEM_TYPE_COUNT);
-  previewGem.row = randomUniqueRow();
-  previewGem.x = PREVIEW_GEM_X;
-  previewGem.y = gemYOffsets[previewGem.row];
-  previewGemCount++;  
-}
-
-void Battle::generatePreviewGems() {
-  for (int i = 0; i < PREVIEW_GEMS_MAX; i++) generatePreviewGem();
-}
-
-bool Battle::fallingGemsBelowPreviewThreshold() {
-  for (int i = 0; i < fallingGemCount; i++) {
-    if (fallingGems[i]->x > PREVIEW_THRESHOLD_X) return false;
-  }
-
-  return true;
+  return previewGems.isEmpty() && (fallingGems.isEmpty() || fallingGems.gemsBelowPreviewThreshold());
 }
 
 bool Battle::shouldDropPreviewGems() {
-  return fallingGemCount == 0 && previewGemCount > 0;
+  return fallingGems.isEmpty() && !previewGems.isEmpty();
 }
 
 void Battle::dropPreviewGems() {
-  for (int i = 0; i < previewGemCount; i++) {
-    addGemToArray(fallingGems, *previewGems[i], fallingGemCount).drop();
+  for (int i = 0; i < previewGems.count; i++) {
+    fallingGems.add(previewGems.get(i)).drop();
   }
   
-  previewGemCount = 0;
+  previewGems.reset();
 }
 
-void Battle::handleFullWeapon(Gem& fallingGem) {
-  Weapon& weapon = fallingGem.getWeapon();
+void Battle::handleFullWeapon(Gem& gem) {
+  Weapon& weapon = gem.getWeapon();
   
   weapon.clearGems();
-  fallingGem.clear();
+  gem.clear();
 
   health--;
   loseHeartSound();
@@ -186,8 +146,8 @@ void Battle::handleGemStack(Gem& gem) {
 }
 
 void Battle::dropGems() {  
-  for(int i = 0; i < fallingGemCount; i++) {
-    Gem& gem = *fallingGems[i];
+  for(int i = 0; i < fallingGems.count; i++) {
+    Gem& gem = fallingGems.get(i);
 
     if (isClearing()) {
       if (gem.isClearing()) gem.update();
@@ -198,13 +158,13 @@ void Battle::dropGems() {
         handleGemStack(gem);
         
         if (gem.isStacked()) {
-          removeGemFromArray(fallingGems, i, fallingGemCount);
+          fallingGems.remove(i);
           i--;
         }
       }
   
       if (gem.isPopped() || gem.isCleared()) {
-        removeGemFromArray(fallingGems, i, fallingGemCount);
+        fallingGems.remove(i);
         i--;
       }
     }
@@ -218,8 +178,8 @@ void Battle::render() {
   renderPreviewDivider();
   enemy->render();
   weapons->render();
-  for (int i = 0; i < previewGemCount; i++) previewGems[i]->render();
-  for (int i = 0; i < fallingGemCount; i++) fallingGems[i]->render();
+  previewGems.render();
+  fallingGems.render();
   renderPaused();
 }
 

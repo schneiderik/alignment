@@ -97,6 +97,10 @@ bool Gem::atEndOfRowX() {
   return getWeapon().endOfRowX() >= x;
 }
 
+bool Gem::belowPreviewThreshold() {
+  return x <= PREVIEW_THRESHOLD_X;
+}
+
 void Gem::drop() {
   state = GEM_STATE_FALLING;
 }

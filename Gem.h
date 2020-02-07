@@ -41,6 +41,7 @@ class Gem {
     
     Weapon& getWeapon();
     bool atEndOfRowX();
+    bool belowPreviewThreshold();
     void drop();
     void clear();
     void pop();

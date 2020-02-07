@@ -2,14 +2,10 @@
 #define BATTLE_H
 
 #include "global.h"
-
-#define FALLING_GEMS_MAX 2
-#define PREVIEW_GEMS_MAX 2
+#include "GemManager.h"
 
 class Battle {
-  public:
-    Battle();
-    
+  public:    
     void handleInput();
     void update();
     void render();
@@ -42,10 +38,9 @@ class Battle {
 
     int health = HEALTH_MAX;
     int paused = false;
-    int previewGemCount = 0;
-    int fallingGemCount = 0;
-    Gem* previewGems[PREVIEW_GEMS_MAX];
-    Gem* fallingGems[FALLING_GEMS_MAX];
+    
+    GemManager previewGems;
+    GemManager fallingGems;
 };
 
 #endif
