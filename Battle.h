@@ -35,6 +35,11 @@ class Battle {
     void handleNoMatch(Gem&);
     void handleGemStack(Gem&);
 
+    void renderTopBar();
+    void renderHealth();
+    void renderPreviewDivider();
+    void renderPaused();
+
     int health = HEALTH_MAX;
     int paused = false;
     int previewGemCount = 0;

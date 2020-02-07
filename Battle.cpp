@@ -212,8 +212,22 @@ void Battle::dropGems() {
 }
 
 void Battle::render() {
+  renderTopBar();
+  renderNumberAlignRight(score, 126, 2, true);
+  renderHealth();
+  renderPreviewDivider();
+  enemy->render();
+  weapons->render();
+  for (int i = 0; i < previewGemCount; i++) previewGems[i]->render();
+  for (int i = 0; i < fallingGemCount; i++) fallingGems[i]->render();
+  renderPaused();
+}
+
+void Battle::renderTopBar() {
   arduboy.fillRect(0, 0, 128, 10);
-  
+}
+
+void Battle::renderHealth() {
   for (int i = 0; i < HEALTH_MAX; i++) {  
     sprites.drawErase(
       2 + (i * (heartSprite[0] + 1)),
@@ -221,17 +235,13 @@ void Battle::render() {
       heartSprite,
       i < health ? 0 : 1
     );
-  }
+  }  
+}
 
-  renderNumberAlignRight(score, 126, 2, true);
-  
+void Battle::renderPreviewDivider() {
   arduboy.fillRect(89, 14, 1, 48);
-  
-  enemy->render();
+}
 
-  weapons->render();
-  for (int i = 0; i < previewGemCount; i++) previewGems[i]->render();
-  for (int i = 0; i < fallingGemCount; i++) fallingGems[i]->render();
-
-  if (paused) sprites.drawOverwrite(50, 28, pausedTextImage, 0); 
+void Battle::renderPaused() {
+  if (paused) sprites.drawOverwrite(50, 28, pausedTextImage, 0);
 }
