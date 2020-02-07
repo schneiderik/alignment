@@ -75,8 +75,6 @@ const int gemXOffsets[WEAPON_GEMS_MAX + 1] = {17, 29, 41, 53, 65, 77, 89};
 extern int gameState;
 extern unsigned long int score;
 extern WeaponManager* weapons;
-extern Gem* previewGems[PREVIEW_GEMS_MAX];
-extern Gem* fallingGems[FALLING_GEMS_MAX];
 extern Enemy* enemy;
 
 #endif
