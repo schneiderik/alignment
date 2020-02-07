@@ -2,6 +2,12 @@
 #define GAME_H
 
 #include "global.h";
+#include "Title.h"
+#include "Info.h"
+#include "Quest.h"
+#include "Battle.h"
+#include "Win.h"
+#include "Lose.h"
 
 #define GAME_STATE_TITLE 0
 #define GAME_STATE_INFO 1
@@ -12,6 +18,10 @@
 
 class Game {
   public:
+    void handleInput();
+    void update();
+    void render();
+    
     void goToTitle();
     void goToInfo();
     void goToQuest();
@@ -20,6 +30,13 @@ class Game {
     void goToLose();
   
     int state = GAME_STATE_TITLE;
+    
+    Title title;
+    Battle battle;
+    Info info;
+    Quest quest;
+    Win win;
+    Lose lose;
 };
 
 #endif
