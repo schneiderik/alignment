@@ -2,12 +2,6 @@
 #include "Weapon.h"
 #include "WeaponManager.h"
 
-Gem::Gem() {
-  velocityX = random(0, 3) - 1;
-  initialVelocityY = random(0, 3) - 2;
-  velocityY = initialVelocityY;
-}
-
 void Gem::updateX() {
   if (arduboy.everyXFrames(INITIAL_GAME_SPEED)) {
     if (!atEndOfRowX()) { 
@@ -31,7 +25,6 @@ void Gem::updateClear() {
       x += velocityX;
       velocityY += GRAVITY_ACCELERATION;
     } else {
-      velocityY = initialVelocityY;
       state = GEM_STATE_CLEARED;
     }
   }
@@ -109,6 +102,8 @@ void Gem::drop() {
 }
 
 void Gem::clear() {
+  velocityX = random(0, 3) - 1;
+  velocityY = random(0, 3) - 2;
   state = GEM_STATE_CLEARING;
 }
 

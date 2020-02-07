@@ -12,16 +12,13 @@
 #define GEM_STATE_POPPED 6
 
 class Gem {
-  public:
-    Gem();
-    
+  public:    
     int type;
     int row;
     int x;
     int y;
     int velocityX;
     int velocityY;
-    int initialVelocityY;
     int state = GEM_STATE_INACTIVE;
 
     void render();
