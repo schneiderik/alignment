@@ -59,11 +59,6 @@ int GemManager::randomEmptyRow() {
   return gemExistsInRow(row) ? randomEmptyRow() : row;
 }
 
-bool GemManager::isClearing() {
-  for (int i = 0; i < count; i++) if (get(i).isClearing()) return true;
-  return false;
-}
-
 bool GemManager::isEmpty() {
   return count == 0;
 }

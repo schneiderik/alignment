@@ -49,12 +49,6 @@ void Weapon::clearGems() {
   stackCount = 0;
 }
 
-bool Weapon::isClearing() {
-  for (int i = 0; i < gemCount; i++) if (getGem(i).isClearing()) return true;
-
-  return false;
-}
-
 void Weapon::empty() {
   gemCount = 0;
   stackCount = 0;

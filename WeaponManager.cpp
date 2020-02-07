@@ -47,9 +47,3 @@ void WeaponManager::swap() {
 
   swapSound();
 }
-
-bool WeaponManager::isClearing() {
-  for (int i = 0; i < WEAPON_COUNT; i++) if (get(i).isClearing()) return true;
-
-  return false;
-}

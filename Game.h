@@ -32,9 +32,12 @@ class Game {
     void goToBattle();
     void goToWin();
     void goToLose();
+
+    bool isClearingGems();
   
     int state = GAME_STATE_TITLE;
     unsigned long int score;
+    int clearingGemCount;
 
     WeaponManager weapons;
     Enemy enemy;  

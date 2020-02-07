@@ -15,7 +15,6 @@ class Battle {
     void handleEnemyDefeated();
 
     void swapWeapons();
-    bool isClearing();
     bool shouldGeneratePreviewGems();
     void generatePreviewGems();
     void generatePreviewGem();

@@ -7,7 +7,7 @@
 
 void Battle::handleInput() {
   if (arduboy.justPressed(RIGHT_BUTTON)) paused = !paused;
-  if (paused || isClearing()) return;
+  if (paused || game->isClearingGems()) return;
   if (arduboy.justPressed(UP_BUTTON)) game->weapons.decrementActiveIndex();
   if (arduboy.justPressed(DOWN_BUTTON)) game->weapons.incrementActiveIndex();
   if (arduboy.justPressed(A_BUTTON)) swapWeapons();
@@ -33,7 +33,7 @@ void Battle::update() {
   game->weapons.update();
   game->enemy.update();
 
-  if (!isClearing()) {              
+  if (!game->isClearingGems()) {              
     if (shouldGeneratePreviewGems()) previewGems.create(2);        
     if (shouldDropPreviewGems()) dropPreviewGems();       
   }
@@ -58,11 +58,6 @@ void Battle::handleEnemyDefeated() {
     }
     reset();
   }
-}
-
-bool Battle::isClearing() {
-  if (game->weapons.isClearing() || fallingGems.isClearing()) return true;
-  return false;  
 }
 
 bool Battle::shouldGeneratePreviewGems() {
@@ -134,7 +129,7 @@ void Battle::dropGems() {
   for(int i = 0; i < fallingGems.count; i++) {
     Gem& gem = fallingGems.get(i);
 
-    if (isClearing()) {
+    if (game->isClearingGems()) {
       if (gem.isClearing()) gem.update();
     } else {
       gem.update(); 

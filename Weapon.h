@@ -21,7 +21,6 @@ class Weapon {
     Gem& getNextGem();
     void popLastGem();
     void clearGems();
-    bool isClearing();
     void empty();
     void reset(int);
     void render(bool);

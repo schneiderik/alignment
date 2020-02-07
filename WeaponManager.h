@@ -20,8 +20,6 @@ class WeaponManager {
     void incrementActiveIndex();
     void decrementActiveIndex();
     void swap();
-
-    bool isClearing();
 };
 
 #endif

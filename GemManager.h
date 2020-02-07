@@ -21,7 +21,6 @@ class GemManager {
 
     bool gemExistsInRow(int);
     int randomEmptyRow();
-    bool isClearing();
     bool isEmpty();
     bool gemsBelowPreviewThreshold();
     void moveGemsInObstructedRows(int, int);
