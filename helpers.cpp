@@ -1,13 +1,5 @@
 #include "helpers.h"
-#include "Game.h"
 #include "Gem.h"
-#include "Enemy.h"
-
-void resetGame() {
-  game->enemy.set(ENEMY_TYPE_SKELETON);
-  game->score = 0;
-  game->goToTitle();
-}
 
 void renderDigitBlack(int digit, int x, int y) {
   sprites.drawErase(x, y, numberSprite, digit);

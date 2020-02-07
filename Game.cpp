@@ -57,6 +57,12 @@ void Game::render() {
   }  
 }
 
+void Game::reset() {
+  enemy.set(ENEMY_TYPE_SKELETON);
+  score = 0;
+  goToTitle();
+}
+
 void Game::goToTitle() {
   state = GAME_STATE_TITLE;
 }

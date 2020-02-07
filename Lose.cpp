@@ -2,7 +2,7 @@
 #include "Game.h"
 
 void Lose::handleInput() {
-  if (arduboy.justPressed(A_BUTTON)) resetGame();
+  if (arduboy.justPressed(A_BUTTON)) game->reset();
 }
 
 void Lose::render() {

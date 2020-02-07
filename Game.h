@@ -22,6 +22,8 @@ class Game {
     void handleInput();
     void update();
     void render();
+
+    void reset();
     
     void goToTitle();
     void goToInfo();
