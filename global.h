@@ -13,7 +13,6 @@ extern ArduboyTones sound;
 class Game;
 class Gem;
 class Weapon;
-class WeaponManager;
 
 #include "helpers.h"
 
@@ -35,6 +34,5 @@ const int gemYOffsets[WEAPON_COUNT] = {14, 26, 38, 50};
 const int gemXOffsets[WEAPON_GEMS_MAX + 1] = {17, 29, 41, 53, 65, 77, 89};
 
 extern Game* game;
-extern WeaponManager* weapons;
 
 #endif

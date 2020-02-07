@@ -9,6 +9,7 @@
 #include "Win.h"
 #include "Lose.h"
 #include "Enemy.h"
+#include "WeaponManager.h"
 
 #define GAME_STATE_TITLE 0
 #define GAME_STATE_INFO 1
@@ -34,7 +35,8 @@ class Game {
   
     int state = GAME_STATE_TITLE;
     unsigned long int score;
-    
+
+    WeaponManager weapons;
     Enemy enemy;  
     Title title;
     Battle battle;

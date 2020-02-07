@@ -8,8 +8,8 @@
 void Battle::handleInput() {
   if (arduboy.justPressed(RIGHT_BUTTON)) paused = !paused;
   if (paused || isClearing()) return;
-  if (arduboy.justPressed(UP_BUTTON)) weapons->decrementActiveIndex();
-  if (arduboy.justPressed(DOWN_BUTTON)) weapons->incrementActiveIndex();
+  if (arduboy.justPressed(UP_BUTTON)) game->weapons.decrementActiveIndex();
+  if (arduboy.justPressed(DOWN_BUTTON)) game->weapons.incrementActiveIndex();
   if (arduboy.justPressed(A_BUTTON)) swapWeapons();
 }
 
@@ -18,19 +18,19 @@ void Battle::reset() {
   fallingGems.reset();
   previewGems.reset();
   game->enemy.reset();
-  weapons->reset();
+  game->weapons.reset();
 }
 
 void Battle::swapWeapons() {
-  weapons->swap();
-  fallingGems.moveGemsInObstructedRows(weapons->activeIndex, weapons->activeIndex + 1);
+  game->weapons.swap();
+  fallingGems.moveGemsInObstructedRows(game->weapons.activeIndex, game->weapons.activeIndex + 1);
 }
 
 void Battle::update() {
   if (paused) return;
   handlePlayerDefeated();
   handleEnemyDefeated();
-  weapons->update();
+  game->weapons.update();
   game->enemy.update();
 
   if (!isClearing()) {              
@@ -61,7 +61,7 @@ void Battle::handleEnemyDefeated() {
 }
 
 bool Battle::isClearing() {
-  if (weapons->isClearing() || fallingGems.isClearing()) return true;
+  if (game->weapons.isClearing() || fallingGems.isClearing()) return true;
   return false;  
 }
 
@@ -162,7 +162,7 @@ void Battle::render() {
   renderHealth();
   renderPreviewDivider();
   game->enemy.render();
-  weapons->render();
+  game->weapons.render();
   previewGems.render();
   fallingGems.render();
   renderPaused();

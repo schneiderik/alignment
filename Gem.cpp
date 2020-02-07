@@ -1,4 +1,5 @@
 #include "Gem.h"
+#include "Game.h"
 #include "Weapon.h"
 #include "WeaponManager.h"
 
@@ -90,7 +91,7 @@ bool Gem::isPopped() {
 }
 
 Weapon& Gem::getWeapon() {
-  return weapons->get(row);
+  return game->weapons.get(row);
 }
 
 bool Gem::atEndOfRowX() {

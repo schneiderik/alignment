@@ -1,4 +1,5 @@
 #include "Weapon.h"
+#include "Game.h"
 #include "Gem.h"
 #include "WeaponManager.h"
 
@@ -84,7 +85,7 @@ void Weapon::renderGems() {
 
 int Weapon::getOrder() {
   for (int i = 0; i < WEAPON_COUNT; i++) {
-    if (type == weapons->get(i).type) return i;
+    if (type == game->weapons.get(i).type) return i;
   }
 }
 
