@@ -1,9 +1,9 @@
-#ifndef INFO_H
-#define INFO_H
+#ifndef WIN_H
+#define WIN_H
 
 #include "global.h"
 
-class Info {
+class Win {
   public:
     void handleInput();
     void render();

@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+void resetGame();
+
 void renderDigitBlack(int, int, int);
 void renderDigitWhite(int, int, int);
 void renderDigit(int, int, int, bool);

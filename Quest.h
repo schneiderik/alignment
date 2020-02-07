@@ -6,7 +6,7 @@
 
 class Quest {
   public:
-    void handleInput(int&);
+    void handleInput();
     void update();
     void render();
     void renderText();

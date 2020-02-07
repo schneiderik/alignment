@@ -1,6 +1,6 @@
 #include "Info.h"
 
-void Info::handleInput(int& gameState) {
+void Info::handleInput() {
   if (arduboy.justPressed(A_BUTTON)) {
     gameState = GAME_STATE_TITLE;
     confirmSound();

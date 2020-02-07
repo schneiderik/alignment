@@ -72,6 +72,8 @@ const int weaponYOffsets[WEAPON_COUNT] = {13, 25, 37, 49};
 const int gemYOffsets[WEAPON_COUNT] = {14, 26, 38, 50};
 const int gemXOffsets[WEAPON_GEMS_MAX + 1] = {17, 29, 41, 53, 65, 77, 89};
 
+extern int gameState;
+extern unsigned long int score;
 extern WeaponManager* weapons;
 extern Gem* previewGems[PREVIEW_GEMS_MAX];
 extern Gem* fallingGems[FALLING_GEMS_MAX];

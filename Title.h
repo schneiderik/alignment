@@ -13,10 +13,10 @@
 class Title {
   public:
     Title() {};
-    void handleInput(int&);
+    void handleInput();
     void decrementState();
     void incrementState();
-    void selectOption(int&);
+    void selectOption();
     
     void render();
     void renderMainImage();
@@ -24,8 +24,6 @@ class Title {
     void renderInfoOption();
     void renderSfxOption();
     void renderCursor(int, int, int);
-
-    void reset();
 
     int state = TITLE_STATE_PLAY;
 };

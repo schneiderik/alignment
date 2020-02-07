@@ -1,7 +1,7 @@
 #include "Quest.h"
 #include "Enemy.h"
 
-void Quest::handleInput(int& gameState) {
+void Quest::handleInput() {
   if (arduboy.justPressed(A_BUTTON)) {
     gameState = GAME_STATE_BATTLE;
     confirmSound();

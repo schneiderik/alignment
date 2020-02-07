@@ -6,21 +6,24 @@
 #include "Title.h"
 #include "Info.h"
 #include "Quest.h"
+#include "Win.h"
+#include "Lose.h"
 
 //////////////////////////////
 // GLOBAL VARIABLES
 //////////////////////////////
 
-int gameState = GAME_STATE_TITLE;
-unsigned long int score = 0;
 int gameSpeed = INITIAL_GAME_SPEED;
 int health = HEALTH_MAX;
 int paused = false;
 int previewGemCount = 0;
 int fallingGemCount = 0;
+
 Title title;
 Info info;
 Quest quest;
+Win win;
+Lose lose;
 
 
 
@@ -46,13 +49,6 @@ void setup() {
 //////////////////////////////
 // HANDLE INPUT
 //////////////////////////////
-
-void resetGame() {
-  title.reset();
-  enemy->set(ENEMY_TYPE_SKELETON);
-  score = 0;
-  gameState = GAME_STATE_TITLE;
-}
 
 void resetBattle() { 
   health = HEALTH_MAX;
@@ -86,13 +82,13 @@ void swapWeapons() {
 void handleInput() {
   switch (gameState) {
     case GAME_STATE_TITLE:
-      title.handleInput(gameState);   
+      title.handleInput();   
       break;
     case GAME_STATE_INFO:
-      info.handleInput(gameState);
+      info.handleInput();
       break;
     case GAME_STATE_QUEST:
-      quest.handleInput(gameState);
+      quest.handleInput();
       break;
     case GAME_STATE_BATTLE:
       if (arduboy.justPressed(RIGHT_BUTTON)) paused = !paused;
@@ -102,8 +98,9 @@ void handleInput() {
       if (arduboy.justPressed(A_BUTTON)) swapWeapons();
       break;
     case GAME_STATE_WIN:
+      win.handleInput();
     case GAME_STATE_LOSE:
-      if (arduboy.justPressed(A_BUTTON)) resetGame();
+      lose.handleInput();
       break;
   }  
 }
@@ -332,16 +329,10 @@ void render() {
       if (paused) sprites.drawOverwrite(50, 28, pausedTextImage, 0); 
       break;
     case GAME_STATE_WIN:
-      sprites.drawOverwrite(21, 3, victoryImage, 0);
-      sprites.drawOverwrite(6, 33, winTextImage, 0);    
-      sprites.drawOverwrite(53, 46, dividerImage, 0);
-      renderNumberAlignCenter(score, 64, 54, false);
+      win.render();
       break;
     case GAME_STATE_LOSE:
-      sprites.drawOverwrite(23, 9, youDiedImage, 0);
-      sprites.drawOverwrite(48, 35, tryAgainImage, 0);   
-      sprites.drawOverwrite(53, 42, dividerImage, 0);
-      renderNumberAlignCenter(score, 64, 50, false);
+      lose.render();
       break;
   }
 }

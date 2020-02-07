@@ -1,9 +1,9 @@
 #include "Title.h"
 
-void Title::handleInput(int& gameState) {
+void Title::handleInput() {
   if (arduboy.justPressed(UP_BUTTON)) decrementState();   
   if (arduboy.justPressed(DOWN_BUTTON)) incrementState();
-  if (arduboy.justPressed(A_BUTTON)) selectOption(gameState);   
+  if (arduboy.justPressed(A_BUTTON)) selectOption();   
 }
 
 void Title::decrementState() {
@@ -20,7 +20,7 @@ void Title::incrementState() {
   }  
 }
 
-void Title::selectOption(int& gameState) {
+void Title::selectOption() {
   switch(state) {
     case TITLE_STATE_PLAY:
       gameState = GAME_STATE_QUEST;
@@ -75,8 +75,4 @@ void Title::renderSfxOption() {
 void Title::renderCursor(int x, int y, int textWidth) {
   arduboy.fillRect(x - 5, y + 1, 2, 2);
   arduboy.fillRect(x + textWidth + 3, y + 1, 2, 2);
-}
-
-void Title::reset() {
-  state = TITLE_STATE_PLAY;
 }
