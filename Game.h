@@ -10,6 +10,7 @@
 #include "Lose.h"
 #include "Enemy.h"
 #include "WeaponManager.h"
+#include "GemCollection.h"
 
 #define GAME_STATE_TITLE 0
 #define GAME_STATE_INFO 1
@@ -40,6 +41,7 @@ class Game {
     int clearingGemCount;
 
     WeaponManager weapons;
+    GemCollection gems;
     Enemy enemy;  
     Title title;
     Battle battle;
