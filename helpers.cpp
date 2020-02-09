@@ -1,5 +1,4 @@
 #include "helpers.h"
-#include "Gem.h"
 
 void renderDigitBlack(int digit, int x, int y) {
   sprites.drawErase(x, y, numberSprite, digit);
@@ -59,24 +58,6 @@ void renderNumberAlignCenter(int num, int x, int y, bool black) {
   int numWidth = numberWidth(num);
           
   renderNumberAlignRight(num, x + (numWidth / 2), y, black);
-}
-
-//////////////////////////////
-// GEM ARRAYS
-//////////////////////////////
-
-void removeGemFromArray(Gem** gems, int i, int& size) {
-  size--;
-  
-  for(int j = i; j < size; j++) *gems[j] = *gems[j + 1];
-}
-
-Gem& addGemToArray(Gem** gems, Gem& gem, int& size) {
-  Gem& nextGem = *gems[size];
-  nextGem = gem;
-  size++;
-
-  return nextGem;
 }
 
 //////////////////////////////

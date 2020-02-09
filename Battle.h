@@ -15,12 +15,6 @@ class Battle {
 
     void swapWeapons();
 
-    void handleFullWeapon(Gem&);
-    bool isMatch(Gem&);
-    void handleMatch(Gem&);
-    void handleNoMatch(Gem&);
-    void handleGemStack(Gem&);
-
     void renderTopBar();
     void renderHealth();
     void renderPreviewDivider();

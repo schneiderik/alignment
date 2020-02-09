@@ -11,9 +11,6 @@ int numberWidth(int);
 void renderNumberAlignRight(int, int, int, bool);
 void renderNumberAlignCenter(int, int, int, bool);
 
-void removeGemFromArray(Gem**, int, int&);
-Gem& addGemToArray(Gem**, Gem&, int&);
-
 void confirmSound();
 void moveSound();
 void swapSound();

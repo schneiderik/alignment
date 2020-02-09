@@ -11,7 +11,6 @@ extern ArduboyTones sound;
 #include "images.h"
 
 class Game;
-class Gem;
 class Gem2;
 class Weapon;
 

@@ -1,6 +1,5 @@
 #include "Battle.h"
 #include "Game.h"
-#include "Gem.h"
 #include "WeaponManager.h"
 #include "Enemy.h"
 #include "Weapon.h"
