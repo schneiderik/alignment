@@ -12,6 +12,7 @@ extern ArduboyTones sound;
 
 class Game;
 class Gem;
+class Gem2;
 class Weapon;
 
 #include "helpers.h"

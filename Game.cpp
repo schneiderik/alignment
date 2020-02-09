@@ -86,7 +86,3 @@ void Game::goToWin() {
 void Game::goToLose() {
   state = GAME_STATE_LOSE;
 }
-
-bool Game::isClearingGems() {
-  return clearingGemCount > 0;
-}

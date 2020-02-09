@@ -7,23 +7,22 @@
 
 void Battle::handleInput() {
   if (arduboy.justPressed(RIGHT_BUTTON)) paused = !paused;
-  if (paused || game->isClearingGems()) return;
+  if (paused || game->gems.hasClearingGems()) return;
   if (arduboy.justPressed(UP_BUTTON)) game->weapons.decrementActiveIndex();
   if (arduboy.justPressed(DOWN_BUTTON)) game->weapons.incrementActiveIndex();
   if (arduboy.justPressed(A_BUTTON)) swapWeapons();
 }
 
 void Battle::reset() { 
-  health = HEALTH_MAX;
-  fallingGems.reset();
-  previewGems.reset();
+  game->health = HEALTH_MAX;
+  game->gems.reset();
   game->enemy.reset();
   game->weapons.reset();
 }
 
 void Battle::swapWeapons() {
   game->weapons.swap();
-  fallingGems.moveGemsInObstructedRows(game->weapons.activeIndex, game->weapons.activeIndex + 1);
+  game->gems.moveGemsInObstructedRows(game->weapons.activeIndex, game->weapons.activeIndex + 1);
 }
 
 void Battle::update() {
@@ -32,17 +31,11 @@ void Battle::update() {
   handleEnemyDefeated();
   game->weapons.update();
   game->enemy.update();
-
-  if (!game->isClearingGems()) {              
-    if (shouldGeneratePreviewGems()) previewGems.create(2);        
-    if (shouldDropPreviewGems()) dropPreviewGems();       
-  }
-
-  dropGems();
+  game->gems.update();
 }
 
 void Battle::handlePlayerDefeated() {
-  if (health == 0) {
+  if (game->health == 0) {
     game->goToLose(); 
     reset(); 
   }
@@ -60,97 +53,6 @@ void Battle::handleEnemyDefeated() {
   }
 }
 
-bool Battle::shouldGeneratePreviewGems() {
-  return previewGems.isEmpty() && (fallingGems.isEmpty() || fallingGems.gemsBelowPreviewThreshold());
-}
-
-bool Battle::shouldDropPreviewGems() {
-  return fallingGems.isEmpty() && !previewGems.isEmpty();
-}
-
-void Battle::dropPreviewGems() {
-  for (int i = 0; i < previewGems.count; i++) {
-    fallingGems.add(previewGems.get(i)).drop();
-  }
-  
-  previewGems.reset();
-}
-
-void Battle::handleFullWeapon(Gem& gem) {
-  Weapon& weapon = gem.getWeapon();
-  
-  weapon.clearGems();
-  gem.clear();
-
-  health--;
-  loseHeartSound();
-}
-
-bool Battle::isMatch(Gem& gem) {
-  Weapon& weapon = gem.getWeapon();
-
-  if (weapon.isEmpty()) return false;
-
-  return weapon.getLastGem().type == gem.type;
-}
-
-void Battle::handleMatch(Gem& gem) {
-  Weapon& weapon = gem.getWeapon();
-  
-  game->score += 100;
-  gem.pop();
-  weapon.popLastGem();
-  confirmSound();
-  game->enemy.takeDamage(5, weapon.type);
-}
-
-void Battle::handleNoMatch(Gem& gem) {
-  Weapon& weapon = gem.getWeapon();
-          
-  weapon.addGem(gem);
-  game->score += 10; 
-}
-
-void Battle::handleGemStack(Gem& gem) {
-  Weapon& weapon = gem.getWeapon();
-
-  if (isMatch(gem)) {
-    handleMatch(gem);
-  } else {
-    if (weapon.isFull()) {
-      handleFullWeapon(gem);
-    } else {
-      handleNoMatch(gem);
-    }        
-  }  
-}
-
-void Battle::dropGems() {  
-  for(int i = 0; i < fallingGems.count; i++) {
-    Gem& gem = fallingGems.get(i);
-
-    if (game->isClearingGems()) {
-      if (gem.isClearing()) gem.update();
-    } else {
-      gem.update(); 
-  
-      if (gem.isStacked()) {
-        handleGemStack(gem);
-        
-        if (gem.isStacked()) {
-          fallingGems.remove(i);
-          i--;
-        }
-      }
-  
-      if (gem.isPopped() || gem.isCleared()) {
-        fallingGems.remove(i);
-        i--;
-      }
-    }
-  }  
-}
-
 void Battle::render() {
   renderTopBar();
   renderNumberAlignRight(game->score, 126, 2, true);
@@ -158,8 +60,7 @@ void Battle::render() {
   renderPreviewDivider();
   game->enemy.render();
   game->weapons.render();
-  previewGems.render();
-  fallingGems.render();
+  game->gems.render();
   renderPaused();
 }
 
@@ -173,7 +74,7 @@ void Battle::renderHealth() {
       2 + (i * (heartSprite[0] + 1)),
       2,
       heartSprite,
-      i < health ? 0 : 1
+      i < game->health ? 0 : 1
     );
   }  
 }

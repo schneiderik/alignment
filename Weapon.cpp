@@ -1,63 +1,53 @@
 #include "Weapon.h"
 #include "Game.h"
-#include "Gem.h"
+#include "Gem2.h"
 #include "WeaponManager.h"
 
 Weapon::Weapon(int i) {
   type = i;
   y = weaponYOffsets[i];
   empty();
-
-  for (int i = 0; i < WEAPON_GEMS_MAX; i++) {
-    gems[i] = new Gem();
-  }
 }
 
 bool Weapon::isFull() {
-  return stackCount == WEAPON_GEMS_MAX;
+  return gemCount == WEAPON_GEMS_MAX;
 }
 
 bool Weapon::isEmpty() {
-  return stackCount == 0;
+  return gemCount == 0;
 }
 
-void Weapon::addGem(Gem& gem) {
-  getNextGem() = gem;
+void Weapon::addGem(Gem2& gem) {
+  gem.setNext(lastGem);
+  lastGem = &gem;
   gemCount++;
-  stackCount++;
-}
-
-Gem& Weapon::getGem(int i) {
-  return *gems[i];
-}
-
-Gem& Weapon::getLastGem() {
-  return getGem(stackCount - 1);
-}
-
-Gem& Weapon::getNextGem() {
-  return getGem(stackCount);
 }
 
 void Weapon::popLastGem() {
-  getLastGem().pop();
-  stackCount--;
+  lastGem->pop();
+  lastGem = lastGem->getNext();
+  gemCount--;
 }
 
 void Weapon::clearGems() {
-  for (int i = 0; i < gemCount; i++) getGem(i).clear(); 
-  stackCount = 0;
+  Gem2* gem = lastGem;
+  
+  while (gem != NULL) {
+    gem->clear();
+    
+    gem = gem->getNext();
+  }
+  
+  empty();
 }
 
 void Weapon::empty() {
   gemCount = 0;
-  stackCount = 0;
 }
 
 void Weapon::render(bool active) {
   renderIcon(active);
   renderDivider();
-  renderGems();
 }
 
 void Weapon::renderIcon(bool active) {
@@ -71,10 +61,6 @@ void Weapon::renderIcon(bool active) {
 
 void Weapon::renderDivider() {
   arduboy.fillRect(14, y + 1, 1, 10);
-}
-
-void Weapon::renderGems() {
-  for (int i = 0; i < gemCount; i++) getGem(i).render(); 
 }
 
 int Weapon::getOrder() {
@@ -95,7 +81,6 @@ void Weapon::reset(int order) {
 
 void Weapon::update() {
   updateY();
-  updateGems();
 }
 
 void Weapon::updateY() {
@@ -104,19 +89,11 @@ void Weapon::updateY() {
   if (y != weaponYOffsets[order]) y += y < weaponYOffsets[order] ? 3 : -3;
 }
 
-void Weapon::updateGems() {
-  for (int i = 0; i < gemCount; i++) {
-    Gem& gem = getGem(i);
-    
-    gem.update();
-
-    if (gem.isPopped() || gem.isCleared()) {
-      removeGemFromArray(gems, i, gemCount);
-      i--;
-    }
-  }
-}
-
 void Weapon::setGemRows(int row) {
-  for (int i = 0; i < WEAPON_GEMS_MAX; i++) getGem(i).row = row;
+  Gem2* gem = lastGem;
+
+  while (gem != NULL) {
+    gem->setRow(row);
+    gem = gem->getNext();
+  }
 }

@@ -1,6 +1,6 @@
 #include "WeaponManager.h"
 #include "Weapon.h"
-#include "Gem.h"
+#include "Gem2.h"
 
 WeaponManager::WeaponManager() {
   for (int i = 0; i < WEAPON_COUNT; i++) weapons[i] = new Weapon(i); 

@@ -26,7 +26,6 @@ void Gem::updateClear() {
       x += velocityX;
       velocityY += GRAVITY_ACCELERATION;
     } else {
-      game->clearingGemCount--;
       state = GEM_STATE_CLEARED;
     }
   }
@@ -119,7 +118,6 @@ void Gem::clear() {
   velocityX = random(0, 3) - 1;
   velocityY = random(0, 3) - 2;
   state = GEM_STATE_CLEARING;
-  game->clearingGemCount++;
 }
 
 void Gem::pop() {

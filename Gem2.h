@@ -17,10 +17,9 @@ class Gem2 {
   public:
     void init(int);   
     void render();
-    bool update();
-    void updateX();
+    bool updateX();
     void updateY();
-    void updateClear();
+    bool updateClear();
     void updatePop();
 
     bool isInactive();
@@ -34,14 +33,19 @@ class Gem2 {
     bool belowEndOfRowX();
     bool atEndOfRowX();
     bool belowPreviewThreshold();
+    bool matchesLastGemInRow();
     void changeRowIfObstructed(int, int);
     void drop();
     void clear();
     void pop();
+    void hide();
+    void stack();
 
     Gem2* getNext() const;
     void setNext(Gem2*);
     int getRow() const;
+    void setRow(int);
+    int getType() const;
 
   private:
     int type_;

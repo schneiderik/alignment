@@ -2,7 +2,6 @@
 #define BATTLE_H
 
 #include "global.h"
-#include "GemManager.h"
 
 class Battle {
   public:    
@@ -15,14 +14,6 @@ class Battle {
     void handleEnemyDefeated();
 
     void swapWeapons();
-    bool shouldGeneratePreviewGems();
-    void generatePreviewGems();
-    void generatePreviewGem();
-    bool shouldDropPreviewGems();
-    void dropPreviewGems();
-    void dropGems();
-    bool fallingGemsBelowPreviewThreshold();
-    int randomUniqueRow();
 
     void handleFullWeapon(Gem&);
     bool isMatch(Gem&);
@@ -35,11 +26,7 @@ class Battle {
     void renderPreviewDivider();
     void renderPaused();
 
-    int health = HEALTH_MAX;
     int paused = false;
-    
-    GemManager previewGems;
-    GemManager fallingGems;
 };
 
 #endif

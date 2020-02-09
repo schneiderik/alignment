@@ -10,15 +10,11 @@ class Weapon {
     int type;
     int y;
     int gemCount;
-    int stackCount;
-    Gem* gems[WEAPON_GEMS_MAX];
+    Gem2* lastGem = NULL;
 
     bool isFull();
     bool isEmpty();
-    void addGem(Gem&);
-    Gem& getGem(int);
-    Gem& getLastGem();
-    Gem& getNextGem();
+    void addGem(Gem2&);
     void popLastGem();
     void clearGems();
     void empty();
