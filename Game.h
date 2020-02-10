@@ -10,7 +10,7 @@
 #include "Lose.h"
 #include "Enemy.h"
 #include "WeaponManager.h"
-#include "GemCollection.h"
+#include "GemManager.h"
 
 #define GAME_STATE_TITLE 0
 #define GAME_STATE_INFO 1
@@ -39,7 +39,7 @@ class Game {
     int health = HEALTH_MAX;
 
     WeaponManager weapons;
-    GemCollection gems;
+    GemManager gems;
     Enemy enemy;  
     Title title;
     Battle battle;

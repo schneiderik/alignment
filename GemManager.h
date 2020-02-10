@@ -1,12 +1,12 @@
-#ifndef GEM_COLLECTION_H
-#define GEM_COLLECTION_H
+#ifndef GEM_MANAGER_H
+#define GEM_MANAGER_H
 
 #include "global.h"
 #include "Gem2.h"
 
-class GemCollection {
+class GemManager {
   public:
-    GemCollection();
+    GemManager();
 
     void create();
     void create(int);
@@ -27,8 +27,8 @@ class GemCollection {
     bool shouldCreateGems();
 
   private:
-    static const int GEM_COLLECTION_SIZE = 30;
-    Gem2 gems_[GEM_COLLECTION_SIZE];
+    static const int GEM_MANAGER_SIZE = 30;
+    Gem2 gems_[GEM_MANAGER_SIZE];
     Gem2* firstAvailable_;
     
     int fallingGemCount_;

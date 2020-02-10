@@ -1,19 +1,19 @@
-#include "GemCollection.h"
+#include "GemManager.h"
 #include "Game.h"
 #include "Gem2.h"
 #include "Weapon.h"
 
-GemCollection::GemCollection() {
+GemManager::GemManager() {
   firstAvailable_ = &gems_[0];
 
-  for (int i = 0; i < GEM_COLLECTION_SIZE - 1; i++) {
+  for (int i = 0; i < GEM_MANAGER_SIZE - 1; i++) {
     gems_[i].setNext(&gems_[i + 1]);
   }
 
-  gems_[GEM_COLLECTION_SIZE - 1].setNext(NULL);
+  gems_[GEM_MANAGER_SIZE - 1].setNext(NULL);
 }
 
-void GemCollection::create() {
+void GemManager::create() {
   if (firstAvailable_ == NULL) return;
   
   Gem2* newGem = firstAvailable_;
@@ -22,12 +22,12 @@ void GemCollection::create() {
   newGem->init(randomEmptyRow());
 }
 
-void GemCollection::create(int count) {
+void GemManager::create(int count) {
   for (int i = 0; i < count; i++) create();
 }
 
-bool GemCollection::gemExistsInRow(int row) {  
-  for (int i = 0; i < GEM_COLLECTION_SIZE; i++) {
+bool GemManager::gemExistsInRow(int row) {  
+  for (int i = 0; i < GEM_MANAGER_SIZE; i++) {
     Gem2& gem = gems_[i];
     if (gem.isInactive() && gem.getRow() == row) return true;
   }
@@ -35,68 +35,68 @@ bool GemCollection::gemExistsInRow(int row) {
   return false;
 }
 
-bool GemCollection::hasClearingGems() {
+bool GemManager::hasClearingGems() {
   return clearingGemCount_ > 0;
 }
 
-bool GemCollection::hasInactiveGems() {
+bool GemManager::hasInactiveGems() {
   return inactiveGemCount_ > 0;
 }
 
-bool GemCollection::hasFallingGems() {
+bool GemManager::hasFallingGems() {
   return fallingGemCount_ > 0;
 }
 
-bool GemCollection::fallingGemsAreBelowPreviewThreshold() {
+bool GemManager::fallingGemsAreBelowPreviewThreshold() {
   return fallingGemCount_ == belowPreviewThresholdCount_;
 }
 
-bool GemCollection::shouldCreateGems() {
+bool GemManager::shouldCreateGems() {
   return !hasClearingGems()
     && !hasInactiveGems()
     && fallingGemsAreBelowPreviewThreshold();
 }
 
-void GemCollection::reset() {
+void GemManager::reset() {
   clearingGemCount_ = 0;
   fallingGemCount_ = 0;
   belowPreviewThresholdCount_ = 0;
   inactiveGemCount_ = 0;  
 
-  for (int i = 0; i < GEM_COLLECTION_SIZE; i++) {
+  for (int i = 0; i < GEM_MANAGER_SIZE; i++) {
     Gem2& gem = gems_[i];
     gem.hide();
   }
 }
 
-void GemCollection::render() {
-  for (int i = 0; i < GEM_COLLECTION_SIZE; i++) {
+void GemManager::render() {
+  for (int i = 0; i < GEM_MANAGER_SIZE; i++) {
     Gem2& gem = gems_[i];
     if (!gem.isHidden()) gem.render();
   }
 }
 
-int GemCollection::randomEmptyRow() {
+int GemManager::randomEmptyRow() {
   int row = random(0, WEAPON_COUNT);
 
   return gemExistsInRow(row) ? randomEmptyRow() : row;
 }
 
-void GemCollection::moveGemsInObstructedRows(int row1, int row2) {
-  for(int i = 0; i < GEM_COLLECTION_SIZE; i++) {
+void GemManager::moveGemsInObstructedRows(int row1, int row2) {
+  for(int i = 0; i < GEM_MANAGER_SIZE; i++) {
     Gem2& gem = gems_[i];
     if (gem.isFalling()) gem.changeRowIfObstructed(row1, row2);
   }
 }
 
-void GemCollection::update() {
+void GemManager::update() {
   hasClearingGems() ? updateClearing() : updateFalling();
 }
 
-void GemCollection::updateClearing() {
+void GemManager::updateClearing() {
   int newClearingGemCount = 0;
     
-  for (int i = 0; i < GEM_COLLECTION_SIZE; i++) {
+  for (int i = 0; i < GEM_MANAGER_SIZE; i++) {
     Gem2& gem = gems_[i];
     Weapon& weapon = gem.getWeapon();
 
@@ -112,7 +112,7 @@ void GemCollection::updateClearing() {
   clearingGemCount_ = newClearingGemCount;
 }
 
-void GemCollection::updateFalling() {
+void GemManager::updateFalling() {
   int newClearingGemCount = 0;
   int newFallingGemCount = 0;
   int newBelowPreviewThresholdCount = 0;
@@ -120,7 +120,7 @@ void GemCollection::updateFalling() {
   
   if (shouldCreateGems()) create(2);
   
-  for (int i = 0; i < GEM_COLLECTION_SIZE; i++) {
+  for (int i = 0; i < GEM_MANAGER_SIZE; i++) {
     Gem2& gem = gems_[i];
     Weapon& weapon = gem.getWeapon();
 
@@ -175,7 +175,7 @@ void GemCollection::updateFalling() {
   inactiveGemCount_ = newInactiveGemCount;  
 }
 
-void GemCollection::remove(Gem2& gem) {
+void GemManager::remove(Gem2& gem) {
   gem.setNext(firstAvailable_);
   firstAvailable_ = &gem; 
 }
