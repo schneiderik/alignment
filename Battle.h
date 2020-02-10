@@ -10,11 +10,6 @@ class Battle {
     void render();
     void reset();
 
-    void handlePlayerDefeated();
-    void handleEnemyDefeated();
-
-    void swapWeapons();
-
     void renderTopBar();
     void renderHealth();
     void renderPreviewDivider();

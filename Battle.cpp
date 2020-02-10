@@ -9,47 +9,19 @@ void Battle::handleInput() {
   if (paused || game->gems.hasClearingGems()) return;
   if (arduboy.justPressed(UP_BUTTON)) game->weapons.decrementActiveIndex();
   if (arduboy.justPressed(DOWN_BUTTON)) game->weapons.incrementActiveIndex();
-  if (arduboy.justPressed(A_BUTTON)) swapWeapons();
-}
-
-void Battle::reset() { 
-  game->health = HEALTH_MAX;
-  game->gems.reset();
-  game->enemy.reset();
-  game->weapons.reset();
-}
-
-void Battle::swapWeapons() {
-  game->weapons.swap();
-  game->gems.moveGemsInObstructedRows(game->weapons.activeIndex, game->weapons.activeIndex + 1);
+  if (arduboy.justPressed(A_BUTTON)) {
+    game->weapons.swap();
+    game->gems.moveGemsInObstructedRows(game->weapons.activeIndex, game->weapons.activeIndex + 1);
+  }
 }
 
 void Battle::update() {
   if (paused) return;
-  handlePlayerDefeated();
-  handleEnemyDefeated();
+  game->handlePlayerDefeated();
+  game->handleEnemyDefeated();
   game->weapons.update();
   game->enemy.update();
   game->gems.update();
-}
-
-void Battle::handlePlayerDefeated() {
-  if (game->health == 0) {
-    game->goToLose(); 
-    reset(); 
-  }
-}
-
-void Battle::handleEnemyDefeated() {
-  if (game->enemy.health <= 0) {
-    if (game->enemy.type == LAST_ENEMY) {
-      game->goToWin();
-    } else { 
-      game->enemy.set(game->enemy.type + 1);
-      game->goToQuest();
-    }
-    reset();
-  }
 }
 
 void Battle::render() {

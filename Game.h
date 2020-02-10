@@ -26,6 +26,7 @@ class Game {
     void render();
 
     void reset();
+    void resetBattle();
     
     void goToTitle();
     void goToInfo();
@@ -33,6 +34,9 @@ class Game {
     void goToBattle();
     void goToWin();
     void goToLose();
+
+    void handlePlayerDefeated();
+    void handleEnemyDefeated();
   
     int state = GAME_STATE_TITLE;
     unsigned long int score;

@@ -58,9 +58,17 @@ void Game::render() {
 }
 
 void Game::reset() {
+  resetBattle();
   enemy.set(ENEMY_TYPE_SKELETON);
   score = 0;
   goToTitle();
+}
+
+void Game::resetBattle() {
+  health = HEALTH_MAX;
+  gems.reset();
+  enemy.reset();
+  weapons.reset();
 }
 
 void Game::goToTitle() {
@@ -85,4 +93,21 @@ void Game::goToWin() {
 
 void Game::goToLose() {
   state = GAME_STATE_LOSE;
+}
+
+void Game::handlePlayerDefeated() {
+  if (health > 0) return;
+  goToLose(); 
+  resetBattle(); 
+}
+
+void Game::handleEnemyDefeated() {
+  if (enemy.health > 0) return;
+  if (enemy.type == LAST_ENEMY) {
+    goToWin();
+  } else { 
+    enemy.set(enemy.type + 1);
+    goToQuest();
+  }
+  resetBattle();
 }
