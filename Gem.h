@@ -17,6 +17,7 @@ class Gem {
   public:
     void init(int);   
     void render();
+    void update();
     bool updateX();
     void updateY();
     bool updateClear();

@@ -20,6 +20,9 @@ void GemManager::create() {
   firstAvailable_ = newGem->getNext();
 
   newGem->init(randomEmptyRow());
+
+  newGem->setNext(inactiveGemsHead_);
+  inactiveGemsHead_ = newGem;
 }
 
 void GemManager::create(int count) {
@@ -40,7 +43,7 @@ bool GemManager::hasClearingGems() {
 }
 
 bool GemManager::hasInactiveGems() {
-  return inactiveGemCount_ > 0;
+  return inactiveGemsHead_ != NULL;
 }
 
 bool GemManager::hasFallingGems() {
@@ -61,7 +64,7 @@ void GemManager::reset() {
   clearingGemCount_ = 0;
   fallingGemCount_ = 0;
   belowPreviewThresholdCount_ = 0;
-  inactiveGemCount_ = 0;  
+  inactiveGemsHead_ = NULL;  
 
   for (int i = 0; i < GEM_MANAGER_SIZE; i++) {
     Gem& gem = gems_[i];
@@ -116,7 +119,6 @@ void GemManager::updateFalling() {
   int newClearingGemCount = 0;
   int newFallingGemCount = 0;
   int newBelowPreviewThresholdCount = 0;
-  int newInactiveGemCount = 0;
   
   if (shouldCreateGems()) create(2);
   
@@ -132,8 +134,7 @@ void GemManager::updateFalling() {
       if (!hasFallingGems()) {
         gem.drop();
         newFallingGemCount++;
-      } else {
-        newInactiveGemCount++;
+        inactiveGemsHead_ = NULL;
       }
     } else if (gem.isFalling()) {
       if (gem.updateX()) {
@@ -172,7 +173,6 @@ void GemManager::updateFalling() {
   clearingGemCount_ = newClearingGemCount;
   fallingGemCount_ = newFallingGemCount;
   belowPreviewThresholdCount_ = newBelowPreviewThresholdCount;
-  inactiveGemCount_ = newInactiveGemCount;  
 }
 
 void GemManager::remove(Gem& gem) {

@@ -35,6 +35,7 @@ class GemManager {
     int belowPreviewThresholdCount_;
     int clearingGemCount_;
     int inactiveGemCount_;
+    Gem* inactiveGemsHead_ = NULL;
 };
 
 #endif
