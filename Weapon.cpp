@@ -1,6 +1,6 @@
 #include "Weapon.h"
 #include "Game.h"
-#include "Gem2.h"
+#include "Gem.h"
 #include "WeaponManager.h"
 
 Weapon::Weapon(int i) {
@@ -17,7 +17,7 @@ bool Weapon::isEmpty() {
   return gemCount == 0;
 }
 
-void Weapon::addGem(Gem2& gem) {
+void Weapon::addGem(Gem& gem) {
   gem.setNext(lastGem);
   lastGem = &gem;
   gemCount++;
@@ -30,7 +30,7 @@ void Weapon::popLastGem() {
 }
 
 void Weapon::clearGems() {
-  Gem2* gem = lastGem;
+  Gem* gem = lastGem;
   
   while (gem != NULL) {
     gem->clear();
@@ -90,7 +90,7 @@ void Weapon::updateY() {
 }
 
 void Weapon::setGemRows(int row) {
-  Gem2* gem = lastGem;
+  Gem* gem = lastGem;
 
   while (gem != NULL) {
     gem->setRow(row);

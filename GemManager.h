@@ -2,7 +2,7 @@
 #define GEM_MANAGER_H
 
 #include "global.h"
-#include "Gem2.h"
+#include "Gem.h"
 
 class GemManager {
   public:
@@ -13,7 +13,7 @@ class GemManager {
     void update();
     void updateClearing();
     void updateFalling();
-    void remove(Gem2&);
+    void remove(Gem&);
     void render();
     void reset();
 
@@ -28,8 +28,8 @@ class GemManager {
 
   private:
     static const int GEM_MANAGER_SIZE = 30;
-    Gem2 gems_[GEM_MANAGER_SIZE];
-    Gem2* firstAvailable_;
+    Gem gems_[GEM_MANAGER_SIZE];
+    Gem* firstAvailable_;
     
     int fallingGemCount_;
     int belowPreviewThresholdCount_;

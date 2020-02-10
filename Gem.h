@@ -1,5 +1,5 @@
-#ifndef GEM2_H
-#define GEM2_H
+#ifndef Gem_H
+#define Gem_H
 
 #include "global.h"
 
@@ -13,7 +13,7 @@
 #define GEM_POPPING_ANIMATION_START_FRAME 5
 #define GEM_POPPING_ANIMATION_END_FRAME 7
 
-class Gem2 {
+class Gem {
   public:
     void init(int);   
     void render();
@@ -41,8 +41,8 @@ class Gem2 {
     void hide();
     void stack();
 
-    Gem2* getNext() const;
-    void setNext(Gem2*);
+    Gem* getNext() const;
+    void setNext(Gem*);
     int getRow() const;
     void setRow(int);
     int getType() const;
@@ -55,7 +55,7 @@ class Gem2 {
     int state_ = GEM_STATE_HIDDEN;
     int xVel_;
     int yVel_;
-    Gem2* next_;
+    Gem* next_;
 };
 
 #endif

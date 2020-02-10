@@ -1,9 +1,9 @@
-#include "Gem2.h"
+#include "Gem.h"
 #include "Game.h"
 #include "Weapon.h"
 #include "WeaponManager.h"
 
-void Gem2::init(int row) {
+void Gem::init(int row) {
   type_ = random(0, GEM_TYPE_COUNT);
   row_ = row;
   x_ = PREVIEW_GEM_X;
@@ -12,11 +12,11 @@ void Gem2::init(int row) {
   next_ = NULL;
 }
 
-void Gem2::render() {
+void Gem::render() {
   sprites.drawPlusMask(x_, y_, gemSpritePlusMask, type_);
 }
 
-bool Gem2::updateX() {
+bool Gem::updateX() {
   if (arduboy.everyXFrames(INITIAL_GAME_SPEED)) {
     if (!atEndOfRowX()) { 
       x_ -= 3;
@@ -29,13 +29,13 @@ bool Gem2::updateX() {
   return true;
 }
 
-void Gem2::updateY() {
+void Gem::updateY() {
   if (y_ != gemYOffsets[row_]) {
     y_ += y_ < gemYOffsets[row_] ? 3 : -3;
   }  
 }
 
-bool Gem2::updateClear() {
+bool Gem::updateClear() {
   if (arduboy.everyXFrames(5)) {
     if (y_ < SCREEN_HEIGHT) {
       y_ += yVel_;
@@ -50,7 +50,7 @@ bool Gem2::updateClear() {
   return true;
 }
 
-void Gem2::updatePop() {
+void Gem::updatePop() {
   if (arduboy.everyXFrames(5)) {
     if (type_ < GEM_POPPING_ANIMATION_END_FRAME) {
       type_++;
@@ -60,23 +60,23 @@ void Gem2::updatePop() {
   }
 }
 
-Weapon& Gem2::getWeapon() {
+Weapon& Gem::getWeapon() {
   return game->weapons.get(row_);
 }
 
-bool Gem2::atEndOfRowX() {
+bool Gem::atEndOfRowX() {
   return x_ <= getWeapon().endOfRowX();
 }
 
-bool Gem2::belowEndOfRowX() {
+bool Gem::belowEndOfRowX() {
   return x_ < getWeapon().endOfRowX();
 }
 
-bool Gem2::belowPreviewThreshold() {
+bool Gem::belowPreviewThreshold() {
   return x_ <= PREVIEW_THRESHOLD_X;
 }
 
-bool Gem2::matchesLastGemInRow() {
+bool Gem::matchesLastGemInRow() {
   Weapon& weapon = getWeapon();
 
   if (weapon.isEmpty()) return false;
@@ -84,42 +84,42 @@ bool Gem2::matchesLastGemInRow() {
   return weapon.lastGem->getType() == type_;
 }
 
-void Gem2::changeRowIfObstructed(int row1, int row2) {
+void Gem::changeRowIfObstructed(int row1, int row2) {
   if (belowEndOfRowX()) row_ = row_ == row1 ? row2 : row1;
 }
 
-void Gem2::drop() {
+void Gem::drop() {
   if (isInactive()) state_ = GEM_STATE_FALLING;
 }
 
-void Gem2::clear() {
+void Gem::clear() {
   xVel_ = random(0, 3) - 1;
   yVel_ = random(0, 3) - 2;
   state_ = GEM_STATE_CLEARING;
 }
 
-void Gem2::pop() {
+void Gem::pop() {
   type_ = GEM_POPPING_ANIMATION_START_FRAME;
   state_ = GEM_STATE_POPPING;
 }
 
-void Gem2::stack() {
+void Gem::stack() {
   state_ = GEM_STATE_STACKED;
 }
 
-void Gem2::hide() {
+void Gem::hide() {
   state_ = GEM_STATE_HIDDEN;
 }
 
-bool Gem2::isInactive() { return state_ == GEM_STATE_INACTIVE; }
-bool Gem2::isFalling() { return state_ == GEM_STATE_FALLING; }
-bool Gem2::isStacked() { return state_ == GEM_STATE_STACKED; }
-bool Gem2::isClearing() { return state_ == GEM_STATE_CLEARING; }
-bool Gem2::isPopping() { return state_ == GEM_STATE_POPPING; }
-bool Gem2::isHidden() { return state_ == GEM_STATE_HIDDEN; }
+bool Gem::isInactive() { return state_ == GEM_STATE_INACTIVE; }
+bool Gem::isFalling() { return state_ == GEM_STATE_FALLING; }
+bool Gem::isStacked() { return state_ == GEM_STATE_STACKED; }
+bool Gem::isClearing() { return state_ == GEM_STATE_CLEARING; }
+bool Gem::isPopping() { return state_ == GEM_STATE_POPPING; }
+bool Gem::isHidden() { return state_ == GEM_STATE_HIDDEN; }
 
-Gem2* Gem2::getNext() const { return next_; }
-void Gem2::setNext(Gem2* next) { next_ = next; }
-int Gem2::getRow() const { return row_; }
-void Gem2::setRow(int row) { row_ = row; }
-int Gem2::getType() const { return type_; }
+Gem* Gem::getNext() const { return next_; }
+void Gem::setNext(Gem* next) { next_ = next; }
+int Gem::getRow() const { return row_; }
+void Gem::setRow(int row) { row_ = row; }
+int Gem::getType() const { return type_; }

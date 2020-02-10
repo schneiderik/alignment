@@ -1,6 +1,6 @@
 #include "GemManager.h"
 #include "Game.h"
-#include "Gem2.h"
+#include "Gem.h"
 #include "Weapon.h"
 
 GemManager::GemManager() {
@@ -16,7 +16,7 @@ GemManager::GemManager() {
 void GemManager::create() {
   if (firstAvailable_ == NULL) return;
   
-  Gem2* newGem = firstAvailable_;
+  Gem* newGem = firstAvailable_;
   firstAvailable_ = newGem->getNext();
 
   newGem->init(randomEmptyRow());
@@ -28,7 +28,7 @@ void GemManager::create(int count) {
 
 bool GemManager::gemExistsInRow(int row) {  
   for (int i = 0; i < GEM_MANAGER_SIZE; i++) {
-    Gem2& gem = gems_[i];
+    Gem& gem = gems_[i];
     if (gem.isInactive() && gem.getRow() == row) return true;
   }
 
@@ -64,14 +64,14 @@ void GemManager::reset() {
   inactiveGemCount_ = 0;  
 
   for (int i = 0; i < GEM_MANAGER_SIZE; i++) {
-    Gem2& gem = gems_[i];
+    Gem& gem = gems_[i];
     gem.hide();
   }
 }
 
 void GemManager::render() {
   for (int i = 0; i < GEM_MANAGER_SIZE; i++) {
-    Gem2& gem = gems_[i];
+    Gem& gem = gems_[i];
     if (!gem.isHidden()) gem.render();
   }
 }
@@ -84,7 +84,7 @@ int GemManager::randomEmptyRow() {
 
 void GemManager::moveGemsInObstructedRows(int row1, int row2) {
   for(int i = 0; i < GEM_MANAGER_SIZE; i++) {
-    Gem2& gem = gems_[i];
+    Gem& gem = gems_[i];
     if (gem.isFalling()) gem.changeRowIfObstructed(row1, row2);
   }
 }
@@ -97,7 +97,7 @@ void GemManager::updateClearing() {
   int newClearingGemCount = 0;
     
   for (int i = 0; i < GEM_MANAGER_SIZE; i++) {
-    Gem2& gem = gems_[i];
+    Gem& gem = gems_[i];
     Weapon& weapon = gem.getWeapon();
 
     if (gem.isHidden()) continue;
@@ -121,7 +121,7 @@ void GemManager::updateFalling() {
   if (shouldCreateGems()) create(2);
   
   for (int i = 0; i < GEM_MANAGER_SIZE; i++) {
-    Gem2& gem = gems_[i];
+    Gem& gem = gems_[i];
     Weapon& weapon = gem.getWeapon();
 
     if (gem.isHidden()) continue;
@@ -175,7 +175,7 @@ void GemManager::updateFalling() {
   inactiveGemCount_ = newInactiveGemCount;  
 }
 
-void GemManager::remove(Gem2& gem) {
+void GemManager::remove(Gem& gem) {
   gem.setNext(firstAvailable_);
   firstAvailable_ = &gem; 
 }

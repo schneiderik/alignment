@@ -10,11 +10,11 @@ class Weapon {
     int type;
     int y;
     int gemCount;
-    Gem2* lastGem = NULL;
+    Gem* lastGem = NULL;
 
     bool isFull();
     bool isEmpty();
-    void addGem(Gem2&);
+    void addGem(Gem&);
     void popLastGem();
     void clearGems();
     void empty();
