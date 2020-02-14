@@ -1,7 +1,7 @@
 #ifndef WEAPON_H
 #define WEAPON_H
 
-#include "global.h";
+#include "../../global.h";
 
 class Weapon {
   public:

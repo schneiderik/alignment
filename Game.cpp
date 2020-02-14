@@ -3,22 +3,22 @@
 void Game::handleInput() {
   switch (state) {
     case GAME_STATE_TITLE:
-      title.handleInput();   
+      titleView.handleInput();   
       break;
     case GAME_STATE_INFO:
-      info.handleInput();
+      infoView.handleInput();
       break;
     case GAME_STATE_QUEST:
-      quest.handleInput();
+      questView.handleInput();
       break;
     case GAME_STATE_BATTLE:
-      battle.handleInput();
+      battleView.handleInput();
       break;
     case GAME_STATE_WIN:
-      win.handleInput();
+      winView.handleInput();
       break;
     case GAME_STATE_LOSE:
-      lose.handleInput();
+      loseView.handleInput();
       break;
   }    
 }
@@ -26,10 +26,10 @@ void Game::handleInput() {
 void Game::update() {
   switch (state) {
     case GAME_STATE_QUEST:
-      quest.update();
+      questView.update();
       break;
     case GAME_STATE_BATTLE:
-      battle.update();
+      battleView.update();
       break;
   }    
 }
@@ -37,22 +37,22 @@ void Game::update() {
 void Game::render() {
   switch (state) {
     case GAME_STATE_TITLE:
-      title.render();
+      titleView.render();
       break;
     case GAME_STATE_INFO:
-      info.render();
+      infoView.render();
       break;
     case GAME_STATE_QUEST:
-      quest.render();
+      questView.render();
       break;
     case GAME_STATE_BATTLE:
-      battle.render();
+      battleView.render();
       break;
     case GAME_STATE_WIN:
-      win.render();
+      winView.render();
       break;
     case GAME_STATE_LOSE:
-      lose.render();
+      loseView.render();
       break;
   }  
 }
@@ -61,7 +61,7 @@ void Game::reset() {
   resetBattle();
   enemy.set(ENEMY_TYPE_SKELETON);
   score = 0;
-  goToTitle();
+  goToTitleView();
 }
 
 void Game::resetBattle() {
@@ -71,43 +71,43 @@ void Game::resetBattle() {
   weapons.reset();
 }
 
-void Game::goToTitle() {
+void Game::goToTitleView() {
   state = GAME_STATE_TITLE;
 }
 
-void Game::goToInfo() {
+void Game::goToInfoView() {
   state = GAME_STATE_INFO;
 }
 
-void Game::goToQuest() {
+void Game::goToQuestView() {
   state = GAME_STATE_QUEST;
 }
 
-void Game::goToBattle() {
+void Game::goToBattleView() {
   state = GAME_STATE_BATTLE;
 }
 
-void Game::goToWin() {
+void Game::goToWinView() {
   state = GAME_STATE_WIN;
 }
 
-void Game::goToLose() {
+void Game::goToLoseView() {
   state = GAME_STATE_LOSE;
 }
 
 void Game::handlePlayerDefeated() {
   if (health > 0) return;
-  goToLose(); 
+  goToLoseView(); 
   resetBattle(); 
 }
 
 void Game::handleEnemyDefeated() {
   if (enemy.health > 0) return;
   if (enemy.type == LAST_ENEMY) {
-    goToWin();
+    goToWinView();
   } else { 
     enemy.set(enemy.type + 1);
-    goToQuest();
+    goToQuestView();
   }
   resetBattle();
 }

@@ -1,7 +1,7 @@
 #include "Weapon.h"
-#include "Game.h"
+#include "../../Game.h"
 #include "Gem.h"
-#include "WeaponManager.h"
+#include "../collections/WeaponManager.h"
 
 Weapon::Weapon(int i) {
   type = i;

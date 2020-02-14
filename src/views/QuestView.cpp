@@ -1,15 +1,15 @@
-#include "Quest.h"
-#include "Game.h"
-#include "Enemy.h"
+#include "QuestView.h"
+#include "../../Game.h"
+#include "../entities/Enemy.h"
 
-void Quest::handleInput() {
+void QuestView::handleInput() {
   if (arduboy.justPressed(A_BUTTON)) {
-    game->goToBattle();
+    game->goToBattleView();
     confirmSound();
   }
 }
 
-void Quest::update() {
+void QuestView::update() {
   if (arduboy.everyXFrames(INITIAL_GAME_SPEED)) {
     if (cursorOffset > 0) cursorVelocity = -1;
     if (cursorOffset < 0) cursorVelocity = 1;
@@ -17,18 +17,18 @@ void Quest::update() {
   }  
 }
 
-void Quest::render() {
+void QuestView::render() {
   renderText();
   renderCursor();
   renderPaths();
   renderEnemies();
 }
 
-void Quest::renderText() {
+void QuestView::renderText() {
   sprites.drawOverwrite(32, 2, questText, 0);     
 }
 
-void Quest::renderCursor() {
+void QuestView::renderCursor() {
   sprites.drawOverwrite(
     ENEMY_DATA[game->enemy.type][ENEMY_DATA_QUEST_X] + 8,
     ENEMY_DATA[game->enemy.type][ENEMY_DATA_QUEST_Y] - 4 - cursorOffset,
@@ -37,18 +37,18 @@ void Quest::renderCursor() {
   );  
 }
 
-void Quest::renderPaths() {
+void QuestView::renderPaths() {
   sprites.drawOverwrite(16, 50, pathImage, 0);
   sprites.drawOverwrite(54, 50, pathReverseImage, 0);
   sprites.drawOverwrite(64, 50, pathImage, 0);
   sprites.drawOverwrite(102, 50, pathReverseImage, 0);  
 }
 
-void Quest::renderEnemies() {
+void QuestView::renderEnemies() {
   for (int i = 0; i < ENEMY_COUNT; i++) renderEnemy(i); 
 }
 
-void Quest::renderEnemy(int i) {
+void QuestView::renderEnemy(int i) {
   sprites.drawOverwrite(
     ENEMY_DATA[i][ENEMY_DATA_QUEST_X],
     ENEMY_DATA[i][ENEMY_DATA_QUEST_Y],

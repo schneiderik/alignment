@@ -2,15 +2,18 @@
 #define GAME_H
 
 #include "global.h"
-#include "Title.h"
-#include "Info.h"
-#include "Quest.h"
-#include "Battle.h"
-#include "Win.h"
-#include "Lose.h"
-#include "Enemy.h"
-#include "WeaponManager.h"
-#include "GemManager.h"
+
+#include "src/views/TitleView.h"
+#include "src/views/InfoView.h"
+#include "src/views/QuestView.h"
+#include "src/views/BattleView.h"
+#include "src/views/WinView.h"
+#include "src/views/LoseView.h"
+
+#include "src/entities/Enemy.h"
+
+#include "src/collections/WeaponManager.h"
+#include "src/collections/GemManager.h"
 
 #define GAME_STATE_TITLE 0
 #define GAME_STATE_INFO 1
@@ -28,12 +31,12 @@ class Game {
     void reset();
     void resetBattle();
     
-    void goToTitle();
-    void goToInfo();
-    void goToQuest();
-    void goToBattle();
-    void goToWin();
-    void goToLose();
+    void goToTitleView();
+    void goToInfoView();
+    void goToQuestView();
+    void goToBattleView();
+    void goToWinView();
+    void goToLoseView();
 
     void handlePlayerDefeated();
     void handleEnemyDefeated();
@@ -45,12 +48,12 @@ class Game {
     WeaponManager weapons;
     GemManager gems;
     Enemy enemy;  
-    Title title;
-    Battle battle;
-    Info info;
-    Quest quest;
-    Win win;
-    Lose lose;
+    TitleView titleView;
+    BattleView battleView;
+    InfoView infoView;
+    QuestView questView;
+    WinView winView;
+    LoseView loseView;
 };
 
 #endif

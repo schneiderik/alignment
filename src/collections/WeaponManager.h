@@ -1,7 +1,7 @@
 #ifndef WEAPON_MANAGER_H
 #define WEAPON_MANAGER_H
 
-#include "global.h";
+#include "../../global.h";
 
 #define ACTIVE_INDEX_MIN 0
 #define ACTIVE_INDEX_MAX 2

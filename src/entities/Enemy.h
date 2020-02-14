@@ -1,7 +1,7 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#include "global.h";
+#include "../../global.h";
 
 #define ENEMY_HEALTH_BAR_WIDTH_MAX 20
 

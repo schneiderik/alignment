@@ -1,7 +1,7 @@
 #ifndef Gem_H
 #define Gem_H
 
-#include "global.h"
+#include "../../global.h"
 
 #define GEM_STATE_INACTIVE 0
 #define GEM_STATE_FALLING 1

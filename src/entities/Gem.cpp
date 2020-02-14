@@ -1,7 +1,7 @@
 #include "Gem.h"
-#include "Game.h"
+#include "../../Game.h"
 #include "Weapon.h"
-#include "WeaponManager.h"
+#include "../collections/WeaponManager.h"
 
 void Gem::init(int row) {
   type_ = random(0, GEM_TYPE_COUNT);

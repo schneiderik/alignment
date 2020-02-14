@@ -1,9 +1,9 @@
-#ifndef BATTLE_H
-#define BATTLE_H
+#ifndef BATTLE_VIEW_H
+#define BATTLE_VIEW_H
 
-#include "global.h"
+#include "../../global.h"
 
-class Battle {
+class BattleView {
   public:    
     void handleInput();
     void update();

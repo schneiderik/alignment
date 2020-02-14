@@ -1,8 +1,8 @@
 #ifndef GEM_MANAGER_H
 #define GEM_MANAGER_H
 
-#include "global.h"
-#include "Gem.h"
+#include "../../global.h"
+#include "../entities/Gem.h"
 
 class GemManager {
   public:

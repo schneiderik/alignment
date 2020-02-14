@@ -1,12 +1,12 @@
-#ifndef QUEST_H
-#define QUEST_H
+#ifndef QUEST_VIEW_H
+#define QUEST_VIEW_H
 
-#include "global.h"
+#include "../../global.h"
 
 #define QUEST_SPRITE_GRAVE_INDEX 6
 #define QUEST_SPRITE_MYSTERY_INDEX 5
 
-class Quest {
+class QuestView {
   public:
     void handleInput();
     void update();

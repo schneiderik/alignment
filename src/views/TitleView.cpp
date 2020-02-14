@@ -1,33 +1,33 @@
-#include "Title.h"
-#include "Game.h"
+#include "TitleView.h"
+#include "../../Game.h"
 
-void Title::handleInput() {
+void TitleView::handleInput() {
   if (arduboy.justPressed(UP_BUTTON)) decrementState();   
   if (arduboy.justPressed(DOWN_BUTTON)) incrementState();
   if (arduboy.justPressed(A_BUTTON)) selectOption();   
 }
 
-void Title::decrementState() {
+void TitleView::decrementState() {
   if (state > 0) {
     state--;  
     moveSound();
   }  
 }
 
-void Title::incrementState() {
+void TitleView::incrementState() {
   if (state < LAST_TITLE_STATE) {
     state++;
     moveSound();
   }  
 }
 
-void Title::selectOption() {
+void TitleView::selectOption() {
   switch(state) {
     case TITLE_STATE_PLAY:
-      game->goToQuest();
+      game->goToQuestView();
       break;
     case TITLE_STATE_INFO:
-      game->goToInfo();
+      game->goToInfoView();
       break;
     case TITLE_STATE_SFX:
       if (arduboy.audio.enabled()) {
@@ -42,28 +42,28 @@ void Title::selectOption() {
   confirmSound();  
 }
 
-void Title::render() {
+void TitleView::render() {
   renderMainImage();
   renderPlayOption();
   renderInfoOption();
   renderSfxOption();
 }
 
-void Title::renderMainImage() {
+void TitleView::renderMainImage() {
   sprites.drawOverwrite(0, 5, titleImage, 0);
 }
 
-void Title::renderPlayOption() {
+void TitleView::renderPlayOption() {
   sprites.drawOverwrite(56, 38, playTextImage, 0);
   if (state == TITLE_STATE_PLAY) renderCursor(56, 38, playTextImage[0]);
 }
 
-void Title::renderInfoOption() {
+void TitleView::renderInfoOption() {
   sprites.drawOverwrite(56, 45, infoTextImage, 0);
   if (state == TITLE_STATE_INFO) renderCursor(56, 45, infoTextImage[0]);   
 }
 
-void Title::renderSfxOption() {
+void TitleView::renderSfxOption() {
   if (arduboy.audio.enabled()) {
     sprites.drawOverwrite(52, 52, sfxOnTextImage, 0);
     if (state == TITLE_STATE_SFX) renderCursor(52, 52, sfxOnTextImage[0]);
@@ -73,7 +73,7 @@ void Title::renderSfxOption() {
   }  
 }
        
-void Title::renderCursor(int x, int y, int textWidth) {
+void TitleView::renderCursor(int x, int y, int textWidth) {
   arduboy.fillRect(x - 5, y + 1, 2, 2);
   arduboy.fillRect(x + textWidth + 3, y + 1, 2, 2);
 }

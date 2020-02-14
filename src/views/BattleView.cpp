@@ -1,10 +1,10 @@
-#include "Battle.h"
-#include "Game.h"
-#include "WeaponManager.h"
-#include "Enemy.h"
-#include "Weapon.h"
+#include "BattleView.h"
+#include "../../Game.h"
+#include "../collections/WeaponManager.h"
+#include "../entities/Enemy.h"
+#include "../entities/Weapon.h"
 
-void Battle::handleInput() {
+void BattleView::handleInput() {
   if (arduboy.justPressed(RIGHT_BUTTON)) paused = !paused;
   if (paused || game->gems.hasClearingGems()) return;
   if (arduboy.justPressed(UP_BUTTON)) game->weapons.decrementActiveIndex();
@@ -15,7 +15,7 @@ void Battle::handleInput() {
   }
 }
 
-void Battle::update() {
+void BattleView::update() {
   if (paused) return;
   game->handlePlayerDefeated();
   game->handleEnemyDefeated();
@@ -24,7 +24,7 @@ void Battle::update() {
   game->gems.update();
 }
 
-void Battle::render() {
+void BattleView::render() {
   renderTopBar();
   renderNumberAlignRight(game->score, 126, 2, true);
   renderHealth();
@@ -35,11 +35,11 @@ void Battle::render() {
   renderPaused();
 }
 
-void Battle::renderTopBar() {
+void BattleView::renderTopBar() {
   arduboy.fillRect(0, 0, 128, 10);
 }
 
-void Battle::renderHealth() {
+void BattleView::renderHealth() {
   for (int i = 0; i < HEALTH_MAX; i++) {  
     sprites.drawErase(
       2 + (i * (heartSprite[0] + 1)),
@@ -50,10 +50,10 @@ void Battle::renderHealth() {
   }  
 }
 
-void Battle::renderPreviewDivider() {
+void BattleView::renderPreviewDivider() {
   arduboy.fillRect(89, 14, 1, 48);
 }
 
-void Battle::renderPaused() {
+void BattleView::renderPaused() {
   if (paused) sprites.drawOverwrite(50, 28, pausedTextImage, 0);
 }
