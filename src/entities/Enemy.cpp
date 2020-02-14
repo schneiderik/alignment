@@ -1,6 +1,8 @@
 #include "Enemy.h"
 
 Enemy::Enemy() {
+  flashAnimation_ = new FlashAnimation(FLASH_COUNT, FLASH_DURATION);
+
   set(ENEMY_TYPE_SKELETON);
 }
 
@@ -11,8 +13,8 @@ void Enemy::set(int i) {
 }
 
 void Enemy::reset() {
+  flashAnimation_->reset();
   damageAnimationFrame = ENEMY_TAKE_DAMAGE_ANIMATION_END_FRAME;
-  damageFlashCount = ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX;
   offsetX = 0;
   velocityX = 1;
   damageIndicatorFrame = ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME;
@@ -25,7 +27,7 @@ void Enemy::takeDamage(int rawDamage, int weaponType) {
   health -= damage;
   healthBarWidth = (int)ceil(((float)health / (float)ENEMY_DATA[type][ENEMY_DATA_HEALTH]) * (float)ENEMY_HEALTH_BAR_WIDTH_MAX);
   
-  damageFlashCount = 0;
+  flashAnimation_->run();
   offsetX = 0;
   damageAnimationFrame = ENEMY_TAKE_DAMAGE_ANIMATION_START_FRAME;
   damageIndicatorFrame = ENEMY_TAKE_DAMAGE_INDICATOR_START_FRAME;
@@ -34,7 +36,7 @@ void Enemy::takeDamage(int rawDamage, int weaponType) {
 }
 
 void Enemy::update() {
-  updateFlashAnimation();
+  flashAnimation_->update();
   updateX();
   updateDamageIndicator();
 }
@@ -48,10 +50,6 @@ void Enemy::updateX() {
       damageAnimationFrame++;
     }
   }  
-}
-
-void Enemy::updateFlashAnimation() {
-  if (arduboy.everyXFrames(ENEMY_TAKE_DAMAGE_FLASH_LENGTH) && damageFlashCount < ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX) damageFlashCount++;  
 }
 
 void Enemy::updateDamageIndicator() {
@@ -70,9 +68,7 @@ void Enemy::render() {
 }
 
 void Enemy::renderPortrait() {
-  if (damageFlashCount == ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX || damageFlashCount % 2) {
-    sprites.drawOverwrite(104 + offsetX, 12, enemySprite, type);
-  }  
+  if (flashAnimation_->isVisible()) sprites.drawOverwrite(104 + offsetX, 12, enemySprite, type);
 }
 
 void Enemy::renderHealthBar() {

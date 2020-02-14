@@ -2,6 +2,7 @@
 #define ENEMY_H
 
 #include "../../global.h";
+#include "FlashAnimation.h";
 
 #define ENEMY_HEALTH_BAR_WIDTH_MAX 20
 
@@ -23,9 +24,6 @@
 #define ENEMY_TAKE_DAMAGE_ANIMATION_FRAME_LENGTH 3
 #define ENEMY_TAKE_DAMAGE_ANIMATION_START_FRAME 0
 #define ENEMY_TAKE_DAMAGE_ANIMATION_END_FRAME 12
-
-#define ENEMY_TAKE_DAMAGE_FLASH_LENGTH 5
-#define ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX 5
 
 #define ENEMY_TAKE_DAMAGE_INDICATOR_FRAME_LENGTH 5
 #define ENEMY_TAKE_DAMAGE_INDICATOR_START_FRAME 0
@@ -64,13 +62,18 @@ class Enemy {
     int healthBarWidth = ENEMY_HEALTH_BAR_WIDTH_MAX;
     int offsetX = 0;
     int velocityX = 1;
-    
+
     int damageAnimationFrame = ENEMY_TAKE_DAMAGE_ANIMATION_END_FRAME;
-    int damageFlashCount = ENEMY_TAKE_DAMAGE_FLASH_COUNT_MAX;
 
     int damageIndicatorFrame = ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME;
     int damageIndicatorY = ENEMY_TAKE_DAMAGE_INDICATOR_INITIAL_Y;
     int damageIndicatorNum = 0;
+
+  private:
+    const int FLASH_COUNT = 3;
+    const int FLASH_DURATION = 5;
+
+    FlashAnimation* flashAnimation_;
 };
 
 #endif
