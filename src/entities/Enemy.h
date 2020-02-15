@@ -2,7 +2,8 @@
 #define ENEMY_H
 
 #include "../../global.h";
-#include "FlashAnimation.h";
+#include "../animations/FlashAnimation.h";
+#include "../animations/BounceAnimation.h";
 
 #define ENEMY_HEALTH_BAR_WIDTH_MAX 20
 
@@ -20,10 +21,6 @@
 #define ENEMY_DATA_MODIFIER 1
 #define ENEMY_DATA_QUEST_X 5
 #define ENEMY_DATA_QUEST_Y 6
-
-#define ENEMY_TAKE_DAMAGE_ANIMATION_FRAME_LENGTH 3
-#define ENEMY_TAKE_DAMAGE_ANIMATION_START_FRAME 0
-#define ENEMY_TAKE_DAMAGE_ANIMATION_END_FRAME 12
 
 #define ENEMY_TAKE_DAMAGE_INDICATOR_FRAME_LENGTH 5
 #define ENEMY_TAKE_DAMAGE_INDICATOR_START_FRAME 0
@@ -53,17 +50,11 @@ class Enemy {
     void renderDamageIndicator();
     
     void update();
-    void updateX();
-    void updateFlashAnimation();
     void updateDamageIndicator();
 
     int type;
     int health;
     int healthBarWidth = ENEMY_HEALTH_BAR_WIDTH_MAX;
-    int offsetX = 0;
-    int velocityX = 1;
-
-    int damageAnimationFrame = ENEMY_TAKE_DAMAGE_ANIMATION_END_FRAME;
 
     int damageIndicatorFrame = ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME;
     int damageIndicatorY = ENEMY_TAKE_DAMAGE_INDICATOR_INITIAL_Y;
@@ -71,9 +62,14 @@ class Enemy {
 
   private:
     const int FLASH_COUNT = 3;
-    const int FLASH_DURATION = 5;
+    const int FLASH_DURATION = 20;
+    const int BOUNCE_COUNT = 2;
+    const int BOUNCE_LOWER_LIMIT = -2;
+    const int BOUNCE_UPPER_LIMIT = 2;
+    const int BOUNCE_DURATION = 40;
 
     FlashAnimation* flashAnimation_;
+    BounceAnimation* bounceAnimation_;
 };
 
 #endif

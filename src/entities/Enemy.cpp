@@ -2,6 +2,12 @@
 
 Enemy::Enemy() {
   flashAnimation_ = new FlashAnimation(FLASH_COUNT, FLASH_DURATION);
+  bounceAnimation_ = new BounceAnimation(
+    BOUNCE_COUNT,
+    BOUNCE_LOWER_LIMIT,
+    BOUNCE_UPPER_LIMIT,
+    BOUNCE_DURATION
+  );
 
   set(ENEMY_TYPE_SKELETON);
 }
@@ -14,9 +20,7 @@ void Enemy::set(int i) {
 
 void Enemy::reset() {
   flashAnimation_->reset();
-  damageAnimationFrame = ENEMY_TAKE_DAMAGE_ANIMATION_END_FRAME;
-  offsetX = 0;
-  velocityX = 1;
+  bounceAnimation_->reset();
   damageIndicatorFrame = ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME;
   damageIndicatorNum = 0;
 }
@@ -28,8 +32,7 @@ void Enemy::takeDamage(int rawDamage, int weaponType) {
   healthBarWidth = (int)ceil(((float)health / (float)ENEMY_DATA[type][ENEMY_DATA_HEALTH]) * (float)ENEMY_HEALTH_BAR_WIDTH_MAX);
   
   flashAnimation_->run();
-  offsetX = 0;
-  damageAnimationFrame = ENEMY_TAKE_DAMAGE_ANIMATION_START_FRAME;
+  bounceAnimation_->run();
   damageIndicatorFrame = ENEMY_TAKE_DAMAGE_INDICATOR_START_FRAME;
   damageIndicatorY = ENEMY_TAKE_DAMAGE_INDICATOR_INITIAL_Y;
   damageIndicatorNum = -damage;
@@ -37,19 +40,8 @@ void Enemy::takeDamage(int rawDamage, int weaponType) {
 
 void Enemy::update() {
   flashAnimation_->update();
-  updateX();
+  bounceAnimation_->update();
   updateDamageIndicator();
-}
-
-void Enemy::updateX() {
-  if (arduboy.everyXFrames(ENEMY_TAKE_DAMAGE_ANIMATION_FRAME_LENGTH)) {
-    if (damageAnimationFrame < ENEMY_TAKE_DAMAGE_ANIMATION_END_FRAME) {
-      if (offsetX > 1) velocityX = -1;
-      if (offsetX < -1) velocityX = 1;
-      offsetX += velocityX;
-      damageAnimationFrame++;
-    }
-  }  
 }
 
 void Enemy::updateDamageIndicator() {
@@ -68,7 +60,14 @@ void Enemy::render() {
 }
 
 void Enemy::renderPortrait() {
-  if (flashAnimation_->isVisible()) sprites.drawOverwrite(104 + offsetX, 12, enemySprite, type);
+  if (flashAnimation_->isVisible()) {
+    sprites.drawOverwrite(
+      104 + bounceAnimation_->getOffset(),
+      12,
+      enemySprite,
+      type
+    );
+  }
 }
 
 void Enemy::renderHealthBar() {

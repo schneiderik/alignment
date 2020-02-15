@@ -5,7 +5,7 @@
 
 class FlashAnimation {
   public:
-    FlashAnimation(int count, int duration): count_(count), index_(count), duration_(duration) {};
+    FlashAnimation(int, int);
 
     void run();
     void reset();
@@ -16,7 +16,7 @@ class FlashAnimation {
     void toggle_();
 
     int count_;
-    int duration_;
+    int interval_;
     int index_;
     bool visible_ = true;
 };

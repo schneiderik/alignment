@@ -2,12 +2,15 @@
 #define QUEST_VIEW_H
 
 #include "../../global.h"
+#include "../animations/BounceAnimation.h"
 
 #define QUEST_SPRITE_GRAVE_INDEX 6
 #define QUEST_SPRITE_MYSTERY_INDEX 5
 
 class QuestView {
   public:
+    QuestView();
+
     void handleInput();
     void update();
     void render();
@@ -17,8 +20,12 @@ class QuestView {
     void renderEnemies();
     void renderEnemy(int);
 
-    int cursorOffset = 0;
-    int cursorVelocity = -1;
+  private:
+    const int BOUNCE_LOWER_LIMIT = -1;
+    const int BOUNCE_UPPER_LIMIT = 1;
+    const int BOUNCE_SPEED = 8;
+
+    BounceAnimation* bounceAnimation_;
 };
 
 #endif

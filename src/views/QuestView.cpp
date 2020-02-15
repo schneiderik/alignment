@@ -2,6 +2,14 @@
 #include "../../Game.h"
 #include "../entities/Enemy.h"
 
+QuestView::QuestView() {
+  bounceAnimation_ = new BounceAnimation(
+    BOUNCE_SPEED,
+    BOUNCE_LOWER_LIMIT,
+    BOUNCE_UPPER_LIMIT
+  );
+}
+
 void QuestView::handleInput() {
   if (arduboy.justPressed(A_BUTTON)) {
     game->goToBattleView();
@@ -10,11 +18,7 @@ void QuestView::handleInput() {
 }
 
 void QuestView::update() {
-  if (arduboy.everyXFrames(INITIAL_GAME_SPEED)) {
-    if (cursorOffset > 0) cursorVelocity = -1;
-    if (cursorOffset < 0) cursorVelocity = 1;
-    cursorOffset += cursorVelocity;
-  }  
+  bounceAnimation_->update();
 }
 
 void QuestView::render() {
@@ -31,7 +35,7 @@ void QuestView::renderText() {
 void QuestView::renderCursor() {
   sprites.drawOverwrite(
     ENEMY_DATA[game->enemy.type][ENEMY_DATA_QUEST_X] + 8,
-    ENEMY_DATA[game->enemy.type][ENEMY_DATA_QUEST_Y] - 4 - cursorOffset,
+    ENEMY_DATA[game->enemy.type][ENEMY_DATA_QUEST_Y] - 4 - bounceAnimation_->getOffset(),
     questCursorImage,
     0
   );  
