@@ -2,10 +2,8 @@
 #define QUEST_VIEW_H
 
 #include "../../global.h"
-#include "../animations/BounceAnimation.h"
-
-#define QUEST_SPRITE_GRAVE_INDEX 6
-#define QUEST_SPRITE_MYSTERY_INDEX 5
+#include "../entities/Enemy.h"
+#include "../animations/TranslateAnimation.h"
 
 class QuestView {
   public:
@@ -21,11 +19,23 @@ class QuestView {
     void renderEnemy(int);
 
   private:
-    const int BOUNCE_LOWER_LIMIT = -1;
-    const int BOUNCE_UPPER_LIMIT = 1;
-    const int BOUNCE_SPEED = 8;
+    static const int DATA_LENGTH = 2;
+    static const int DATA_X = 0;
+    static const int DATA_Y = 1;
+    static const int DATA[Enemy::COUNT][DATA_LENGTH];
 
-    BounceAnimation* bounceAnimation_;
+    static int getXData_(int);
+    static int getYData_(int);
+
+    const int GRAVE_INDEX = 6;
+    const int MYSTERY_INDEX = 5;
+
+    const int BOUNCE_ANIMATION_LOWER_LIMIT = -1;
+    const int BOUNCE_ANIMATION_UPPER_LIMIT = 1;
+    const int BOUNCE_ANIMATION_SPEED = 8;
+    const bool BOUNCE_ANIMATION_LOOP = true;
+
+    TranslateAnimation* bounceAnimation_;
 };
 
 #endif

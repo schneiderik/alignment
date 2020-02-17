@@ -28,6 +28,8 @@ class Weapon;
 #define PREVIEW_THRESHOLD_X 89
 #define INITIAL_GAME_SPEED 8
 #define GRAVITY_ACCELERATION 1
+#define NUMBER_HEIGHT 6
+#define SMALL_NUMBER_HEIGHT 5
 
 const int weaponYOffsets[WEAPON_COUNT] = {13, 25, 37, 49};
 const int gemYOffsets[WEAPON_COUNT] = {14, 26, 38, 50};

@@ -59,7 +59,7 @@ void Game::render() {
 
 void Game::reset() {
   resetBattle();
-  enemy.set(ENEMY_TYPE_SKELETON);
+  enemy.init(Enemy::SKELETON);
   score = 0;
   goToTitleView();
 }
@@ -67,7 +67,6 @@ void Game::reset() {
 void Game::resetBattle() {
   health = HEALTH_MAX;
   gems.reset();
-  enemy.reset();
   weapons.reset();
 }
 
@@ -102,12 +101,14 @@ void Game::handlePlayerDefeated() {
 }
 
 void Game::handleEnemyDefeated() {
-  if (enemy.health > 0) return;
-  if (enemy.type == LAST_ENEMY) {
+  if (!enemy.isDead()) return;
+
+  if (enemy.isLastEnemy()) {
     goToWinView();
   } else { 
-    enemy.set(enemy.type + 1);
+    enemy.initNext();
     goToQuestView();
   }
+
   resetBattle();
 }

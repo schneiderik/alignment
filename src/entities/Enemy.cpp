@@ -1,86 +1,132 @@
 #include "Enemy.h"
 
+const int Enemy::DATA[COUNT][DATA_LENGTH] = {
+  {100, 0, 0, 0, 0},
+  {200, 0, 0, 0, 0},
+  {200, -1, 2, -2, 1},
+  {150, -1, -1, 2, 0},
+  {250, 2, -1, -1, -2}
+};
+
 Enemy::Enemy() {
-  flashAnimation_ = new FlashAnimation(FLASH_COUNT, FLASH_DURATION);
-  bounceAnimation_ = new BounceAnimation(
-    BOUNCE_COUNT,
-    BOUNCE_LOWER_LIMIT,
-    BOUNCE_UPPER_LIMIT,
-    BOUNCE_DURATION
+  flashAnimation_ = new FlashAnimation(
+    FLASH_ANIMATION_COUNT,
+    FLASH_ANIMATION_DURATION
   );
 
-  set(ENEMY_TYPE_SKELETON);
+  shakeAnimation_ = new TranslateAnimation(
+    SHAKE_ANIMATION_LOWER_LIMIT,
+    SHAKE_ANIMATION_UPPER_LIMIT,
+    SHAKE_ANIMATION_COUNT,
+    SHAKE_ANIMATION_DURATION,
+    SHAKE_ANIMATION_LOOP
+  );
+
+  damageIndicatorAnimation_ = new TranslateAnimation(
+    DAMAGE_INDICATOR_ANIMATION_LOWER_LIMIT,
+    DAMAGE_INDICATOR_ANIMATION_UPPER_LIMIT,
+    DAMAGE_INDICATOR_ANIMATION_COUNT,
+    DAMAGE_INDICATOR_ANIMATION_DURATION,
+    DAMAGE_INDICATOR_ANIMATION_LOOP
+  );
+
+  init(SKELETON);
 }
 
-void Enemy::set(int i) {
-  type = i;
-  health = ENEMY_DATA[type][ENEMY_DATA_HEALTH];
-  healthBarWidth = ENEMY_HEALTH_BAR_WIDTH_MAX;
-}
-
-void Enemy::reset() {
+void Enemy::init(int type) {
+  type_ = type;
+  health_ = getHealthData_(type);
+  healthBarWidth_ = HEALTH_BAR_WIDTH_MAX;
   flashAnimation_->reset();
-  bounceAnimation_->reset();
-  damageIndicatorFrame = ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME;
-  damageIndicatorNum = 0;
+  shakeAnimation_->reset();
+  damageIndicatorAnimation_->reset();
 }
 
-void Enemy::takeDamage(int rawDamage, int weaponType) {
-  int damage = rawDamage + ENEMY_DATA[type][ENEMY_DATA_MODIFIER + weaponType];
-  
-  health -= damage;
-  healthBarWidth = (int)ceil(((float)health / (float)ENEMY_DATA[type][ENEMY_DATA_HEALTH]) * (float)ENEMY_HEALTH_BAR_WIDTH_MAX);
-  
-  flashAnimation_->run();
-  bounceAnimation_->run();
-  damageIndicatorFrame = ENEMY_TAKE_DAMAGE_INDICATOR_START_FRAME;
-  damageIndicatorY = ENEMY_TAKE_DAMAGE_INDICATOR_INITIAL_Y;
-  damageIndicatorNum = -damage;
+void Enemy::initNext() {
+  init(type_ + 1);
 }
 
 void Enemy::update() {
-  flashAnimation_->update();
-  bounceAnimation_->update();
-  updateDamageIndicator();
-}
+  if (!damageIndicatorAnimation_->isRunning()) damageIndicatorNum_ = 0;
 
-void Enemy::updateDamageIndicator() {
-  if (damageIndicatorFrame < ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME) {
-    if (arduboy.everyXFrames(ENEMY_TAKE_DAMAGE_INDICATOR_FRAME_LENGTH)) {
-      damageIndicatorY--;      
-      damageIndicatorFrame++;
-    }
-  }  
+  flashAnimation_->update();
+  shakeAnimation_->update();
+  damageIndicatorAnimation_->update();
 }
 
 void Enemy::render() {
-  renderPortrait();
-  renderHealthBar();
-  renderDamageIndicator();
+  renderPortrait_();
+  renderHealthBar_();
+  renderDamageIndicator_();
 }
 
-void Enemy::renderPortrait() {
+void Enemy::takeDamage(int rawDamage, int weaponType) {
+  int damage = rawDamage + getWeaponModifierData_(type_, weaponType);
+  
+  health_ -= damage;
+  healthBarWidth_ = getHealthBarWidth_();
+  
+  flashAnimation_->run();
+  shakeAnimation_->run();
+  damageIndicatorAnimation_->run();
+
+  damageIndicatorNum_ += -damage;
+}
+
+int Enemy::getType() {
+  return type_;
+}
+
+bool Enemy::isDead() {
+  return health_ <= 0;
+}
+
+bool Enemy::isLastEnemy() {
+  return type_ == Enemy::LAST_ENEMY;
+}
+
+void Enemy::renderPortrait_() {
   if (flashAnimation_->isVisible()) {
     sprites.drawOverwrite(
-      104 + bounceAnimation_->getOffset(),
-      12,
+      PORTRAIT_X + shakeAnimation_->getValue(),
+      PORTRAIT_Y,
       enemySprite,
-      type
+      type_
     );
   }
 }
 
-void Enemy::renderHealthBar() {
-  arduboy.fillRect(106, 62, healthBarWidth, 1, 1); 
+void Enemy::renderHealthBar_() {
+  arduboy.fillRect(
+    HEALTH_BAR_X,
+    HEALTH_BAR_Y,
+    healthBarWidth_,
+    HEALTH_BAR_HEIGHT,
+    WHITE
+  ); 
 }
 
-void Enemy::renderDamageIndicator() {
-  if (damageIndicatorFrame < ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME) {
-    int height = numberSprite[1] + 2;
-    int width = numberWidth(damageIndicatorNum) + 4;
-    
-    arduboy.fillRect(SCREEN_WIDTH - 27 + (width/2), damageIndicatorY - 1, width + 2, height + 2, 1);
-    arduboy.fillRect(SCREEN_WIDTH - 26 + (width/2), damageIndicatorY, width, height, 0);
-    renderNumberAlignCenter(damageIndicatorNum, 116, damageIndicatorY + 2, false);
-  }  
+void Enemy::renderDamageIndicator_() {
+  if (!damageIndicatorAnimation_->isRunning()) return;
+
+  renderIndicator(
+    damageIndicatorNum_,
+    DAMAGE_INDICATOR_X, 
+    DAMAGE_INDICATOR_Y + damageIndicatorAnimation_->getValue(),
+    BLACK
+  );
+}
+
+int Enemy::getHealthBarWidth_() {
+  float healthPercent = (float)health_ / (float)getHealthData_(type_);
+  float healthBarWidth = healthPercent * (float)HEALTH_BAR_WIDTH_MAX;
+  return (int)ceil(healthBarWidth);
+}
+
+int Enemy::getHealthData_(int type) {
+  return DATA[type][DATA_HEALTH];
+}
+
+int Enemy::getWeaponModifierData_(int type, int weaponType) {
+  return DATA[type][DATA_WEAPON_MODIFIERS + weaponType];
 }

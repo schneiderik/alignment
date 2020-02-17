@@ -1,12 +1,20 @@
 #include "QuestView.h"
 #include "../../Game.h"
-#include "../entities/Enemy.h"
+
+const int QuestView::DATA[Enemy::COUNT][DATA_LENGTH] = {
+  {5, 16},
+  {29, 31},
+  {53, 16},
+  {77, 31},
+  {101, 16}
+};
 
 QuestView::QuestView() {
-  bounceAnimation_ = new BounceAnimation(
-    BOUNCE_SPEED,
-    BOUNCE_LOWER_LIMIT,
-    BOUNCE_UPPER_LIMIT
+  bounceAnimation_ = new TranslateAnimation(
+    BOUNCE_ANIMATION_LOWER_LIMIT,
+    BOUNCE_ANIMATION_UPPER_LIMIT,
+    BOUNCE_ANIMATION_SPEED,
+    BOUNCE_ANIMATION_LOOP
   );
 }
 
@@ -34,8 +42,8 @@ void QuestView::renderText() {
 
 void QuestView::renderCursor() {
   sprites.drawOverwrite(
-    ENEMY_DATA[game->enemy.type][ENEMY_DATA_QUEST_X] + 8,
-    ENEMY_DATA[game->enemy.type][ENEMY_DATA_QUEST_Y] - 4 - bounceAnimation_->getOffset(),
+    getXData_(game->enemy.getType()) + 8,
+    getYData_(game->enemy.getType()) - 4 + bounceAnimation_->getValue(),
     questCursorImage,
     0
   );  
@@ -49,18 +57,26 @@ void QuestView::renderPaths() {
 }
 
 void QuestView::renderEnemies() {
-  for (int i = 0; i < ENEMY_COUNT; i++) renderEnemy(i); 
+  for (int i = 0; i < Enemy::COUNT; i++) renderEnemy(i); 
 }
 
-void QuestView::renderEnemy(int i) {
+void QuestView::renderEnemy(int type) {
   sprites.drawOverwrite(
-    ENEMY_DATA[i][ENEMY_DATA_QUEST_X],
-    ENEMY_DATA[i][ENEMY_DATA_QUEST_Y],
+    getXData_(type),
+    getYData_(type),
     questSprite,
-    game->enemy.type == i
-      ? i
-      : i < game->enemy.type
-        ? QUEST_SPRITE_GRAVE_INDEX
-        : QUEST_SPRITE_MYSTERY_INDEX
+    game->enemy.getType() == type
+      ? type
+      : type < game->enemy.getType()
+        ? GRAVE_INDEX
+        : MYSTERY_INDEX
   );   
+}
+
+int QuestView::getXData_(int enemyType) {
+  return DATA[enemyType][DATA_X];
+}
+
+int QuestView::getYData_(int enemyType) {
+  return DATA[enemyType][DATA_Y];
 }

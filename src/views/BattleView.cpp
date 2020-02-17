@@ -26,7 +26,7 @@ void BattleView::update() {
 
 void BattleView::render() {
   renderTopBar();
-  renderNumberAlignRight(game->score, 126, 2, true);
+  renderNumberAlignRight(game->score, 126, 2, BLACK);
   renderHealth();
   renderPreviewDivider();
   game->enemy.render();

@@ -3,73 +3,76 @@
 
 #include "../../global.h";
 #include "../animations/FlashAnimation.h";
-#include "../animations/BounceAnimation.h";
-
-#define ENEMY_HEALTH_BAR_WIDTH_MAX 20
-
-#define ENEMY_TYPE_SKELETON 0
-#define ENEMY_TYPE_ORC 1
-#define ENEMY_TYPE_GOLEM 2
-#define ENEMY_TYPE_DEMON 3
-#define ENEMY_TYPE_SORCERER 4
-
-#define ENEMY_COUNT 5
-#define LAST_ENEMY ENEMY_COUNT - 1
-
-#define ENEMY_DATA_LENGTH 7
-#define ENEMY_DATA_HEALTH 0
-#define ENEMY_DATA_MODIFIER 1
-#define ENEMY_DATA_QUEST_X 5
-#define ENEMY_DATA_QUEST_Y 6
-
-#define ENEMY_TAKE_DAMAGE_INDICATOR_FRAME_LENGTH 5
-#define ENEMY_TAKE_DAMAGE_INDICATOR_START_FRAME 0
-#define ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME 6
-#define ENEMY_TAKE_DAMAGE_INDICATOR_X 111
-#define ENEMY_TAKE_DAMAGE_INDICATOR_INITIAL_Y 36
-
-const int ENEMY_DATA[ENEMY_COUNT][ENEMY_DATA_LENGTH] = {
-  {100, 0, 0, 0, 0, 5, 16},
-  {200, 0, 0, 0, 0, 29, 31},
-  {200, -1, 2, -2, 1, 53, 16},
-  {150, -1, -1, 2, 0, 77, 31},
-  {250, 2, -1, -1, -2, 101, 16}
-};
+#include "../animations/TranslateAnimation.h";
 
 class Enemy {
   public:
+    static const int SKELETON = 0;
+    static const int ORC = 1;
+    static const int GOLEM = 2;
+    static const int DEMON = 3;
+    static const int SORCERER = 4;
+    static const int COUNT = 5;
+
     Enemy();
     
-    void set(int);
-    void reset();
-    void takeDamage(int, int);
-    
-    void render();
-    void renderPortrait();
-    void renderHealthBar();
-    void renderDamageIndicator();
-    
+    void init(int);
+    void initNext();
     void update();
-    void updateDamageIndicator();
+    void render();
 
-    int type;
-    int health;
-    int healthBarWidth = ENEMY_HEALTH_BAR_WIDTH_MAX;
-
-    int damageIndicatorFrame = ENEMY_TAKE_DAMAGE_INDICATOR_END_FRAME;
-    int damageIndicatorY = ENEMY_TAKE_DAMAGE_INDICATOR_INITIAL_Y;
-    int damageIndicatorNum = 0;
+    void takeDamage(int, int);
+    int getType();
+    bool isDead();
+    bool isLastEnemy();
 
   private:
-    const int FLASH_COUNT = 3;
-    const int FLASH_DURATION = 20;
-    const int BOUNCE_COUNT = 2;
-    const int BOUNCE_LOWER_LIMIT = -2;
-    const int BOUNCE_UPPER_LIMIT = 2;
-    const int BOUNCE_DURATION = 40;
+    static const int LAST_ENEMY = COUNT - 1;
+
+    static const int DATA_LENGTH = 5;
+    static const int DATA_HEALTH = 0;
+    static const int DATA_WEAPON_MODIFIERS = 1;
+    static const int DATA[COUNT][DATA_LENGTH];
+
+    static int getHealthData_(int);
+    static int getWeaponModifierData_(int, int);
+
+    const int PORTRAIT_X = 104;
+    const int PORTRAIT_Y = 12;
+    const int HEALTH_BAR_X = 106;
+    const int HEALTH_BAR_Y = 62;
+    const int HEALTH_BAR_HEIGHT = 1;
+    const int HEALTH_BAR_WIDTH_MAX = 20;
+    const int FLASH_ANIMATION_COUNT = 3;
+    const int FLASH_ANIMATION_DURATION = 20;
+    const int SHAKE_ANIMATION_LOWER_LIMIT = -2;
+    const int SHAKE_ANIMATION_UPPER_LIMIT = 2;
+    const int SHAKE_ANIMATION_DURATION = 40;
+    const int SHAKE_ANIMATION_COUNT = 2;
+    const int SHAKE_ANIMATION_LOOP = true;
+    const int DAMAGE_INDICATOR_ANIMATION_LOWER_LIMIT = 0;
+    const int DAMAGE_INDICATOR_ANIMATION_UPPER_LIMIT = -4;
+    const int DAMAGE_INDICATOR_ANIMATION_DURATION = 20;
+    const int DAMAGE_INDICATOR_ANIMATION_COUNT = 1;
+    const int DAMAGE_INDICATOR_ANIMATION_LOOP = false;
+    const int DAMAGE_INDICATOR_Y = 46;
+    const int DAMAGE_INDICATOR_X = 116;
+
+    void renderPortrait_();
+    void renderHealthBar_();
+    void renderDamageIndicator_();
+    void updateDamageIndicator_();
+    
+    int getHealthBarWidth_();
 
     FlashAnimation* flashAnimation_;
-    BounceAnimation* bounceAnimation_;
+    TranslateAnimation* shakeAnimation_;
+    TranslateAnimation* damageIndicatorAnimation_;
+
+    int type_;
+    int health_;
+    int healthBarWidth_ = HEALTH_BAR_WIDTH_MAX;
+    int damageIndicatorNum_ = 0;
 };
 
 #endif

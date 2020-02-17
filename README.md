@@ -34,7 +34,7 @@ Gems decend two at a time down rows onto the play area. Swap rows along with the
 - [x] Add weapon clear animation
 - [x] Make sure multiple weapons can clear at the same time.
 - [x] Add damage animation (flash enemy, display damage over enemy (ex. -5))
-- [ ] Make sure double matches display correct damage in single indicator (ex. -10 instead of -5)
+- [x] Make sure double matches display correct damage in single indicator (ex. -10 instead of -5)
 
 ### Advanced Damage Calculation, Enemy Vulnerabilities/Resistances
 - [x] Track what weapons inflict damage.
@@ -47,21 +47,31 @@ Gems decend two at a time down rows onto the play area. Swap rows along with the
 - [x] Add custom poperties for each enemy (Max Health, Resistances, Vulnerabilities)
 
 ### Game Dev
-- [ ] Manage Gems as class instances instead of arrays.
-- [ ] Manage Weapons as class instances instead of arrays.
-- [ ] Separate Game States into classes with handleInput, update, and render instance methods.
+- [x] Manage Gems as class instances instead of arrays.
+- [x] Manage Weapons as class instances instead of arrays.
+- [x] Separate Game States into classes with handleInput, update, and render instance methods.
 
-### Enemy Spells
-- [ ] Allow Skeleton to block random attacks/matches
-- [ ] Display "Block" text over Skeleton when attack is blocked
+### Enemy Updates
+- [ ] Add idle animation to Skeleton
+- [ ] Add take damage image to Skeleton
+- [ ] Allow Skeleton to pop a random gem
+- [ ] Add slash animation to Skeleton
+- [ ] Add idle animation to Orc
+- [ ] Add take damage image to Orc
 - [ ] Allow Orc to randomly send 3 gems
-- [ ] Display "Smash" text over Orc when 3 gems are previewed
-- [ ] Allow Golem to become invulnerable to all non-magic attacks for 10 seconds.
-- [ ] Display "Defense" text over Golem when spell is cast, and display barrier while spell is in affect.
+- [ ] Add smash animation to Orc
+- [ ] Add idle animation to Golem
+- [ ] Add take damage image to Golem
+- [ ] Randomly turn a top gem to stone.
+- [ ] Add Golem spell animation
+- [ ] Add idle animation to Demon
+- [ ] Add take damage image to Demon
 - [ ] Allow Demon to speed up game for 15 seconds.
-- [ ] Display "Attack" over Demon when spell is cast.
+- [ ] Add attack animation to Demon
+- [ ] Add idle animation to Sorcerer
+- [ ] Add take damage image to Sorcerer
 - [ ] Allow Sorcerer to randomly teleport falling gems to new positions.
-- [ ] Display "Teleport" over Sorcerer when spell is cast.
+- [ ] Add spell animation to Sorcerer
 
 ## Inspiration
 - Yoshi for Gameboy
