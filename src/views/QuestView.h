@@ -12,11 +12,6 @@ class QuestView {
     void handleInput();
     void update();
     void render();
-    void renderText();
-    void renderCursor();
-    void renderPaths();
-    void renderEnemies();
-    void renderEnemy(int);
 
   private:
     static const int DATA_LENGTH = 2;
@@ -34,6 +29,12 @@ class QuestView {
     const int BOUNCE_ANIMATION_UPPER_LIMIT = 1;
     const int BOUNCE_ANIMATION_SPEED = 8;
     const bool BOUNCE_ANIMATION_LOOP = true;
+
+    void renderText_();
+    void renderCursor_();
+    void renderPaths_();
+    void renderEnemies_();
+    void renderEnemy_(int);
 
     TranslateAnimation* bounceAnimation_;
 };

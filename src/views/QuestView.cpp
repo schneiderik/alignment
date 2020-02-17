@@ -30,17 +30,17 @@ void QuestView::update() {
 }
 
 void QuestView::render() {
-  renderText();
-  renderCursor();
-  renderPaths();
-  renderEnemies();
+  renderText_();
+  renderCursor_();
+  renderPaths_();
+  renderEnemies_();
 }
 
-void QuestView::renderText() {
+void QuestView::renderText_() {
   sprites.drawOverwrite(32, 2, questText, 0);     
 }
 
-void QuestView::renderCursor() {
+void QuestView::renderCursor_() {
   sprites.drawOverwrite(
     getXData_(game->enemy.getType()) + 8,
     getYData_(game->enemy.getType()) - 4 + bounceAnimation_->getValue(),
@@ -49,18 +49,18 @@ void QuestView::renderCursor() {
   );  
 }
 
-void QuestView::renderPaths() {
+void QuestView::renderPaths_() {
   sprites.drawOverwrite(16, 50, pathImage, 0);
   sprites.drawOverwrite(54, 50, pathReverseImage, 0);
   sprites.drawOverwrite(64, 50, pathImage, 0);
   sprites.drawOverwrite(102, 50, pathReverseImage, 0);  
 }
 
-void QuestView::renderEnemies() {
-  for (int i = 0; i < Enemy::COUNT; i++) renderEnemy(i); 
+void QuestView::renderEnemies_() {
+  for (int i = 0; i < Enemy::COUNT; i++) renderEnemy_(i); 
 }
 
-void QuestView::renderEnemy(int type) {
+void QuestView::renderEnemy_(int type) {
   sprites.drawOverwrite(
     getXData_(type),
     getYData_(type),
