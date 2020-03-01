@@ -3,13 +3,13 @@
 
 #include "../../global.h"
 #include "../entities/Gem.h"
+#include "../entities/Preview.h"
 
 class GemManager {
   public:
     GemManager();
 
-    void create();
-    void create(int);
+    Gem* create();
     void update();
     void updateClearing();
     void updateFalling();
@@ -17,11 +17,8 @@ class GemManager {
     void render();
     void reset();
 
-    int randomEmptyRow();
-    bool gemExistsInRow(int);
     void moveGemsInObstructedRows(int, int);
     bool hasClearingGems();
-    bool hasInactiveGems();
     bool hasFallingGems();
     bool fallingGemsAreBelowPreviewThreshold();
     bool shouldCreateGems();
@@ -34,8 +31,8 @@ class GemManager {
     int fallingGemCount_;
     int belowPreviewThresholdCount_;
     int clearingGemCount_;
-    int inactiveGemCount_;
-    Gem* inactiveGemsHead_ = NULL;
+
+    Preview preview_;
 };
 
 #endif

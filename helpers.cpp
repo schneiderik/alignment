@@ -93,9 +93,6 @@ void renderIndicator(int num, int x, int y, int color) {
   int width = numberWidth(num) + 4;
   int centerOffset = roundedHalf(width - 1);
 
-  arduboy.print(width);
-  arduboy.print(centerOffset);
-
   fillRectWithStroke(
     x - centerOffset, 
     y,

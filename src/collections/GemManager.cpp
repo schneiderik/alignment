@@ -2,6 +2,7 @@
 #include "../../Game.h"
 #include "../entities/Gem.h"
 #include "../entities/Weapon.h"
+#include "../entities/Preview.h"
 
 GemManager::GemManager() {
   firstAvailable_ = &gems_[0];
@@ -13,37 +14,18 @@ GemManager::GemManager() {
   gems_[GEM_MANAGER_SIZE - 1].setNext(NULL);
 }
 
-void GemManager::create() {
+Gem* GemManager::create() {
   if (firstAvailable_ == NULL) return;
   
   Gem* newGem = firstAvailable_;
   firstAvailable_ = newGem->getNext();
+  newGem->setNext(NULL);
 
-  newGem->init(randomEmptyRow());
-
-  newGem->setNext(inactiveGemsHead_);
-  inactiveGemsHead_ = newGem;
-}
-
-void GemManager::create(int count) {
-  for (int i = 0; i < count; i++) create();
-}
-
-bool GemManager::gemExistsInRow(int row) {  
-  for (int i = 0; i < GEM_MANAGER_SIZE; i++) {
-    Gem& gem = gems_[i];
-    if (gem.isInactive() && gem.getRow() == row) return true;
-  }
-
-  return false;
+  return newGem;
 }
 
 bool GemManager::hasClearingGems() {
   return clearingGemCount_ > 0;
-}
-
-bool GemManager::hasInactiveGems() {
-  return inactiveGemsHead_ != NULL;
 }
 
 bool GemManager::hasFallingGems() {
@@ -56,7 +38,7 @@ bool GemManager::fallingGemsAreBelowPreviewThreshold() {
 
 bool GemManager::shouldCreateGems() {
   return !hasClearingGems()
-    && !hasInactiveGems()
+    && preview_.isEmpty()
     && fallingGemsAreBelowPreviewThreshold();
 }
 
@@ -64,7 +46,7 @@ void GemManager::reset() {
   clearingGemCount_ = 0;
   fallingGemCount_ = 0;
   belowPreviewThresholdCount_ = 0;
-  inactiveGemsHead_ = NULL;  
+  preview_.clear();
 
   for (int i = 0; i < GEM_MANAGER_SIZE; i++) {
     Gem& gem = gems_[i];
@@ -77,12 +59,6 @@ void GemManager::render() {
     Gem& gem = gems_[i];
     if (!gem.isHidden()) gem.render();
   }
-}
-
-int GemManager::randomEmptyRow() {
-  int row = random(0, WEAPON_COUNT);
-
-  return gemExistsInRow(row) ? randomEmptyRow() : row;
 }
 
 void GemManager::moveGemsInObstructedRows(int row1, int row2) {
@@ -120,7 +96,7 @@ void GemManager::updateFalling() {
   int newFallingGemCount = 0;
   int newBelowPreviewThresholdCount = 0;
   
-  if (shouldCreateGems()) create(2);
+  if (shouldCreateGems()) preview_.populate(2);
   
   for (int i = 0; i < GEM_MANAGER_SIZE; i++) {
     Gem& gem = gems_[i];
@@ -134,7 +110,7 @@ void GemManager::updateFalling() {
       if (!hasFallingGems()) {
         gem.drop();
         newFallingGemCount++;
-        inactiveGemsHead_ = NULL;
+        preview_.clear();
       }
     } else if (gem.isFalling()) {
       if (gem.updateX()) {
