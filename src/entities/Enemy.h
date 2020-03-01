@@ -68,6 +68,7 @@ class Enemy {
     FlashAnimation* flashAnimation_;
     TranslateAnimation* shakeAnimation_;
     TranslateAnimation* damageIndicatorAnimation_;
+    TranslateAnimation* idleAnimation_;
 
     int type_;
     int health_;

@@ -9,6 +9,13 @@ const int Enemy::DATA[COUNT][DATA_LENGTH] = {
 };
 
 Enemy::Enemy() {
+  idleAnimation_ = new TranslateAnimation(
+    0,
+    3,
+    30,
+    false
+  );
+
   flashAnimation_ = new FlashAnimation(
     FLASH_ANIMATION_COUNT,
     FLASH_ANIMATION_DURATION
@@ -52,6 +59,7 @@ void Enemy::update() {
   flashAnimation_->update();
   shakeAnimation_->update();
   damageIndicatorAnimation_->update();
+  idleAnimation_->update();
 }
 
 void Enemy::render() {
@@ -87,12 +95,21 @@ bool Enemy::isLastEnemy() {
 
 void Enemy::renderPortrait_() {
   if (flashAnimation_->isVisible()) {
-    sprites.drawOverwrite(
-      PORTRAIT_X + shakeAnimation_->getValue(),
-      PORTRAIT_Y,
-      enemySprite,
-      type_
-    );
+    if (type_ < ORC) {
+      sprites.drawOverwrite(
+        PORTRAIT_X + shakeAnimation_->getValue(),
+        PORTRAIT_Y,
+        skeletonSprite,
+        shakeAnimation_->isRunning() ? 9 : idleAnimation_->getValue()
+      );
+    } else {
+      sprites.drawOverwrite(
+        PORTRAIT_X + shakeAnimation_->getValue(),
+        PORTRAIT_Y,
+        enemySprite,
+        type_
+      );
+    }
   }
 }
 
