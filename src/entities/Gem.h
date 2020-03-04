@@ -44,6 +44,8 @@ class Gem {
 
     Gem* getNext() const;
     void setNext(Gem*);
+    Gem* getPrevious() const;
+    void setPrevious(Gem*);
     int getRow() const;
     void setRow(int);
     int getType() const;
@@ -57,6 +59,7 @@ class Gem {
     int xVel_;
     int yVel_;
     Gem* next_;
+    Gem* previous_;
 };
 
 #endif

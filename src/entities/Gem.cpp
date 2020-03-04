@@ -10,6 +10,7 @@ void Gem::init(int row) {
   y_ = gemYOffsets[row];
   state_ = GEM_STATE_INACTIVE;
   next_ = NULL;
+  previous_ = NULL;
 }
 
 void Gem::render() {
@@ -120,6 +121,8 @@ bool Gem::isHidden() { return state_ == GEM_STATE_HIDDEN; }
 
 Gem* Gem::getNext() const { return next_; }
 void Gem::setNext(Gem* next) { next_ = next; }
+Gem* Gem::getPrevious() const { return previous_; }
+void Gem::setPrevious(Gem* previous) { previous_ = previous; }
 int Gem::getRow() const { return row_; }
 void Gem::setRow(int row) { row_ = row; }
 int Gem::getType() const { return type_; }

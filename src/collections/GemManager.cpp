@@ -7,11 +7,14 @@
 GemManager::GemManager() {
   firstAvailable_ = &gems_[0];
 
-  for (int i = 0; i < GEM_MANAGER_SIZE - 1; i++) {
+  gems_[0].setNext(&gems_[1]);
+
+  for (int i = 1; i < GEM_MANAGER_SIZE - 2; i++) {
     gems_[i].setNext(&gems_[i + 1]);
+    gems_[i].setPrevious(&gems_[i - 1]);
   }
 
-  gems_[GEM_MANAGER_SIZE - 1].setNext(NULL);
+  gems_[GEM_MANAGER_SIZE - 1].setPrevious(&gems_[GEM_MANAGER_SIZE - 2]);
 }
 
 Gem* GemManager::create() {
@@ -19,6 +22,7 @@ Gem* GemManager::create() {
   
   Gem* newGem = firstAvailable_;
   firstAvailable_ = newGem->getNext();
+  firstAvailable_->setPrevious(NULL);
   newGem->setNext(NULL);
 
   return newGem;
@@ -152,6 +156,7 @@ void GemManager::updateFalling() {
 }
 
 void GemManager::remove(Gem& gem) {
+  firstAvailable_->setPrevious(&gem);
   gem.setNext(firstAvailable_);
   firstAvailable_ = &gem; 
 }
