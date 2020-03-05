@@ -17,6 +17,24 @@ void Gem::render() {
   sprites.drawPlusMask(x_, y_, gemSpritePlusMask, type_);
 }
 
+void Gem::update() {
+  switch (state_) {
+    case GEM_STATE_FALLING:
+      updateY();
+      updateX();
+      break;
+    case GEM_STATE_STACKED:
+      updateY();
+      break;
+    case GEM_STATE_POPPING:
+      updatePop();
+      break;
+    case GEM_STATE_CLEARING:
+      updateClear();
+      break;
+  }
+}
+
 bool Gem::updateX() {
   if (arduboy.everyXFrames(INITIAL_GAME_SPEED)) {
     if (!atEndOfRowX()) { 
@@ -82,7 +100,7 @@ void Gem::changeRowIfObstructed(int row1, int row2) {
 }
 
 void Gem::drop() {
-  if (isInactive()) state_ = GEM_STATE_FALLING;
+  state_ = GEM_STATE_FALLING;
 }
 
 void Gem::clear() {
@@ -98,6 +116,8 @@ void Gem::pop() {
 
 void Gem::stack() {
   state_ = GEM_STATE_STACKED;
+  getWeapon().addGem(*this);
+  game->score += 10; 
 }
 
 void Gem::hide() {

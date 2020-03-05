@@ -93,12 +93,12 @@ void GemManager::updateClearing() {
     
   for (int i = 0; i < GEM_MANAGER_SIZE; i++) {
     Gem& gem = gems_[i];
-    Weapon& weapon = gem.getWeapon();
 
     if (gem.isHidden()) continue;
 
     if (gem.isClearing()) {
-      if (gem.updateClear()) newClearingGemCount++;
+      gem.update();
+      newClearingGemCount++;
     }
 
     if (gem.isHidden()) remove(gem);
@@ -116,11 +116,10 @@ void GemManager::updateFalling() {
   
   for (int i = 0; i < GEM_MANAGER_SIZE; i++) {
     Gem& gem = gems_[i];
-    Weapon& weapon = gem.getWeapon();
 
     if (gem.isHidden()) continue;
     
-    gem.updateY();
+    gem.update();
     
     if (gem.isInactive()) {
       if (!hasFallingGems()) {
@@ -129,22 +128,13 @@ void GemManager::updateFalling() {
         preview_.clear();
       }
     } else if (gem.isFalling()) {
-      if (gem.updateX()) {
-        newFallingGemCount++;
-        
-        if (gem.belowPreviewThreshold()) {
-          newBelowPreviewThresholdCount++;
-        }
-      } else {
-        if (weapon.isFull()) {
-          newClearingGemCount = 7;
-        }
-
-        weapon.addGem(gem);
-        game->score += 10; 
+      newFallingGemCount++;
+      
+      if (gem.belowPreviewThreshold()) {
+        newBelowPreviewThresholdCount++;
       }
-    } else if (gem.isPopping()) {
-      gem.updatePop();
+    } else if (gem.isClearing()) {
+      newClearingGemCount++;
     }
 
     if (gem.isHidden()) remove(gem);
