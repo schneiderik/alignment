@@ -6,7 +6,15 @@ WeaponManager::WeaponManager() {
 }
 
 void WeaponManager::update() {
-  for (int i = 0; i < WEAPON_COUNT; i++) get(i).update();
+  state_ = STATE_ACTIVE;
+
+  for (int i = 0; i < WEAPON_COUNT; i++) {
+    Weapon& weapon = get(i);
+
+    weapon.update();
+
+    if (weapon.isClearing()) state_ = STATE_CLEARING;
+  }
 }
 
 void WeaponManager::render() {
@@ -42,3 +50,6 @@ void WeaponManager::swap() {
   weapons[activeIndex] = weaponPtr;
   swapSound();
 }
+
+bool WeaponManager::isClearing() { return state_ == STATE_CLEARING; }
+bool WeaponManager::isActive() { return state_ == STATE_ACTIVE; }

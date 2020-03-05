@@ -20,6 +20,15 @@ class WeaponManager {
     void incrementActiveIndex();
     void decrementActiveIndex();
     void swap();
+
+    bool isClearing();
+    bool isActive();
+
+  private:
+    const int STATE_ACTIVE = 0;
+    const int STATE_CLEARING = 1;
+
+    int state_ = STATE_ACTIVE;
 };
 
 #endif

@@ -14,11 +14,34 @@ void Weapon::reset(int order) {
 }
 
 void Weapon::update() {
-  int order = getOrder();
+  switch (state_) {
+    case WEAPON_STATE_ACTIVE:
+      updateY_();
+      break;
+    case WEAPON_STATE_CLEARING:
+      updateClearing_();
+      break;
+  }
+}
 
-  if (lastGem_ != NULL && lastGem_->getRow() != order) setGemRows(order);
+void Weapon::updateY_() {
+  int order = getOrder();
   
+  if (lastGem_ != NULL && lastGem_->getRow() != order) setGemRows(order);
   if (y_ != weaponYOffsets[order]) y_ += y_ < weaponYOffsets[order] ? 3 : -3;
+}
+
+void Weapon::updateClearing_() {
+  Gem* gem = lastGem_;
+  
+  while (gem != NULL) {
+    if (gem->isClearing()) return;
+    
+    gem = gem->getNext();
+  }
+
+  empty();
+  activate();
 }
 
 void Weapon::render(bool active) {
@@ -36,8 +59,8 @@ void Weapon::addGem(Gem& gem) {
 
   gemCount_++;
 
-  if (isOverflowed_()) {
-    clearGems_();
+  if (isOverflowed()) {
+    clear();
     game->health--;
     loseHeartSound();
   }
@@ -63,18 +86,6 @@ void Weapon::popLastGems_() {
   gemCount_ -= 2;
 }
 
-void Weapon::clearGems_() {
-  Gem* gem = lastGem_;
-  
-  while (gem != NULL) {
-    gem->clear();
-    
-    gem = gem->getNext();
-  }
-  
-  empty();
-}
-
 void Weapon::setGemRows(int row) {
   Gem* gem = lastGem_;
 
@@ -84,21 +95,25 @@ void Weapon::setGemRows(int row) {
   }
 }
 
-bool Weapon::isFull() {
-  return gemCount_ == WEAPON_GEMS_MAX - 1;
-}
-
-bool Weapon::isOverflowed_() {
-  return gemCount_ == WEAPON_GEMS_MAX;
-}
-
-bool Weapon::isEmpty() {
-  return gemCount_ == 0;
-}
-
 void Weapon::empty() {
   gemCount_ = 0;
   lastGem_ = NULL;
+}
+
+void Weapon::activate() {
+  state_ = WEAPON_STATE_ACTIVE;
+}
+
+void Weapon::clear() {
+  state_ = WEAPON_STATE_CLEARING;
+
+  Gem* gem = lastGem_;
+  
+  while (gem != NULL) {
+    gem->clear();
+    
+    gem = gem->getNext();
+  }
 }
 
 int Weapon::getType() {
@@ -114,6 +129,12 @@ int Weapon::getOrder() {
 int Weapon::getEndOfRowX() {
   return gemXOffsets[gemCount_];
 }
+
+bool Weapon::isFull() { return gemCount_ == WEAPON_GEMS_MAX - 1; }
+bool Weapon::isOverflowed() { return gemCount_ == WEAPON_GEMS_MAX; }
+bool Weapon::isEmpty() { return gemCount_ == 0; }
+bool Weapon::isClearing() { return state_ == WEAPON_STATE_CLEARING; }
+bool Weapon::isActive() { return state_ == WEAPON_STATE_ACTIVE; }
 
 void Weapon::renderIcon_(bool active) {
   if (active) {

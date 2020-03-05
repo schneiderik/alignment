@@ -3,6 +3,9 @@
 
 #include "../../global.h";
 
+#define WEAPON_STATE_ACTIVE 0
+#define WEAPON_STATE_CLEARING 1
+
 class Weapon {
   public:
     Weapon(int i);
@@ -14,26 +17,33 @@ class Weapon {
     void addGem(Gem&);
     void setGemRows(int);
 
-    bool isFull();
-    bool isEmpty();
     void empty();
+    void clear();
+    void activate();
 
     int getType();
     Gem& getLastGem();
     int getOrder();
     int getEndOfRowX();
 
+    bool isFull();
+    bool isOverflowed();
+    bool isEmpty();
+    bool isClearing();
+    bool isActive();
+
   private:
     int type_;
+    int state_ = WEAPON_STATE_ACTIVE;
     int y_;
     int gemCount_ = 0;
     Gem* lastGem_ = NULL;
 
-    bool isOverflowed_();
-    bool lastGemsMatch_();
+    void updateY_();
+    void updateClearing_();
 
+    bool lastGemsMatch_();
     void popLastGems_();
-    void clearGems_();
 
     void renderIcon_(bool);
     void renderDivider_();

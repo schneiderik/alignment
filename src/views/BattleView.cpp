@@ -6,7 +6,7 @@
 
 void BattleView::handleInput() {
   if (arduboy.justPressed(RIGHT_BUTTON)) paused = !paused;
-  if (paused || game->gems.hasClearingGems()) return;
+  if (paused || game->weapons.isClearing()) return;
   if (arduboy.justPressed(UP_BUTTON)) game->weapons.decrementActiveIndex();
   if (arduboy.justPressed(DOWN_BUTTON)) game->weapons.incrementActiveIndex();
   if (arduboy.justPressed(A_BUTTON)) {
