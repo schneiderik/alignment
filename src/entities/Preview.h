@@ -12,6 +12,7 @@ class Preview {
   private:
     Gem* head_ = NULL;
 
+    void populate_();
     int randomEmptyRow_();
     bool gemExistsInRow_(int);
 };

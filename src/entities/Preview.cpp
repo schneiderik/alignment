@@ -7,17 +7,24 @@ void Preview::clear() {
 }
 
 void Preview::populate(int num) {
-  for (int i = 0; i < num; i++) {
-    Gem* gem = game->gems.create();
-
-    gem->init(randomEmptyRow_());
-    if (!isEmpty()) gem->setNext(head_);
-    head_ = gem;
-  }
+  for (int i = 0; i < num; i++) populate_();
 }
 
 bool Preview::isEmpty() {
   return head_ == NULL;
+}
+
+void Preview::populate_() {
+  Gem* gem = game->gems.create();
+
+  gem->init(randomEmptyRow_());
+
+  if (!isEmpty()) {
+    gem->setNext(head_);
+    head_->setPrevious(gem);
+  }
+
+  head_ = gem;
 }
 
 int Preview::randomEmptyRow_() {

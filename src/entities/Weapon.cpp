@@ -14,6 +14,12 @@ void Weapon::reset(int order) {
 }
 
 void Weapon::update() {
+  if (isOverflowed()) {
+    clearGems();
+    game->health--;
+    loseHeartSound();
+  }
+
   int order = getOrder();
   
   if (y_ != weaponYOffsets[order]) y_ += y_ < weaponYOffsets[order] ? 3 : -3;
@@ -25,8 +31,13 @@ void Weapon::render(bool active) {
 }
 
 void Weapon::addGem(Gem& gem) {
+  lastGem_->setPrevious(&gem);
+
+  gem.setPrevious(NULL);
   gem.setNext(lastGem_);
+
   lastGem_ = &gem;
+
   gemCount_++;
 }
 
@@ -58,6 +69,10 @@ void Weapon::setGemRows(int row) {
 }
 
 bool Weapon::isFull() {
+  return gemCount_ == WEAPON_GEMS_MAX - 1;
+}
+
+bool Weapon::isOverflowed() {
   return gemCount_ == WEAPON_GEMS_MAX;
 }
 
@@ -67,6 +82,7 @@ bool Weapon::isEmpty() {
 
 void Weapon::empty() {
   gemCount_ = 0;
+  lastGem_ = NULL;
 }
 
 int Weapon::getType() {

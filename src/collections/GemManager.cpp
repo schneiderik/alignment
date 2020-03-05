@@ -23,9 +23,20 @@ Gem* GemManager::create() {
   Gem* newGem = firstAvailable_;
   firstAvailable_ = newGem->getNext();
   firstAvailable_->setPrevious(NULL);
+
   newGem->setNext(NULL);
+  newGem->setPrevious(NULL);
 
   return newGem;
+}
+
+void GemManager::remove(Gem& gem) {
+  firstAvailable_->setPrevious(&gem);
+
+  gem.setPrevious(NULL);
+  gem.setNext(firstAvailable_);
+
+  firstAvailable_ = &gem; 
 }
 
 bool GemManager::hasClearingGems() {
@@ -132,15 +143,11 @@ void GemManager::updateFalling() {
           game->enemy.takeDamage(5, weapon.getType());            
         } else {
           if (weapon.isFull()) {
-            weapon.clearGems();
-            gem.clear();
             newClearingGemCount = 7;
-            game->health--;
-            loseHeartSound();
-          } else {
-            weapon.addGem(gem);
-            game->score += 10; 
-          }            
+          }
+
+          weapon.addGem(gem);
+          game->score += 10; 
         }
       }
     } else if (gem.isPopping()) {
@@ -153,10 +160,4 @@ void GemManager::updateFalling() {
   clearingGemCount_ = newClearingGemCount;
   fallingGemCount_ = newFallingGemCount;
   belowPreviewThresholdCount_ = newBelowPreviewThresholdCount;
-}
-
-void GemManager::remove(Gem& gem) {
-  firstAvailable_->setPrevious(&gem);
-  gem.setNext(firstAvailable_);
-  firstAvailable_ = &gem; 
 }

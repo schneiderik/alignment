@@ -22,7 +22,7 @@ class Weapon;
 #define SCREEN_HEIGHT 64
 #define HEALTH_MAX 3
 #define WEAPON_COUNT 4
-#define WEAPON_GEMS_MAX 6
+#define WEAPON_GEMS_MAX 7
 #define GEM_TYPE_COUNT 5
 #define PREVIEW_GEM_X 92
 #define PREVIEW_THRESHOLD_X 89

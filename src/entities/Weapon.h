@@ -17,6 +17,7 @@ class Weapon {
     void setGemRows(int);
 
     bool isFull();
+    bool isOverflowed();
     bool isEmpty();
     void empty();
 
