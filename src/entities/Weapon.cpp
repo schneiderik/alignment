@@ -14,12 +14,6 @@ void Weapon::reset(int order) {
 }
 
 void Weapon::update() {
-  if (isOverflowed()) {
-    clearGems();
-    game->health--;
-    loseHeartSound();
-  }
-
   int order = getOrder();
   
   if (y_ != weaponYOffsets[order]) y_ += y_ < weaponYOffsets[order] ? 3 : -3;
@@ -39,15 +33,35 @@ void Weapon::addGem(Gem& gem) {
   lastGem_ = &gem;
 
   gemCount_++;
+
+  if (isOverflowed_()) {
+    clearGems_();
+    game->health--;
+    loseHeartSound();
+  }
+
+  if (lastGemsMatch_()) {         
+    popLastGems_();
+    game->score += 100;
+    game->enemy.takeDamage(5, type_);            
+    confirmSound();
+  }
 }
 
-void Weapon::popLastGem() {
+bool Weapon::lastGemsMatch_() {
+  if (gemCount_ < 2) return false;
+
+  return lastGem_->getType() == lastGem_->getNext()->getType();
+}
+
+void Weapon::popLastGems_() {
   lastGem_->pop();
-  lastGem_ = lastGem_->getNext();
-  gemCount_--;
+  lastGem_->getNext()->pop();
+  lastGem_ = lastGem_->getNext()->getNext();
+  gemCount_ -= 2;
 }
 
-void Weapon::clearGems() {
+void Weapon::clearGems_() {
   Gem* gem = lastGem_;
   
   while (gem != NULL) {
@@ -72,7 +86,7 @@ bool Weapon::isFull() {
   return gemCount_ == WEAPON_GEMS_MAX - 1;
 }
 
-bool Weapon::isOverflowed() {
+bool Weapon::isOverflowed_() {
   return gemCount_ == WEAPON_GEMS_MAX;
 }
 
@@ -87,10 +101,6 @@ void Weapon::empty() {
 
 int Weapon::getType() {
   return type_;
-}
-
-Gem& Weapon::getLastGem() {
-  return *lastGem_;
 }
 
 int Weapon::getOrder() {

@@ -12,12 +12,9 @@ class Weapon {
     void update();
 
     void addGem(Gem&);
-    void popLastGem();
-    void clearGems();
     void setGemRows(int);
 
     bool isFull();
-    bool isOverflowed();
     bool isEmpty();
     void empty();
 
@@ -29,8 +26,14 @@ class Weapon {
   private:
     int type_;
     int y_;
-    int gemCount_;
+    int gemCount_ = 0;
     Gem* lastGem_ = NULL;
+
+    bool isOverflowed_();
+    bool lastGemsMatch_();
+
+    void popLastGems_();
+    void clearGems_();
 
     void renderIcon_(bool);
     void renderDivider_();

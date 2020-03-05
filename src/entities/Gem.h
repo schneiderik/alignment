@@ -34,7 +34,6 @@ class Gem {
     bool belowEndOfRowX();
     bool atEndOfRowX();
     bool belowPreviewThreshold();
-    bool matchesLastGemInRow();
     void changeRowIfObstructed(int, int);
     void drop();
     void clear();

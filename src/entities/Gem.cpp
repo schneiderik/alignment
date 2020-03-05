@@ -77,14 +77,6 @@ bool Gem::belowPreviewThreshold() {
   return x_ <= PREVIEW_THRESHOLD_X;
 }
 
-bool Gem::matchesLastGemInRow() {
-  Weapon& weapon = getWeapon();
-
-  if (weapon.isEmpty()) return false;
-
-  return weapon.getLastGem().getType() == type_;
-}
-
 void Gem::changeRowIfObstructed(int row1, int row2) {
   if (belowEndOfRowX()) row_ = row_ == row1 ? row2 : row1;
 }

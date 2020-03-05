@@ -21,6 +21,7 @@ Gem* GemManager::create() {
   if (firstAvailable_ == NULL) return;
   
   Gem* newGem = firstAvailable_;
+
   firstAvailable_ = newGem->getNext();
   firstAvailable_->setPrevious(NULL);
 
@@ -135,20 +136,12 @@ void GemManager::updateFalling() {
           newBelowPreviewThresholdCount++;
         }
       } else {
-        if (gem.matchesLastGemInRow()) {         
-          game->score += 100;
-          gem.pop();
-          weapon.popLastGem();
-          confirmSound();
-          game->enemy.takeDamage(5, weapon.getType());            
-        } else {
-          if (weapon.isFull()) {
-            newClearingGemCount = 7;
-          }
-
-          weapon.addGem(gem);
-          game->score += 10; 
+        if (weapon.isFull()) {
+          newClearingGemCount = 7;
         }
+
+        weapon.addGem(gem);
+        game->score += 10; 
       }
     } else if (gem.isPopping()) {
       gem.updatePop();
