@@ -66,11 +66,11 @@ Weapon& Gem::getWeapon() {
 }
 
 bool Gem::atEndOfRowX() {
-  return x_ <= getWeapon().endOfRowX();
+  return x_ <= getWeapon().getEndOfRowX();
 }
 
 bool Gem::belowEndOfRowX() {
-  return x_ < getWeapon().endOfRowX();
+  return x_ < getWeapon().getEndOfRowX();
 }
 
 bool Gem::belowPreviewThreshold() {
@@ -82,7 +82,7 @@ bool Gem::matchesLastGemInRow() {
 
   if (weapon.isEmpty()) return false;
 
-  return weapon.lastGem->getType() == type_;
+  return weapon.getLastGem().getType() == type_;
 }
 
 void Gem::changeRowIfObstructed(int row1, int row2) {

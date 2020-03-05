@@ -7,28 +7,32 @@ class Weapon {
   public:
     Weapon(int i);
         
-    int type;
-    int y;
-    int gemCount;
-    Gem* lastGem = NULL;
+    void reset(int);
+    void render(bool);
+    void update();
 
-    bool isFull();
-    bool isEmpty();
     void addGem(Gem&);
     void popLastGem();
     void clearGems();
-    void empty();
-    void reset(int);
-    void render(bool);
-    void renderIcon(bool);
-    void renderDivider();
-    void renderGems();
-    int getOrder();
-    void update();
-    void updateY();
-    void updateGems();
-    int endOfRowX();
     void setGemRows(int);
+
+    bool isFull();
+    bool isEmpty();
+    void empty();
+
+    int getType();
+    Gem& getLastGem();
+    int getOrder();
+    int getEndOfRowX();
+
+  private:
+    int type_;
+    int y_;
+    int gemCount_;
+    Gem* lastGem_ = NULL;
+
+    void renderIcon_(bool);
+    void renderDivider_();
 };
 
 #endif

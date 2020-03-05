@@ -129,7 +129,7 @@ void GemManager::updateFalling() {
           gem.pop();
           weapon.popLastGem();
           confirmSound();
-          game->enemy.takeDamage(5, weapon.type);            
+          game->enemy.takeDamage(5, weapon.getType());            
         } else {
           if (weapon.isFull()) {
             weapon.clearGems();
