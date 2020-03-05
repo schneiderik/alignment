@@ -1,6 +1,5 @@
 #include "WeaponManager.h"
 #include "../entities/Weapon.h"
-#include "../entities/Gem.h"
 
 WeaponManager::WeaponManager() {
   for (int i = 0; i < WEAPON_COUNT; i++) weapons[i] = new Weapon(i); 
@@ -41,9 +40,5 @@ void WeaponManager::swap() {
   Weapon* weaponPtr = weapons[activeIndex + 1];
   weapons[activeIndex + 1] = weapons[activeIndex];
   weapons[activeIndex] = weaponPtr;
-  
-  get(activeIndex).setGemRows(activeIndex);
-  get(activeIndex + 1).setGemRows(activeIndex + 1);
-
   swapSound();
 }

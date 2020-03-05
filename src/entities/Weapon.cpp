@@ -15,6 +15,8 @@ void Weapon::reset(int order) {
 
 void Weapon::update() {
   int order = getOrder();
+
+  if (lastGem_ != NULL && lastGem_->getRow() != order) setGemRows(order);
   
   if (y_ != weaponYOffsets[order]) y_ += y_ < weaponYOffsets[order] ? 3 : -3;
 }
