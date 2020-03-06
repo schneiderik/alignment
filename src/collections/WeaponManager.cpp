@@ -48,6 +48,10 @@ void WeaponManager::swap() {
   Weapon* weaponPtr = weapons[activeIndex + 1];
   weapons[activeIndex + 1] = weapons[activeIndex];
   weapons[activeIndex] = weaponPtr;
+
+  weapons[activeIndex + 1]->setOrder(activeIndex + 1);
+  weapons[activeIndex]->setOrder(activeIndex);
+
   swapSound();
 }
 

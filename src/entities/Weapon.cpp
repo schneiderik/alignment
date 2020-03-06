@@ -9,6 +9,7 @@ Weapon::Weapon(int i) {
 
 void Weapon::reset(int order) {
   type_ = order;
+  order_ = order;
   y_ = weaponYOffsets[order];
   empty();
 }
@@ -25,10 +26,8 @@ void Weapon::update() {
 }
 
 void Weapon::updateY_() {
-  int order = getOrder();
-  
-  if (lastGem_ != NULL && lastGem_->getRow() != order) setGemRows(order);
-  if (y_ != weaponYOffsets[order]) y_ += y_ < weaponYOffsets[order] ? 3 : -3;
+  if (lastGem_ != NULL && lastGem_->getRow() != order_) setGemRows(order_);
+  if (y_ != weaponYOffsets[order_]) y_ += y_ < weaponYOffsets[order_] ? 3 : -3;
 }
 
 void Weapon::updateClearing_() {
@@ -72,6 +71,8 @@ void Weapon::addGem(Gem& gem) {
     confirmSound();
   }
 }
+
+void Weapon::setOrder(int order) { order_ = order; }
 
 bool Weapon::lastGemsMatch_() {
   if (gemCount_ < 2) return false;
@@ -118,12 +119,6 @@ void Weapon::clear() {
 
 int Weapon::getType() {
   return type_;
-}
-
-int Weapon::getOrder() {
-  for (int i = 0; i < WEAPON_COUNT; i++) {
-    if (type_ == game->weapons.get(i).getType()) return i;
-  }
 }
 
 int Weapon::getEndOfRowX() {

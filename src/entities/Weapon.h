@@ -16,7 +16,7 @@ class Weapon {
 
     void addGem(Gem&);
     void setGemRows(int);
-
+    void setOrder(int);
     void empty();
     void clear();
     void activate();
@@ -34,6 +34,7 @@ class Weapon {
 
   private:
     int type_;
+    int order_;
     int state_ = WEAPON_STATE_ACTIVE;
     int y_;
     int gemCount_ = 0;
