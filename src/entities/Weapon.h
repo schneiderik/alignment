@@ -15,22 +15,9 @@ class Weapon {
     void update();
 
     void addGem(Gem&);
-    void setGemRows(int);
-    void setOrder(int);
-    void empty();
-    void clear();
-    void activate();
-
-    int getType();
-    Gem& getLastGem();
-    int getOrder();
-    int getEndOfRowX();
-
-    bool isFull();
-    bool isOverflowed();
-    bool isEmpty();
     bool isClearing();
-    bool isActive();
+    void setOrder(int);
+    int getEndOfRowX();
 
   private:
     int type_;
@@ -40,11 +27,25 @@ class Weapon {
     int gemCount_ = 0;
     Gem* lastGem_ = NULL;
 
-    void updateY_();
-    void updateClearing_();
-
-    bool lastGemsMatch_();
+    void setGemRows_(int);
+    void clearGems_();
+    void popLastGem_();
     void popLastGems_();
+
+    void empty_();
+    void clear_();
+    void activate_();
+    void adjustY_();
+
+    bool isFull_();
+    bool isOverflowed_();
+    bool isEmpty_();
+    bool isActive_();
+    bool isMisaligned_();
+    bool isMatchable_();
+    bool isCleared_();
+    bool lastGemsMatch_();
+    bool gemsOutOfOrder_();
 
     void renderIcon_(bool);
     void renderDivider_();
