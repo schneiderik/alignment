@@ -2,7 +2,7 @@
 #include "../../Game.h"
 #include "../entities/Gem.h"
 #include "../entities/Weapon.h"
-#include "../entities/Preview.h"
+#include "../battle/Preview.h"
 
 GemManager::GemManager() {
   firstAvailable_ = &gems_[0];

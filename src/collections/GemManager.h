@@ -3,7 +3,7 @@
 
 #include "../../global.h"
 #include "../entities/Gem.h"
-#include "../entities/Preview.h"
+#include "../battle/Preview.h"
 
 class GemManager {
   public:
