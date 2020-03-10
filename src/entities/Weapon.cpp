@@ -87,7 +87,7 @@ void Weapon::clear_() {
   player->takeDamage();
 }
 
-int Weapon::getEndOfRowX() { return gemXOffsets[gemCount_]; }
+int Weapon::getEndOfRowX() { return Gem::X_OFFSETS[gemCount_]; }
 
 bool Weapon::isMisaligned_() { return y_ != Weapon::Y_OFFSETS[order_]; }
 bool Weapon::isFull_() { return gemCount_ == Weapon::GEMS_MAX - 1; }

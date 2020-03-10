@@ -8,3 +8,4 @@ Game* game;
 Player* player;
 Enemy* enemy;
 WeaponManager* weaponManager;
+GemManager* gemManager;

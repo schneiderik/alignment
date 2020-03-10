@@ -16,7 +16,7 @@ bool Preview::isEmpty() {
 }
 
 void Preview::populate_() {
-  Gem* gem = game->gems.create();
+  Gem* gem = gemManager->create();
 
   gem->init(randomEmptyRow_());
 

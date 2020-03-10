@@ -32,8 +32,6 @@ class Game {
     void goToWinView();
     void goToLoseView();
 
-    GemManager gems;
-
   private:
     int state_ = GAME_STATE_TITLE;
 

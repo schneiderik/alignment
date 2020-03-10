@@ -3,18 +3,12 @@
 
 #include "../../global.h"
 
-#define GEM_STATE_INACTIVE 0
-#define GEM_STATE_FALLING 1
-#define GEM_STATE_STACKED 2
-#define GEM_STATE_CLEARING 3
-#define GEM_STATE_POPPING 4
-#define GEM_STATE_HIDDEN 5
-
-#define GEM_POPPING_ANIMATION_START_FRAME 5
-#define GEM_POPPING_ANIMATION_END_FRAME 7
-
 class Gem {
   public:
+    static const int COUNT = 5;
+    static const int Y_OFFSETS[4];
+    static const int X_OFFSETS[7];
+
     void init(int);   
     void render();
     void update();
@@ -48,11 +42,21 @@ class Gem {
     int getType() const;
 
   private:
+    static const int STATE_INACTIVE = 0;
+    static const int STATE_FALLING = 1;
+    static const int STATE_STACKED = 2;
+    static const int STATE_CLEARING = 3;
+    static const int STATE_POPPING = 4;
+    static const int STATE_HIDDEN = 5;
+
+    const int POPPING_ANIMATION_START_FRAME = 5;
+    const int POPPING_ANIMATION_END_FRAME = 7;
+
     int type_;
     int row_;
     int x_;
     int y_;
-    int state_ = GEM_STATE_HIDDEN;
+    int state_ = STATE_HIDDEN;
     int xVel_;
     int yVel_;
     Gem* next_;

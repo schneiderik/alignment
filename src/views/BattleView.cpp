@@ -12,7 +12,7 @@ void BattleView::handleInput() {
   if (arduboy.justPressed(DOWN_BUTTON)) weaponManager->incrementActiveIndex();
   if (arduboy.justPressed(A_BUTTON)) {
     weaponManager->swap();
-    game->gems.moveGemsInObstructedRows(weaponManager->activeIndex, weaponManager->activeIndex + 1);
+    gemManager->moveGemsInObstructedRows(weaponManager->activeIndex, weaponManager->activeIndex + 1);
   }
 }
 
@@ -21,7 +21,7 @@ void BattleView::update() {
   player->update();
   enemy->update();
   weaponManager->update();
-  game->gems.update();
+  gemManager->update();
 }
 
 void BattleView::render() {
@@ -31,13 +31,13 @@ void BattleView::render() {
   renderPreviewDivider();
   enemy->render();
   weaponManager->render();
-  game->gems.render();
+  gemManager->render();
   renderPaused();
 }
 
 void BattleView::reset() {
   player->resetHealth();
-  game->gems.reset();
+  gemManager->reset();
   weaponManager->reset();
 }
 

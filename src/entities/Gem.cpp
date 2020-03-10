@@ -4,12 +4,15 @@
 #include "Weapon.h"
 #include "../collections/WeaponManager.h"
 
+static const int Gem::Y_OFFSETS[4] = {14, 26, 38, 50};
+static const int Gem::X_OFFSETS[7] = {17, 29, 41, 53, 65, 77, 89};
+
 void Gem::init(int row) {
-  type_ = random(0, GEM_TYPE_COUNT);
+  type_ = random(0, COUNT);
   row_ = row;
   x_ = PREVIEW_GEM_X;
-  y_ = gemYOffsets[row];
-  state_ = GEM_STATE_INACTIVE;
+  y_ = Y_OFFSETS[row];
+  state_ = STATE_INACTIVE;
   next_ = NULL;
 }
 
@@ -19,17 +22,17 @@ void Gem::render() {
 
 void Gem::update() {
   switch (state_) {
-    case GEM_STATE_FALLING:
+    case STATE_FALLING:
       updateY();
       updateX();
       break;
-    case GEM_STATE_STACKED:
+    case STATE_STACKED:
       updateY();
       break;
-    case GEM_STATE_POPPING:
+    case STATE_POPPING:
       updatePop();
       break;
-    case GEM_STATE_CLEARING:
+    case STATE_CLEARING:
       updateClear();
       break;
   }
@@ -49,8 +52,8 @@ bool Gem::updateX() {
 }
 
 void Gem::updateY() {
-  if (y_ != gemYOffsets[row_]) {
-    y_ += y_ < gemYOffsets[row_] ? 3 : -3;
+  if (y_ != Y_OFFSETS[row_]) {
+    y_ += y_ < Y_OFFSETS[row_] ? 3 : -3;
   }  
 }
 
@@ -71,7 +74,7 @@ bool Gem::updateClear() {
 
 void Gem::updatePop() {
   if (arduboy.everyXFrames(5)) {
-    if (type_ < GEM_POPPING_ANIMATION_END_FRAME) {
+    if (type_ < POPPING_ANIMATION_END_FRAME) {
       type_++;
     } else {
       hide();
@@ -100,36 +103,36 @@ void Gem::changeRowIfObstructed(int row1, int row2) {
 }
 
 void Gem::drop() {
-  state_ = GEM_STATE_FALLING;
+  state_ = STATE_FALLING;
 }
 
 void Gem::clear() {
   xVel_ = random(0, 3) - 1;
   yVel_ = random(0, 3) - 2;
-  state_ = GEM_STATE_CLEARING;
+  state_ = STATE_CLEARING;
 }
 
 void Gem::pop() {
-  type_ = GEM_POPPING_ANIMATION_START_FRAME;
-  state_ = GEM_STATE_POPPING;
+  type_ = POPPING_ANIMATION_START_FRAME;
+  state_ = STATE_POPPING;
 }
 
 void Gem::stack() {
-  state_ = GEM_STATE_STACKED;
+  state_ = STATE_STACKED;
   getWeapon().addGem(*this);
   player->addScore(10);
 }
 
 void Gem::hide() {
-  state_ = GEM_STATE_HIDDEN;
+  state_ = STATE_HIDDEN;
 }
 
-bool Gem::isInactive() { return state_ == GEM_STATE_INACTIVE; }
-bool Gem::isFalling() { return state_ == GEM_STATE_FALLING; }
-bool Gem::isStacked() { return state_ == GEM_STATE_STACKED; }
-bool Gem::isClearing() { return state_ == GEM_STATE_CLEARING; }
-bool Gem::isPopping() { return state_ == GEM_STATE_POPPING; }
-bool Gem::isHidden() { return state_ == GEM_STATE_HIDDEN; }
+bool Gem::isInactive() { return state_ == STATE_INACTIVE; }
+bool Gem::isFalling() { return state_ == STATE_FALLING; }
+bool Gem::isStacked() { return state_ == STATE_STACKED; }
+bool Gem::isClearing() { return state_ == STATE_CLEARING; }
+bool Gem::isPopping() { return state_ == STATE_POPPING; }
+bool Gem::isHidden() { return state_ == STATE_HIDDEN; }
 
 Gem* Gem::getNext() const { return next_; }
 void Gem::setNext(Gem* next) { next_ = next; }
