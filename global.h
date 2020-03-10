@@ -15,6 +15,7 @@ class Enemy;
 class Game;
 class Gem;
 class Weapon;
+class WeaponManager;
 
 #include "helpers.h"
 
@@ -22,8 +23,6 @@ class Weapon;
 #define INTERVAL_LENGTH 30
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
-#define WEAPON_COUNT 4
-#define WEAPON_GEMS_MAX 7
 #define GEM_TYPE_COUNT 5
 #define PREVIEW_GEM_X 92
 #define PREVIEW_THRESHOLD_X 89
@@ -32,12 +31,12 @@ class Weapon;
 #define NUMBER_HEIGHT 6
 #define SMALL_NUMBER_HEIGHT 5
 
-const int weaponYOffsets[WEAPON_COUNT] = {13, 25, 37, 49};
-const int gemYOffsets[WEAPON_COUNT] = {14, 26, 38, 50};
-const int gemXOffsets[WEAPON_GEMS_MAX + 1] = {17, 29, 41, 53, 65, 77, 89};
+const int gemYOffsets[4] = {14, 26, 38, 50};
+const int gemXOffsets[7] = {17, 29, 41, 53, 65, 77, 89};
 
 extern Game* game;
 extern Player* player;
 extern Enemy* enemy;
+extern WeaponManager* weaponManager;
 
 #endif

@@ -80,7 +80,7 @@ void Gem::updatePop() {
 }
 
 Weapon& Gem::getWeapon() {
-  return game->weapons.get(row_);
+  return weaponManager->get(row_);
 }
 
 bool Gem::atEndOfRowX() {

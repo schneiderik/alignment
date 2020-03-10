@@ -2,6 +2,7 @@
 #define WEAPON_MANAGER_H
 
 #include "../../global.h";
+#include "../entities/Weapon.h";
 
 #define ACTIVE_INDEX_MIN 0
 #define ACTIVE_INDEX_MAX 2
@@ -10,7 +11,7 @@ class WeaponManager {
   public:
     WeaponManager();
     
-    Weapon* weapons[WEAPON_COUNT];
+    Weapon* weapons[Weapon::COUNT];
     int activeIndex = ACTIVE_INDEX_MIN;
 
     void update();

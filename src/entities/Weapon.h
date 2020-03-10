@@ -3,11 +3,12 @@
 
 #include "../../global.h";
 
-#define WEAPON_STATE_ACTIVE 0
-#define WEAPON_STATE_CLEARING 1
-
 class Weapon {
   public:
+    static const int COUNT = 4;
+    static const int GEMS_MAX = 7;
+    static const int Y_OFFSETS[COUNT];
+
     Weapon(int i);
         
     void reset(int);
@@ -20,9 +21,12 @@ class Weapon {
     int getEndOfRowX();
 
   private:
+    static const int STATE_ACTIVE = 0;
+    static const int STATE_CLEARING = 1;
+
     int type_;
     int order_;
-    int state_ = WEAPON_STATE_ACTIVE;
+    int state_ = STATE_ACTIVE;
     int y_;
     int gemCount_ = 0;
     Gem* lastGem_ = NULL;

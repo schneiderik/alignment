@@ -1,6 +1,7 @@
 #include "global.h"
 #include "Game.h"
 #include "Player.h"
+#include "src/collections/WeaponManager.h"
 
 void setup() {
   arduboy.initRandomSeed();
@@ -10,6 +11,7 @@ void setup() {
   game = new Game();
   player = new Player();
   enemy = new Enemy();
+  weaponManager = new WeaponManager();
   
   arduboy.clear();
 }

@@ -32,7 +32,6 @@ class Game {
     void goToWinView();
     void goToLoseView();
 
-    WeaponManager weapons;
     GemManager gems;
 
   private:

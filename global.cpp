@@ -7,3 +7,4 @@ ArduboyTones sound(arduboy.audio.enabled);
 Game* game;
 Player* player;
 Enemy* enemy;
+WeaponManager* weaponManager;

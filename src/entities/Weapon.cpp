@@ -4,6 +4,8 @@
 #include "Gem.h"
 #include "../collections/WeaponManager.h"
 
+const int Weapon::Y_OFFSETS[Weapon::COUNT] = {13, 25, 37, 49};
+
 Weapon::Weapon(int i) {
   reset(i);
 }
@@ -11,19 +13,19 @@ Weapon::Weapon(int i) {
 void Weapon::reset(int order) {
   type_ = order;
   order_ = order;
-  y_ = weaponYOffsets[order];
+  y_ = Weapon::Y_OFFSETS[order];
   empty_();
 }
 
 void Weapon::update() {
   switch (state_) {
-    case WEAPON_STATE_ACTIVE:
+    case STATE_ACTIVE:
       if (lastGemsMatch_()) popLastGems_();
       if (isOverflowed_()) clear_();
       if (gemsOutOfOrder_()) setGemRows_(order_);
       if (isMisaligned_()) adjustY_();
       break;
-    case WEAPON_STATE_CLEARING:
+    case STATE_CLEARING:
       if (isCleared_()) {
         empty_();
         activate_();
@@ -76,24 +78,24 @@ void Weapon::clearGems_() {
 }
 
 void Weapon::setOrder(int order) { order_ = order; }
-void Weapon::activate_() { state_ = WEAPON_STATE_ACTIVE; }
+void Weapon::activate_() { state_ = STATE_ACTIVE; }
 void Weapon::empty_() { gemCount_ = 0; lastGem_ = NULL; }
-void Weapon::adjustY_() { y_ += y_ < weaponYOffsets[order_] ? 3 : -3; }
+void Weapon::adjustY_() { y_ += y_ < Weapon::Y_OFFSETS[order_] ? 3 : -3; }
 void Weapon::clear_() {
-  state_ = WEAPON_STATE_CLEARING;
+  state_ = STATE_CLEARING;
   clearGems_();
   player->takeDamage();
 }
 
 int Weapon::getEndOfRowX() { return gemXOffsets[gemCount_]; }
 
-bool Weapon::isMisaligned_() { return y_ != weaponYOffsets[order_]; }
-bool Weapon::isFull_() { return gemCount_ == WEAPON_GEMS_MAX - 1; }
-bool Weapon::isOverflowed_() { return gemCount_ == WEAPON_GEMS_MAX; }
+bool Weapon::isMisaligned_() { return y_ != Weapon::Y_OFFSETS[order_]; }
+bool Weapon::isFull_() { return gemCount_ == Weapon::GEMS_MAX - 1; }
+bool Weapon::isOverflowed_() { return gemCount_ == Weapon::GEMS_MAX; }
 bool Weapon::isEmpty_() { return gemCount_ == 0; }
 bool Weapon::isMatchable_() { return gemCount_ >= 2; }
-bool Weapon::isClearing() { return state_ == WEAPON_STATE_CLEARING; }
-bool Weapon::isActive_() { return state_ == WEAPON_STATE_ACTIVE; }
+bool Weapon::isClearing() { return state_ == STATE_CLEARING; }
+bool Weapon::isActive_() { return state_ == STATE_ACTIVE; }
 bool Weapon::lastGemsMatch_() { return isMatchable_() && lastGem_->getType() == lastGem_->getNext()->getType(); }
 bool Weapon::gemsOutOfOrder_() { return !isEmpty_() && lastGem_->getRow() != order_; }
 bool Weapon::isCleared_() { 

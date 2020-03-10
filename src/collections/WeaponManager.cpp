@@ -2,13 +2,13 @@
 #include "../entities/Weapon.h"
 
 WeaponManager::WeaponManager() {
-  for (int i = 0; i < WEAPON_COUNT; i++) weapons[i] = new Weapon(i); 
+  for (int i = 0; i < Weapon::COUNT; i++) weapons[i] = new Weapon(i); 
 }
 
 void WeaponManager::update() {
   state_ = STATE_ACTIVE;
 
-  for (int i = 0; i < WEAPON_COUNT; i++) {
+  for (int i = 0; i < Weapon::COUNT; i++) {
     Weapon& weapon = get(i);
 
     weapon.update();
@@ -18,12 +18,12 @@ void WeaponManager::update() {
 }
 
 void WeaponManager::render() {
-  for (int i = 0; i < WEAPON_COUNT; i++) get(i).render(i == activeIndex || i == activeIndex + 1);
+  for (int i = 0; i < Weapon::COUNT; i++) get(i).render(i == activeIndex || i == activeIndex + 1);
 }
 
 void WeaponManager::reset() {
   activeIndex = ACTIVE_INDEX_MIN;
-  for (int i = 0; i < WEAPON_COUNT; i++) get(i).reset(i);
+  for (int i = 0; i < Weapon::COUNT; i++) get(i).reset(i);
 }
 
 Weapon& WeaponManager::get(int i) {

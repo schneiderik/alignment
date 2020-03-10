@@ -1,6 +1,7 @@
 #include "Preview.h"
 #include "../collections/GemManager.h"
 #include "../../Game.h"
+#include "../entities/Weapon.h"
 
 void Preview::clear() {
   head_ = NULL;
@@ -27,7 +28,7 @@ void Preview::populate_() {
 }
 
 int Preview::randomEmptyRow_() {
-  int row = random(0, WEAPON_COUNT);
+  int row = random(0, Weapon::COUNT);
 
   return gemExistsInRow_(row) ? randomEmptyRow_() : row;
 }

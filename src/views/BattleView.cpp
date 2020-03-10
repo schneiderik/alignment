@@ -7,12 +7,12 @@
 
 void BattleView::handleInput() {
   if (arduboy.justPressed(RIGHT_BUTTON)) paused = !paused;
-  if (paused || game->weapons.isClearing()) return;
-  if (arduboy.justPressed(UP_BUTTON)) game->weapons.decrementActiveIndex();
-  if (arduboy.justPressed(DOWN_BUTTON)) game->weapons.incrementActiveIndex();
+  if (paused || weaponManager->isClearing()) return;
+  if (arduboy.justPressed(UP_BUTTON)) weaponManager->decrementActiveIndex();
+  if (arduboy.justPressed(DOWN_BUTTON)) weaponManager->incrementActiveIndex();
   if (arduboy.justPressed(A_BUTTON)) {
-    game->weapons.swap();
-    game->gems.moveGemsInObstructedRows(game->weapons.activeIndex, game->weapons.activeIndex + 1);
+    weaponManager->swap();
+    game->gems.moveGemsInObstructedRows(weaponManager->activeIndex, weaponManager->activeIndex + 1);
   }
 }
 
@@ -20,7 +20,7 @@ void BattleView::update() {
   if (paused) return;
   player->update();
   enemy->update();
-  game->weapons.update();
+  weaponManager->update();
   game->gems.update();
 }
 
@@ -30,7 +30,7 @@ void BattleView::render() {
   renderHealth();
   renderPreviewDivider();
   enemy->render();
-  game->weapons.render();
+  weaponManager->render();
   game->gems.render();
   renderPaused();
 }
@@ -38,7 +38,7 @@ void BattleView::render() {
 void BattleView::reset() {
   player->resetHealth();
   game->gems.reset();
-  game->weapons.reset();
+  weaponManager->reset();
 }
 
 void BattleView::renderTopBar() {
