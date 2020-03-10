@@ -1,16 +1,12 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "global.h"
-
 #include "src/views/TitleView.h"
 #include "src/views/InfoView.h"
 #include "src/views/QuestView.h"
 #include "src/views/BattleView.h"
 #include "src/views/WinView.h"
 #include "src/views/LoseView.h"
-
-#include "src/entities/Enemy.h"
 
 #include "src/collections/WeaponManager.h"
 #include "src/collections/GemManager.h"
@@ -27,9 +23,7 @@ class Game {
     void handleInput();
     void update();
     void render();
-
     void reset();
-    void resetBattle();
     
     void goToTitleView();
     void goToInfoView();
@@ -38,22 +32,18 @@ class Game {
     void goToWinView();
     void goToLoseView();
 
-    void handlePlayerDefeated();
-    void handleEnemyDefeated();
-  
-    int state = GAME_STATE_TITLE;
-    unsigned long int score;
-    int health = HEALTH_MAX;
-
     WeaponManager weapons;
     GemManager gems;
-    Enemy enemy;  
-    TitleView titleView;
-    BattleView battleView;
-    InfoView infoView;
-    QuestView questView;
-    WinView winView;
-    LoseView loseView;
+
+  private:
+    int state_ = GAME_STATE_TITLE;
+
+    TitleView titleView_;
+    BattleView battleView_;
+    InfoView infoView_;
+    QuestView questView_;
+    WinView winView_;
+    LoseView loseView_;
 };
 
 #endif

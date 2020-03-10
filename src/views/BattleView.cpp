@@ -1,7 +1,8 @@
 #include "BattleView.h"
 #include "../../Game.h"
+#include "../../Player.h"
+#include "../../Enemy.h"
 #include "../collections/WeaponManager.h"
-#include "../entities/Enemy.h"
 #include "../entities/Weapon.h"
 
 void BattleView::handleInput() {
@@ -17,22 +18,27 @@ void BattleView::handleInput() {
 
 void BattleView::update() {
   if (paused) return;
-  game->handlePlayerDefeated();
-  game->handleEnemyDefeated();
+  player->update();
+  enemy->update();
   game->weapons.update();
-  game->enemy.update();
   game->gems.update();
 }
 
 void BattleView::render() {
   renderTopBar();
-  renderNumberAlignRight(game->score, 126, 2, BLACK);
+  renderNumberAlignRight(player->getScore(), 126, 2, BLACK);
   renderHealth();
   renderPreviewDivider();
-  game->enemy.render();
+  enemy->render();
   game->weapons.render();
   game->gems.render();
   renderPaused();
+}
+
+void BattleView::reset() {
+  player->resetHealth();
+  game->gems.reset();
+  game->weapons.reset();
 }
 
 void BattleView::renderTopBar() {
@@ -40,12 +46,12 @@ void BattleView::renderTopBar() {
 }
 
 void BattleView::renderHealth() {
-  for (int i = 0; i < HEALTH_MAX; i++) {  
+  for (int i = 0; i < Player::HEALTH_MAX; i++) {  
     sprites.drawErase(
       2 + (i * (heartSprite[0] + 1)),
       2,
       heartSprite,
-      i < game->health ? 0 : 1
+      i < player->getHealth() ? 0 : 1
     );
   }  
 }

@@ -1,5 +1,6 @@
 #include "Weapon.h"
 #include "../../Game.h"
+#include "../../Player.h"
 #include "Gem.h"
 #include "../collections/WeaponManager.h"
 
@@ -53,8 +54,8 @@ void Weapon::popLastGem_() {
 void Weapon::popLastGems_() {
   for (int i = 0; i < 2; i++) popLastGem_();
 
-  game->score += 100;
-  game->enemy.takeDamage(5, type_);            
+  player->addScore(100);
+  enemy->takeDamage(5, type_);            
   confirmSound();
 }
 
@@ -83,8 +84,7 @@ void Weapon::adjustY_() { y_ += y_ < weaponYOffsets[order_] ? 3 : -3; }
 void Weapon::clear_() {
   state_ = WEAPON_STATE_CLEARING;
   clearGems_();
-  game->health--;
-  loseHeartSound();
+  player->takeDamage();
 }
 
 int Weapon::getEndOfRowX() { return gemXOffsets[gemCount_]; }

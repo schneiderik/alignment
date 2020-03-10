@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include "Game.h"
 
 const int Enemy::DATA[COUNT][DATA_LENGTH] = {
   {100, 0, 0, 0, 0},
@@ -55,6 +56,15 @@ void Enemy::initNext() {
 
 void Enemy::update() {
   if (!damageIndicatorAnimation_->isRunning()) damageIndicatorNum_ = 0;
+
+  if (isDead()) {
+    if (isLastEnemy()) {
+      game->goToWinView();
+    } else { 
+      initNext();
+      game->goToQuestView();
+    }
+  }
 
   flashAnimation_->update();
   shakeAnimation_->update();

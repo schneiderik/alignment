@@ -2,7 +2,7 @@
 #define QUEST_VIEW_H
 
 #include "../../global.h"
-#include "../entities/Enemy.h"
+#include "../../Enemy.h"
 #include "../animations/TranslateAnimation.h"
 
 class QuestView {

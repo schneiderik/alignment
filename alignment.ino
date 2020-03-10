@@ -1,5 +1,6 @@
 #include "global.h"
 #include "Game.h"
+#include "Player.h"
 
 void setup() {
   arduboy.initRandomSeed();
@@ -7,6 +8,8 @@ void setup() {
   arduboy.setFrameRate(FPS);
   
   game = new Game();
+  player = new Player();
+  enemy = new Enemy();
   
   arduboy.clear();
 }

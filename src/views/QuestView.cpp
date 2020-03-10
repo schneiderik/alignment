@@ -42,8 +42,8 @@ void QuestView::renderText_() {
 
 void QuestView::renderCursor_() {
   sprites.drawOverwrite(
-    getXData_(game->enemy.getType()) + 8,
-    getYData_(game->enemy.getType()) - 4 + bounceAnimation_->getValue(),
+    getXData_(enemy->getType()) + 8,
+    getYData_(enemy->getType()) - 4 + bounceAnimation_->getValue(),
     questCursorImage,
     0
   );  
@@ -65,9 +65,9 @@ void QuestView::renderEnemy_(int type) {
     getXData_(type),
     getYData_(type),
     questSprite,
-    game->enemy.getType() == type
+    enemy->getType() == type
       ? type
-      : type < game->enemy.getType()
+      : type < enemy->getType()
         ? GRAVE_INDEX
         : MYSTERY_INDEX
   );   

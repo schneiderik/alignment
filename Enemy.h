@@ -1,9 +1,9 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#include "../../global.h";
-#include "../animations/FlashAnimation.h";
-#include "../animations/TranslateAnimation.h";
+#include "global.h";
+#include "src/animations/FlashAnimation.h";
+#include "src/animations/TranslateAnimation.h";
 
 class Enemy {
   public:

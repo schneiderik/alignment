@@ -1,5 +1,6 @@
 #include "Gem.h"
 #include "../../Game.h"
+#include "../../Player.h"
 #include "Weapon.h"
 #include "../collections/WeaponManager.h"
 
@@ -117,7 +118,7 @@ void Gem::pop() {
 void Gem::stack() {
   state_ = GEM_STATE_STACKED;
   getWeapon().addGem(*this);
-  game->score += 10; 
+  player->addScore(10);
 }
 
 void Gem::hide() {
