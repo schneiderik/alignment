@@ -2,12 +2,13 @@
 #define Gem_H
 
 #include "../../global.h"
+#include "Weapon.h"
 
 class Gem {
   public:
     static const int COUNT = 5;
-    static const int Y_OFFSETS[4];
-    static const int X_OFFSETS[7];
+    static const int Y_OFFSETS[Weapon::COUNT];
+    static const int X_OFFSETS[Weapon::GEM_MAX];
 
     void init(int);   
     void render();

@@ -6,7 +6,7 @@
 class Weapon {
   public:
     static const int COUNT = 4;
-    static const int GEMS_MAX = 7;
+    static const int GEM_MAX = 7;
     static const int Y_OFFSETS[COUNT];
 
     Weapon(int i);

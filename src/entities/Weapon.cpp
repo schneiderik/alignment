@@ -90,8 +90,8 @@ void Weapon::clear_() {
 int Weapon::getEndOfRowX() { return Gem::X_OFFSETS[gemCount_]; }
 
 bool Weapon::isMisaligned_() { return y_ != Weapon::Y_OFFSETS[order_]; }
-bool Weapon::isFull_() { return gemCount_ == Weapon::GEMS_MAX - 1; }
-bool Weapon::isOverflowed_() { return gemCount_ == Weapon::GEMS_MAX; }
+bool Weapon::isFull_() { return gemCount_ == Weapon::GEM_MAX - 1; }
+bool Weapon::isOverflowed_() { return gemCount_ == Weapon::GEM_MAX; }
 bool Weapon::isEmpty_() { return gemCount_ == 0; }
 bool Weapon::isMatchable_() { return gemCount_ >= 2; }
 bool Weapon::isClearing() { return state_ == STATE_CLEARING; }

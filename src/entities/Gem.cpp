@@ -4,8 +4,8 @@
 #include "Weapon.h"
 #include "../collections/WeaponManager.h"
 
-static const int Gem::Y_OFFSETS[4] = {14, 26, 38, 50};
-static const int Gem::X_OFFSETS[7] = {17, 29, 41, 53, 65, 77, 89};
+static const int Gem::Y_OFFSETS[Weapon::COUNT] = {14, 26, 38, 50};
+static const int Gem::X_OFFSETS[Weapon::GEM_MAX] = {17, 29, 41, 53, 65, 77, 89};
 
 void Gem::init(int row) {
   type_ = random(0, COUNT);
