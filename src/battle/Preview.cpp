@@ -21,7 +21,6 @@ void Preview::populate_() {
 
   if (!isEmpty()) {
     gem->setNext(head_);
-    head_->setPrevious(gem);
   }
 
   head_ = gem;

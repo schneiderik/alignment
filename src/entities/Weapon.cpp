@@ -38,8 +38,6 @@ void Weapon::render(bool active) {
 }
 
 void Weapon::addGem(Gem& gem) {
-  lastGem_->setPrevious(&gem);
-  gem.setPrevious(NULL);
   gem.setNext(lastGem_);
   lastGem_ = &gem;
   gemCount_++;
