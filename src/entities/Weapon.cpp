@@ -40,14 +40,14 @@ void Weapon::render(bool active) {
 }
 
 void Weapon::addGem(Gem& gem) {
-  gem.setNext(lastGem_);
+  gem.setNextInContext(lastGem_);
   lastGem_ = &gem;
   gemCount_++;
 }
 
 void Weapon::popLastGem_() {
   lastGem_->pop();
-  lastGem_ = lastGem_->getNext();
+  lastGem_ = lastGem_->getNextInContext();
   gemCount_--;
 }
 
@@ -64,7 +64,7 @@ void Weapon::setGemRows_(int row) {
 
   while (gem != NULL) {
     gem->setRow(row);
-    gem = gem->getNext();
+    gem = gem->getNextInContext();
   }
 }
 
@@ -73,7 +73,7 @@ void Weapon::clearGems_() {
   
   while (gem != NULL) {
     gem->clear();
-    gem = gem->getNext();
+    gem = gem->getNextInContext();
   }
 }
 
@@ -96,14 +96,14 @@ bool Weapon::isEmpty_() { return gemCount_ == 0; }
 bool Weapon::isMatchable_() { return gemCount_ >= 2; }
 bool Weapon::isClearing() { return state_ == STATE_CLEARING; }
 bool Weapon::isActive_() { return state_ == STATE_ACTIVE; }
-bool Weapon::lastGemsMatch_() { return isMatchable_() && lastGem_->getType() == lastGem_->getNext()->getType(); }
+bool Weapon::lastGemsMatch_() { return isMatchable_() && lastGem_->getType() == lastGem_->getNextInContext()->getType(); }
 bool Weapon::gemsOutOfOrder_() { return !isEmpty_() && lastGem_->getRow() != order_; }
 bool Weapon::isCleared_() { 
   Gem* gem = lastGem_;
   
   while (gem != NULL) {
     if (gem->isClearing()) return false;
-    gem = gem->getNext();
+    gem = gem->getNextInContext();
   }
 
   return true;

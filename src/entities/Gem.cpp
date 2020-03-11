@@ -13,7 +13,8 @@ void Gem::init(int row) {
   x_ = PREVIEW_GEM_X;
   y_ = Y_OFFSETS[row];
   state_ = STATE_INACTIVE;
-  next_ = NULL;
+  nextInCollection_ = NULL;
+  nextInContext_ = NULL;
 }
 
 void Gem::render() {
@@ -134,8 +135,10 @@ bool Gem::isClearing() { return state_ == STATE_CLEARING; }
 bool Gem::isPopping() { return state_ == STATE_POPPING; }
 bool Gem::isHidden() { return state_ == STATE_HIDDEN; }
 
-Gem* Gem::getNext() const { return next_; }
-void Gem::setNext(Gem* next) { next_ = next; }
+Gem* Gem::getNextInCollection() const { return nextInCollection_; }
+void Gem::setNextInCollection(Gem* next) { nextInCollection_ = next; }
+Gem* Gem::getNextInContext() const { return nextInContext_; }
+void Gem::setNextInContext(Gem* next) { nextInContext_ = next; }
 int Gem::getRow() const { return row_; }
 void Gem::setRow(int row) { row_ = row; }
 int Gem::getType() const { return type_; }

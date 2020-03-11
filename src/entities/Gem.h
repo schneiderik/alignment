@@ -36,8 +36,10 @@ class Gem {
     void hide();
     void stack();
 
-    Gem* getNext() const;
-    void setNext(Gem*);
+    Gem* getNextInCollection() const;
+    void setNextInCollection(Gem*);
+    Gem* getNextInContext() const;
+    void setNextInContext(Gem*);
     int getRow() const;
     void setRow(int);
     int getType() const;
@@ -60,7 +62,8 @@ class Gem {
     int state_ = STATE_HIDDEN;
     int xVel_;
     int yVel_;
-    Gem* next_;
+    Gem* nextInCollection_;
+    Gem* nextInContext_;
 };
 
 #endif

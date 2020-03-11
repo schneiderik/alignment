@@ -21,7 +21,7 @@ void Preview::populate_() {
   gem->init(randomEmptyRow_());
 
   if (!isEmpty()) {
-    gem->setNext(head_);
+    gem->setNextInContext(head_);
   }
 
   head_ = gem;
@@ -38,7 +38,7 @@ bool Preview::gemExistsInRow_(int row) {
 
   while (gem != NULL) {
     if (gem->getRow() == row) return true;
-    gem = gem->getNext();
+    gem = gem->getNextInContext();
   }
 
   return false;
