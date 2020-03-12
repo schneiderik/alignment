@@ -5,27 +5,53 @@
 #include "../battle/Preview.h"
 
 GemManager::GemManager() {
-  firstAvailable_ = &gems_[0];
-
-  for (int i = 0; i < GEM_MANAGER_SIZE - 2; i++) {
-    gems_[i].setNextInCollection(&gems_[i + 1]);
-  }
+  reset();
 }
 
 Gem* GemManager::create() {
-  if (firstAvailable_ == NULL) return;
+  if (firstInactive_ == NULL) return;
   
-  Gem* newGem = firstAvailable_;
-  firstAvailable_ = newGem->getNextInCollection();
-  newGem->setNextInCollection(NULL);
-  newGem->setNextInContext(NULL);
+  Gem* gem = getFirstInactive();
+  setFirstActive(gem);
 
-  return newGem;
+  return gem;
 }
 
-void GemManager::remove(Gem& gem) {
-  gem.setNextInCollection(firstAvailable_);
-  firstAvailable_ = &gem; 
+void GemManager::setFirstActive(Gem* gem) {
+  gem->setNextInCollection(firstActive_);
+  gem->setNextInContext(NULL);
+
+  firstActive_ = gem;
+}
+
+Gem* GemManager::getFirstInactive() {
+  Gem* gem = firstInactive_;
+
+  firstInactive_ = firstInactive_->getNextInCollection();
+
+  return gem;
+}
+
+void GemManager::remove(Gem* gem) { 
+  Gem* previousGem = NULL;
+  Gem* currentGem = firstActive_;
+
+  while (currentGem != NULL) {
+    if (currentGem == gem) {
+      if (previousGem != NULL) {
+        previousGem->setNextInCollection(currentGem->getNextInCollection());
+      } else {
+        firstActive_ = currentGem->getNextInCollection();
+      }
+
+      currentGem->setNextInCollection(firstInactive_);
+      firstInactive_ = currentGem;
+      return;
+    }
+
+    previousGem = currentGem;
+    currentGem = currentGem->getNextInCollection();
+  }
 }
 
 bool GemManager::hasClearingGems() {
@@ -52,23 +78,35 @@ void GemManager::reset() {
   belowPreviewThresholdCount_ = 0;
   preview_.clear();
 
-  for (int i = 0; i < GEM_MANAGER_SIZE; i++) {
-    Gem& gem = gems_[i];
-    gem.hide();
+  firstInactive_ = &gems_[0];
+  firstActive_ = NULL;
+
+  for (int i = 0; i < GEM_MANAGER_SIZE - 2; i++) {
+    gems_[i].setNextInCollection(&gems_[i + 1]);
+    gems_[i].setNextInContext(NULL);
   }
+
+  gems_[GEM_MANAGER_SIZE - 1].setNextInCollection(NULL);
+  gems_[GEM_MANAGER_SIZE - 1].setNextInContext(NULL);
 }
 
 void GemManager::render() {
-  for (int i = 0; i < GEM_MANAGER_SIZE; i++) {
-    Gem& gem = gems_[i];
-    if (!gem.isHidden()) gem.render();
+  Gem* currentGem = firstActive_;
+
+  while (currentGem != NULL) {
+    currentGem->render();
+
+    currentGem = currentGem->getNextInCollection();
   }
 }
 
 void GemManager::moveGemsInObstructedRows(int row1, int row2) {
-  for(int i = 0; i < GEM_MANAGER_SIZE; i++) {
-    Gem& gem = gems_[i];
-    if (gem.isFalling()) gem.changeRowIfObstructed(row1, row2);
+  Gem* currentGem = firstActive_;
+
+  while (currentGem != NULL) {
+    if (currentGem->isFalling()) currentGem->changeRowIfObstructed(row1, row2);
+
+    currentGem = currentGem->getNextInCollection();
   }
 }
 
@@ -79,17 +117,20 @@ void GemManager::update() {
 void GemManager::updateClearing() {
   int newClearingGemCount = 0;
     
-  for (int i = 0; i < GEM_MANAGER_SIZE; i++) {
-    Gem& gem = gems_[i];
+  Gem* currentGem = firstActive_;
+  Gem* nextGem = NULL;
 
-    if (gem.isHidden()) continue;
-
-    if (gem.isClearing()) {
-      gem.update();
+  while (currentGem != NULL) {
+    if (currentGem->isClearing()) {
+      currentGem->update();
       newClearingGemCount++;
     }
 
-    if (gem.isHidden()) remove(gem);
+    nextGem = currentGem->getNextInCollection();
+
+    if (currentGem->isHidden()) remove(currentGem);
+    
+    currentGem = nextGem;
   }
   
   clearingGemCount_ = newClearingGemCount;
@@ -102,30 +143,33 @@ void GemManager::updateFalling() {
   
   if (shouldCreateGems()) preview_.populate(2);
   
-  for (int i = 0; i < GEM_MANAGER_SIZE; i++) {
-    Gem& gem = gems_[i];
+  Gem* currentGem = firstActive_;
+  Gem* nextGem = NULL;
 
-    if (gem.isHidden()) continue;
-    
-    gem.update();
-    
-    if (gem.isInactive()) {
+  while (currentGem != NULL) {
+    currentGem->update();
+
+    if (currentGem->isInactive()) {
       if (!hasFallingGems()) {
-        gem.drop();
+        currentGem->drop();
         newFallingGemCount++;
         preview_.clear();
       }
-    } else if (gem.isFalling()) {
+    } else if (currentGem->isFalling()) {
       newFallingGemCount++;
       
-      if (gem.belowPreviewThreshold()) {
+      if (currentGem->belowPreviewThreshold()) {
         newBelowPreviewThresholdCount++;
       }
-    } else if (gem.isClearing()) {
+    } else if (currentGem->isClearing()) {
       newClearingGemCount++;
     }
 
-    if (gem.isHidden()) remove(gem);
+    nextGem = currentGem->getNextInCollection();
+
+    if (currentGem->isHidden()) remove(currentGem);
+    
+    currentGem = nextGem;
   }
   
   clearingGemCount_ = newClearingGemCount;

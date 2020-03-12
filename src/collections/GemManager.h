@@ -10,10 +10,12 @@ class GemManager {
     GemManager();
 
     Gem* create();
+    void setFirstActive(Gem*);
+    Gem* getFirstInactive();
     void update();
     void updateClearing();
     void updateFalling();
-    void remove(Gem&);
+    void remove(Gem*);
     void render();
     void reset();
 
@@ -26,8 +28,9 @@ class GemManager {
   private:
     static const int GEM_MANAGER_SIZE = 30;
     Gem gems_[GEM_MANAGER_SIZE];
-    Gem* firstAvailable_;
-    
+    Gem* firstInactive_;
+    Gem* firstActive_;
+
     int fallingGemCount_;
     int belowPreviewThresholdCount_;
     int clearingGemCount_;

@@ -13,8 +13,6 @@ void Gem::init(int row) {
   x_ = PREVIEW_GEM_X;
   y_ = Y_OFFSETS[row];
   state_ = STATE_INACTIVE;
-  nextInCollection_ = NULL;
-  nextInContext_ = NULL;
 }
 
 void Gem::render() {

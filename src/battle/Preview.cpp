@@ -19,10 +19,7 @@ void Preview::populate_() {
   Gem* gem = gemManager->create();
 
   gem->init(randomEmptyRow_());
-
-  if (!isEmpty()) {
-    gem->setNextInContext(head_);
-  }
+  gem->setNextInContext(head_);
 
   head_ = gem;
 }
