@@ -4,6 +4,7 @@
 #include "../../global.h"
 #include "../entities/Gem.h"
 #include "../battle/Preview.h"
+#include "../battle/FallingGems.h"
 
 class GemManager {
   public:
@@ -31,11 +32,11 @@ class GemManager {
     Gem* firstInactive_;
     Gem* firstActive_;
 
-    int fallingGemCount_;
     int belowPreviewThresholdCount_;
     int clearingGemCount_;
 
     Preview preview_;
+    FallingGems fallingGems_;
 };
 
 #endif

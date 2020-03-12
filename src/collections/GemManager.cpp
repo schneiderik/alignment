@@ -58,24 +58,9 @@ bool GemManager::hasClearingGems() {
   return clearingGemCount_ > 0;
 }
 
-bool GemManager::hasFallingGems() {
-  return fallingGemCount_ > 0;
-}
-
-bool GemManager::fallingGemsAreBelowPreviewThreshold() {
-  return fallingGemCount_ == belowPreviewThresholdCount_;
-}
-
-bool GemManager::shouldCreateGems() {
-  return !hasClearingGems()
-    && preview_.isEmpty()
-    && fallingGemsAreBelowPreviewThreshold();
-}
-
 void GemManager::reset() {
   clearingGemCount_ = 0;
-  fallingGemCount_ = 0;
-  belowPreviewThresholdCount_ = 0;
+  fallingGems_.clear();
   preview_.clear();
 
   firstInactive_ = &gems_[0];
@@ -101,13 +86,7 @@ void GemManager::render() {
 }
 
 void GemManager::moveGemsInObstructedRows(int row1, int row2) {
-  Gem* currentGem = firstActive_;
-
-  while (currentGem != NULL) {
-    if (currentGem->isFalling()) currentGem->changeRowIfObstructed(row1, row2);
-
-    currentGem = currentGem->getNextInCollection();
-  }
+  fallingGems_.moveGemsInObstructedRows(row1, row2);
 }
 
 void GemManager::update() {
@@ -138,10 +117,15 @@ void GemManager::updateClearing() {
 
 void GemManager::updateFalling() {
   int newClearingGemCount = 0;
-  int newFallingGemCount = 0;
-  int newBelowPreviewThresholdCount = 0;
   
-  if (shouldCreateGems()) preview_.populate(2);
+  if (preview_.isEmpty() && fallingGems_.belowPreviewThreshold()) {
+    preview_.populate(2);
+  }
+
+  if (!preview_.isEmpty() && fallingGems_.isEmpty()) {
+    fallingGems_.add(preview_.getHead());
+    preview_.clear();
+  }
   
   Gem* currentGem = firstActive_;
   Gem* nextGem = NULL;
@@ -149,19 +133,7 @@ void GemManager::updateFalling() {
   while (currentGem != NULL) {
     currentGem->update();
 
-    if (currentGem->isInactive()) {
-      if (!hasFallingGems()) {
-        currentGem->drop();
-        newFallingGemCount++;
-        preview_.clear();
-      }
-    } else if (currentGem->isFalling()) {
-      newFallingGemCount++;
-      
-      if (currentGem->belowPreviewThreshold()) {
-        newBelowPreviewThresholdCount++;
-      }
-    } else if (currentGem->isClearing()) {
+    if (currentGem->isClearing()) {
       newClearingGemCount++;
     }
 
@@ -173,6 +145,4 @@ void GemManager::updateFalling() {
   }
   
   clearingGemCount_ = newClearingGemCount;
-  fallingGemCount_ = newFallingGemCount;
-  belowPreviewThresholdCount_ = newBelowPreviewThresholdCount;
 }

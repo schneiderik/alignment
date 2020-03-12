@@ -1,10 +1,12 @@
 #include "Preview.h"
 #include "../collections/GemManager.h"
-#include "../../Game.h"
-#include "../entities/Weapon.h"
 
 void Preview::clear() {
   head_ = NULL;
+}
+
+Gem* Preview::getHead() {
+  return head_;
 }
 
 void Preview::populate(int num) {

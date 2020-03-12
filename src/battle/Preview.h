@@ -8,6 +8,7 @@ class Preview {
     void clear();
     void populate(int);
     bool isEmpty();
+    Gem* getHead();
 
   private:
     Gem* head_ = NULL;
