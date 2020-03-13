@@ -1,4 +1,5 @@
 #include "GemManager.h"
+#include "WeaponManager.h"
 #include "../../Game.h"
 #include "../entities/Gem.h"
 #include "../entities/Weapon.h"
@@ -54,12 +55,7 @@ void GemManager::remove(Gem* gem) {
   }
 }
 
-bool GemManager::hasClearingGems() {
-  return clearingGemCount_ > 0;
-}
-
 void GemManager::reset() {
-  clearingGemCount_ = 0;
   fallingGems_.clear();
   preview_.clear();
 
@@ -90,19 +86,23 @@ void GemManager::moveGemsInObstructedRows(int row1, int row2) {
 }
 
 void GemManager::update() {
-  hasClearingGems() ? updateClearing() : updateFalling();
-}
+  if(!weaponManager->isClearing()) {
+    if (preview_.isEmpty() && fallingGems_.belowPreviewThreshold()) {
+      preview_.populate(2);
+    }
 
-void GemManager::updateClearing() {
-  int newClearingGemCount = 0;
-    
+    if (!preview_.isEmpty() && fallingGems_.isEmpty()) {
+      fallingGems_.add(preview_.getHead());
+      preview_.clear();
+    }
+  }
+  
   Gem* currentGem = firstActive_;
   Gem* nextGem = NULL;
 
   while (currentGem != NULL) {
-    if (currentGem->isClearing()) {
+    if (!weaponManager->isClearing() || currentGem->isClearing()) {
       currentGem->update();
-      newClearingGemCount++;
     }
 
     nextGem = currentGem->getNextInCollection();
@@ -111,38 +111,4 @@ void GemManager::updateClearing() {
     
     currentGem = nextGem;
   }
-  
-  clearingGemCount_ = newClearingGemCount;
-}
-
-void GemManager::updateFalling() {
-  int newClearingGemCount = 0;
-  
-  if (preview_.isEmpty() && fallingGems_.belowPreviewThreshold()) {
-    preview_.populate(2);
-  }
-
-  if (!preview_.isEmpty() && fallingGems_.isEmpty()) {
-    fallingGems_.add(preview_.getHead());
-    preview_.clear();
-  }
-  
-  Gem* currentGem = firstActive_;
-  Gem* nextGem = NULL;
-
-  while (currentGem != NULL) {
-    currentGem->update();
-
-    if (currentGem->isClearing()) {
-      newClearingGemCount++;
-    }
-
-    nextGem = currentGem->getNextInCollection();
-
-    if (currentGem->isHidden()) remove(currentGem);
-    
-    currentGem = nextGem;
-  }
-  
-  clearingGemCount_ = newClearingGemCount;
 }
