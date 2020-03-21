@@ -3,7 +3,7 @@
 
 #include "../../global.h"
 #include "../../Enemy.h"
-#include "../animations/TranslateAnimation.h"
+#include "../animations/Animation.h"
 
 class QuestView {
   public:
@@ -36,7 +36,7 @@ class QuestView {
     void renderEnemies_();
     void renderEnemy_(int);
 
-    TranslateAnimation* bounceAnimation_;
+    Animation* bounceAnimation_;
 };
 
 #endif

@@ -10,19 +10,15 @@ const int Enemy::DATA[COUNT][DATA_LENGTH] = {
 };
 
 Enemy::Enemy() {
-  idleAnimation_ = new TranslateAnimation(
-    0,
-    3,
-    30,
-    false
-  );
-
-  flashAnimation_ = new FlashAnimation(
+  flashAnimation_ = new Animation(
+    FLASH_ANIMATION_LOWER_LIMIT,
+    FLASH_ANIMATION_UPPER_LIMIT,
+    FLASH_ANIMATION_DURATION,
     FLASH_ANIMATION_COUNT,
-    FLASH_ANIMATION_DURATION
+    FLASH_ANIMATION_LOOP
   );
 
-  shakeAnimation_ = new TranslateAnimation(
+  shakeAnimation_ = new Animation(
     SHAKE_ANIMATION_LOWER_LIMIT,
     SHAKE_ANIMATION_UPPER_LIMIT,
     SHAKE_ANIMATION_COUNT,
@@ -30,12 +26,19 @@ Enemy::Enemy() {
     SHAKE_ANIMATION_LOOP
   );
 
-  damageIndicatorAnimation_ = new TranslateAnimation(
+  damageIndicatorAnimation_ = new Animation(
     DAMAGE_INDICATOR_ANIMATION_LOWER_LIMIT,
     DAMAGE_INDICATOR_ANIMATION_UPPER_LIMIT,
     DAMAGE_INDICATOR_ANIMATION_COUNT,
     DAMAGE_INDICATOR_ANIMATION_DURATION,
     DAMAGE_INDICATOR_ANIMATION_LOOP
+  );
+
+  idleAnimation_ = new Animation(
+    IDLE_ANIMATION_LOWER_LIMIT,
+    IDLE_ANIMATION_UPPER_LIMIT,
+    IDLE_ANIMATION_SPEED,
+    IDLE_ANIMATION_LOOP
   );
 
   init(SKELETON);
@@ -48,6 +51,7 @@ void Enemy::init(int type) {
   flashAnimation_->reset();
   shakeAnimation_->reset();
   damageIndicatorAnimation_->reset();
+  idleAnimation_->reset();
 }
 
 void Enemy::initNext() {
@@ -104,7 +108,7 @@ bool Enemy::isLastEnemy() {
 }
 
 void Enemy::renderPortrait_() {
-  if (flashAnimation_->isVisible()) {
+  if (flashAnimation_->getValue() == 0) {
     if (type_ < ORC) {
       sprites.drawOverwrite(
         PORTRAIT_X + shakeAnimation_->getValue(),

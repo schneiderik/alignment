@@ -1,12 +1,12 @@
-#ifndef TRANSLATE_ANIMATION_H
-#define TRANSLATE_ANIMATION_H
+#ifndef ANIMATION_H
+#define ANIMATION_H
 
 #include "../../global.h"
 
-class TranslateAnimation {
+class Animation {
   public:
-    TranslateAnimation(int, int, int, bool);
-    TranslateAnimation(int, int, int, int, bool);
+    Animation(int, int, int, bool);
+    Animation(int, int, int, int, bool);
 
     void run();
     void reset();

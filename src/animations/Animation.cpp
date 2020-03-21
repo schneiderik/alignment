@@ -1,8 +1,8 @@
-#include "TranslateAnimation.h"
+#include "Animation.h"
 
 // loop false: lower limit to upper limit forever at X speed
 // loop true: loop through limits forever at X speed
-TranslateAnimation::TranslateAnimation(
+Animation::Animation(
   int lowerLimit,
   int upperLimit,
   int speed,
@@ -20,7 +20,7 @@ TranslateAnimation::TranslateAnimation(
 
 // loop false: lower limit to upper limit X times over duration
 // loop true: loop through limits X times over duration
-TranslateAnimation::TranslateAnimation(
+Animation::Animation(
   int lowerLimit,
   int upperLimit,
   int count,
@@ -39,19 +39,19 @@ TranslateAnimation::TranslateAnimation(
   currentInterval_ = intervalCount_;
 };
 
-void TranslateAnimation::run() {
+void Animation::run() {
   currentInterval_ = 0;
   value_ = 0;
   velocity_ = initialVelocity_;
 }
 
-void TranslateAnimation::reset() {
+void Animation::reset() {
   currentInterval_ = intervalCount_;
   value_ = 0;
   velocity_ = initialVelocity_;
 }
 
-void TranslateAnimation::update() {
+void Animation::update() {
   if (intervalCount_ != 0 && currentInterval_ == intervalCount_) return;
 
   if (arduboy.everyXFrames(intervalLength_)) {
@@ -71,27 +71,27 @@ void TranslateAnimation::update() {
   }  
 }
 
-bool TranslateAnimation::isRunning() {
+bool Animation::isRunning() {
   if (intervalCount_ == 0) return true;
 
   return currentInterval_ < intervalCount_;
 }
 
-int TranslateAnimation::getValue() {
+int Animation::getValue() {
   return value_;
 }
 
-bool TranslateAnimation::isAtLimit_() {
+bool Animation::isAtLimit_() {
   return isAtUpperLimit_() || isAtLowerLimit_();
 }
 
-bool TranslateAnimation::isAtUpperLimit_() {
+bool Animation::isAtUpperLimit_() {
   return upperLimit_ > lowerLimit_
     ? value_ >= upperLimit_
     : value_ <= upperLimit_;
 }
 
-bool TranslateAnimation::isAtLowerLimit_() {
+bool Animation::isAtLowerLimit_() {
   return upperLimit_ > lowerLimit_
     ? value_ <= lowerLimit_
     : value_ >= lowerLimit_;

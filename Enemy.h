@@ -2,8 +2,7 @@
 #define ENEMY_H
 
 #include "global.h";
-#include "src/animations/FlashAnimation.h";
-#include "src/animations/TranslateAnimation.h";
+#include "src/animations/Animation.h";
 
 class Enemy {
   public:
@@ -43,20 +42,32 @@ class Enemy {
     const int HEALTH_BAR_Y = 62;
     const int HEALTH_BAR_HEIGHT = 1;
     const int HEALTH_BAR_WIDTH_MAX = 20;
-    const int FLASH_ANIMATION_COUNT = 3;
+
+    const int FLASH_ANIMATION_LOWER_LIMIT = 0;
+    const int FLASH_ANIMATION_UPPER_LIMIT = 1;
     const int FLASH_ANIMATION_DURATION = 20;
+    const int FLASH_ANIMATION_COUNT = 3;
+    const bool FLASH_ANIMATION_LOOP = false;
+    
     const int SHAKE_ANIMATION_LOWER_LIMIT = -2;
     const int SHAKE_ANIMATION_UPPER_LIMIT = 2;
     const int SHAKE_ANIMATION_DURATION = 40;
     const int SHAKE_ANIMATION_COUNT = 2;
-    const int SHAKE_ANIMATION_LOOP = true;
+    const bool SHAKE_ANIMATION_LOOP = true;
+
     const int DAMAGE_INDICATOR_ANIMATION_LOWER_LIMIT = 0;
     const int DAMAGE_INDICATOR_ANIMATION_UPPER_LIMIT = -4;
     const int DAMAGE_INDICATOR_ANIMATION_DURATION = 20;
     const int DAMAGE_INDICATOR_ANIMATION_COUNT = 1;
-    const int DAMAGE_INDICATOR_ANIMATION_LOOP = false;
+    const bool DAMAGE_INDICATOR_ANIMATION_LOOP = false;
+
     const int DAMAGE_INDICATOR_Y = 46;
     const int DAMAGE_INDICATOR_X = 116;
+
+    const int IDLE_ANIMATION_LOWER_LIMIT = 0;
+    const int IDLE_ANIMATION_UPPER_LIMIT = 3;
+    const int IDLE_ANIMATION_SPEED = 30;
+    const bool IDLE_ANIMATION_LOOP = false;
 
     void renderPortrait_();
     void renderHealthBar_();
@@ -65,10 +76,10 @@ class Enemy {
     
     int getHealthBarWidth_();
 
-    FlashAnimation* flashAnimation_;
-    TranslateAnimation* shakeAnimation_;
-    TranslateAnimation* damageIndicatorAnimation_;
-    TranslateAnimation* idleAnimation_;
+    Animation* flashAnimation_;
+    Animation* shakeAnimation_;
+    Animation* damageIndicatorAnimation_;
+    Animation* idleAnimation_;
 
     int type_;
     int health_;
