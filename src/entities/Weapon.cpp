@@ -5,7 +5,7 @@
 #include "../collections/GemManager.h"
 
 static const int Weapon::Y_OFFSETS[Weapon::COUNT] = {13, 25, 37, 49};
-static const int Weapon::GEM_X_OFFSETS[Weapon::GEM_MAX] = {17, 29, 41, 53, 65, 77, 89};
+static const int Weapon::GEM_X_OFFSETS[Weapon::GEM_MAX] = {16, 28, 40, 52, 64, 76, 88};
 
 Weapon::Weapon(int order) {
   reset(order);
@@ -46,7 +46,7 @@ void Weapon::updateY_() {
     y_ += y_ < Weapon::Y_OFFSETS[order_] ? MOVE_Y_INCREMENT : -MOVE_Y_INCREMENT;
 
     while (currentGem != NULL) {
-      currentGem->setY(y_ + 1);
+      currentGem->setY(y_);
 
       currentGem = currentGem->getNext();
     }
@@ -68,7 +68,7 @@ void Weapon::updateGemStack_() {
 void Weapon::updateFallingGem_() {
   if (!hasFallingGem()) return;
 
-  if (fallingGem_->getY() != Weapon::Y_OFFSETS[order_] + 1) fallingGem_->setY(y_ + 1);
+  if (fallingGem_->getY() != Weapon::Y_OFFSETS[order_]) fallingGem_->setY(y_);
 
   fallingGem_->update();  
 
@@ -81,8 +81,8 @@ void Weapon::render(bool active) {
   renderIcon_(active);
   renderDivider_();
   renderGemStack_();
-  if (hasFallingGem()) fallingGem_->render();
   if (hasPreviewGem()) previewGem_->render();
+  if (hasFallingGem()) fallingGem_->render();
 }
 
 void Weapon::renderGemStack_() {
@@ -109,7 +109,7 @@ void Weapon::renderDivider_() {
 
 void Weapon::createPreviewGem() {
   previewGem_ = gemManager->create();
-  previewGem_->init(PREVIEW_GEM_X, y_ + 1);
+  previewGem_->init(PREVIEW_GEM_X, y_);
 }
 
 void Weapon::dropPreviewGem() {
