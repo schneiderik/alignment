@@ -11,6 +11,7 @@ const int QuestView::DATA[Enemy::COUNT][DATA_LENGTH] = {
 
 QuestView::QuestView() {
   bounceAnimation_ = new Animation(
+    BOUNCE_ANIMATION_INITIAL_VALUE,
     BOUNCE_ANIMATION_LOWER_LIMIT,
     BOUNCE_ANIMATION_UPPER_LIMIT,
     BOUNCE_ANIMATION_SPEED,

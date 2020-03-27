@@ -3,11 +3,13 @@
 // loop false: lower limit to upper limit forever at X speed
 // loop true: loop through limits forever at X speed
 Animation::Animation(
+  int initialValue,
   int lowerLimit,
   int upperLimit,
   int speed,
   bool loop
 ):
+  initialValue_(initialValue),
   lowerLimit_(lowerLimit),
   upperLimit_(upperLimit),
   intervalCount_(0),
@@ -21,12 +23,14 @@ Animation::Animation(
 // loop false: lower limit to upper limit X times over duration
 // loop true: loop through limits X times over duration
 Animation::Animation(
+  int initialValue,
   int lowerLimit,
   int upperLimit,
   int count,
   int duration,
   bool loop
 ):
+  initialValue_(initialValue),
   lowerLimit_(lowerLimit),
   upperLimit_(upperLimit),
   count_(count),
@@ -41,13 +45,13 @@ Animation::Animation(
 
 void Animation::run() {
   currentInterval_ = 0;
-  value_ = 0;
+  value_ = initialValue_;
   velocity_ = initialVelocity_;
 }
 
 void Animation::reset() {
   currentInterval_ = intervalCount_;
-  value_ = 0;
+  value_ = initialValue_;
   velocity_ = initialVelocity_;
 }
 

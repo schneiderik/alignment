@@ -25,6 +25,7 @@ class QuestView {
     const int GRAVE_INDEX = 6;
     const int MYSTERY_INDEX = 5;
 
+    const int BOUNCE_ANIMATION_INITIAL_VALUE = 0;
     const int BOUNCE_ANIMATION_LOWER_LIMIT = -1;
     const int BOUNCE_ANIMATION_UPPER_LIMIT = 1;
     const int BOUNCE_ANIMATION_SPEED = 8;

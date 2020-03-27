@@ -11,6 +11,7 @@ const int Enemy::DATA[COUNT][DATA_LENGTH] = {
 
 Enemy::Enemy() {
   flashAnimation_ = new Animation(
+    FLASH_ANIMATION_INITIAL_VALUE,
     FLASH_ANIMATION_LOWER_LIMIT,
     FLASH_ANIMATION_UPPER_LIMIT,
     FLASH_ANIMATION_COUNT,
@@ -19,6 +20,7 @@ Enemy::Enemy() {
   );
 
   shakeAnimation_ = new Animation(
+    SHAKE_ANIMATION_INITIAL_VALUE,
     SHAKE_ANIMATION_LOWER_LIMIT,
     SHAKE_ANIMATION_UPPER_LIMIT,
     SHAKE_ANIMATION_COUNT,
@@ -27,6 +29,7 @@ Enemy::Enemy() {
   );
 
   damageIndicatorAnimation_ = new Animation(
+    DAMAGE_INDICATOR_ANIMATION_INITIAL_VALUE,
     DAMAGE_INDICATOR_ANIMATION_LOWER_LIMIT,
     DAMAGE_INDICATOR_ANIMATION_UPPER_LIMIT,
     DAMAGE_INDICATOR_ANIMATION_COUNT,
@@ -35,10 +38,20 @@ Enemy::Enemy() {
   );
 
   idleAnimation_ = new Animation(
+    IDLE_ANIMATION_INITIAL_VALUE,
     IDLE_ANIMATION_LOWER_LIMIT,
     IDLE_ANIMATION_UPPER_LIMIT,
     IDLE_ANIMATION_SPEED,
     IDLE_ANIMATION_LOOP
+  );
+
+  attackAnimation_ = new Animation(
+    ATTACK_ANIMATION_INITIAL_VALUE,
+    ATTACK_ANIMATION_LOWER_LIMIT,
+    ATTACK_ANIMATION_UPPER_LIMIT,
+    ATTACK_ANIMATION_COUNT,
+    ATTACK_ANIMATION_DURATION,
+    ATTACK_ANIMATION_LOOP
   );
 
   init(SKELETON);
@@ -59,7 +72,14 @@ void Enemy::initNext() {
 }
 
 void Enemy::update() {
+  attackAnimation_->update();
+  flashAnimation_->update();
+  shakeAnimation_->update();
+  damageIndicatorAnimation_->update();
+  idleAnimation_->update();
+
   if (!damageIndicatorAnimation_->isRunning()) damageIndicatorNum_ = 0;
+  if (arduboy.everyXFrames(1000)) attackAnimation_->run();
 
   if (isDead()) {
     if (isLastEnemy()) {
@@ -69,11 +89,6 @@ void Enemy::update() {
       game->goToQuestView();
     }
   }
-
-  flashAnimation_->update();
-  shakeAnimation_->update();
-  damageIndicatorAnimation_->update();
-  idleAnimation_->update();
 }
 
 void Enemy::render() {
@@ -107,6 +122,12 @@ bool Enemy::isLastEnemy() {
   return type_ == Enemy::LAST_ENEMY;
 }
 
+int Enemy::getFrame_() {
+  if (attackAnimation_->isRunning()) return attackAnimation_->getValue();
+  if (shakeAnimation_->isRunning()) return 9;
+  return idleAnimation_->getValue();
+}
+
 void Enemy::renderPortrait_() {
   if (flashAnimation_->getValue() == 0) {
     if (type_ < ORC) {
@@ -114,7 +135,7 @@ void Enemy::renderPortrait_() {
         PORTRAIT_X + shakeAnimation_->getValue(),
         PORTRAIT_Y,
         skeletonSprite,
-        shakeAnimation_->isRunning() ? 9 : idleAnimation_->getValue()
+        getFrame_()
       );
     } else {
       sprites.drawOverwrite(

@@ -5,8 +5,8 @@
 
 class Animation {
   public:
-    Animation(int, int, int, bool);
     Animation(int, int, int, int, bool);
+    Animation(int, int, int, int, int, bool);
 
     void run();
     void reset();
@@ -25,6 +25,7 @@ class Animation {
     int intervalCount_ = 0;
     int currentInterval_ = 0;
     int velocity_ = 0;
+    int initialValue_ = 0;
     int initialVelocity_ = 0;
     int upperLimit_ = 0;
     int lowerLimit_ = 0;
