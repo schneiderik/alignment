@@ -87,6 +87,7 @@ class Enemy {
     
     int getHealthBarWidth_();
     int getFrame_();
+    void setRandomAttackInterval_();
 
     Animation* flashAnimation_;
     Animation* shakeAnimation_;
@@ -98,6 +99,8 @@ class Enemy {
     int health_;
     int healthBarWidth_ = HEALTH_BAR_WIDTH_MAX;
     int damageIndicatorNum_ = 0;
+    int attackFrame_ = 0;
+    int attackInterval_ = 0;
 };
 
 #endif

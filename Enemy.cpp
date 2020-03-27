@@ -59,6 +59,8 @@ Enemy::Enemy() {
 
 void Enemy::init(int type) {
   type_ = type;
+  attackFrame_ = 0;
+  setRandomAttackInterval_();
   health_ = getHealthData_(type);
   healthBarWidth_ = HEALTH_BAR_WIDTH_MAX;
   flashAnimation_->reset();
@@ -71,6 +73,10 @@ void Enemy::initNext() {
   init(type_ + 1);
 }
 
+void Enemy::setRandomAttackInterval_() {
+  attackInterval_ = random(700, 1200);
+}
+
 void Enemy::update() {
   attackAnimation_->update();
   flashAnimation_->update();
@@ -79,7 +85,13 @@ void Enemy::update() {
   idleAnimation_->update();
 
   if (!damageIndicatorAnimation_->isRunning()) damageIndicatorNum_ = 0;
-  if (arduboy.everyXFrames(1000)) attackAnimation_->run();
+
+  attackFrame_++;
+  if (attackFrame_ == attackInterval_) {
+    attackAnimation_->run();
+    setRandomAttackInterval_();
+    attackFrame_ = 0;
+  }
 
   if (isDead()) {
     if (isLastEnemy()) {
