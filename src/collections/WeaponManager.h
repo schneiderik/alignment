@@ -4,32 +4,43 @@
 #include "../../global.h";
 #include "../entities/Weapon.h";
 
-#define ACTIVE_INDEX_MIN 0
-#define ACTIVE_INDEX_MAX 2
-
 class WeaponManager {
   public:
     WeaponManager();
-    
-    Weapon* weapons[Weapon::COUNT];
-    int activeIndex = ACTIVE_INDEX_MIN;
 
     void update();
     void render();
     void reset();
-    Weapon& get(int);
-    void incrementActiveIndex();
-    void decrementActiveIndex();
+    void incrementCursor();
+    void decrementCursor();
     void swap();
 
-    bool isClearing();
-    bool isActive();
-
   private:
-    const int STATE_ACTIVE = 0;
-    const int STATE_CLEARING = 1;
+    static const int STATE_DEFAULT = 0;
+    static const int STATE_PREVIEW_EMPTY = 1;
+    static const int STATE_READY_TO_DROP_PREVIEW = 2;
+    static const int STATE_CLEARING_GEMS = 3;
 
-    int state_ = STATE_ACTIVE;
+    static const int CURSOR_MIN = 0;
+    static const int CURSOR_MAX = 2;
+
+    int cursor_ = CURSOR_MIN;
+    int state_ = STATE_DEFAULT;
+
+    Weapon* weapons_[Weapon::COUNT];
+
+    void updateWeapons_();
+    void updateClearingWeapons_();
+
+    Weapon* getWeaponAtIndex_(int);
+    void dropPreviewGems_();
+    void populatePreviewGems_();
+    void populatePreviewGemForRandomWeapon_();
+
+    bool isReadyToPopulatePreview_();
+    bool isReadyToDropPreview_();
+    bool isClearing_();
+    bool isActiveWeapon_(int);
 };
 
 #endif

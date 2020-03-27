@@ -45,9 +45,9 @@ class Enemy {
 
     const int FLASH_ANIMATION_LOWER_LIMIT = 0;
     const int FLASH_ANIMATION_UPPER_LIMIT = 1;
-    const int FLASH_ANIMATION_DURATION = 20;
+    const int FLASH_ANIMATION_DURATION = 40;
     const int FLASH_ANIMATION_COUNT = 3;
-    const bool FLASH_ANIMATION_LOOP = false;
+    const bool FLASH_ANIMATION_LOOP = true;
     
     const int SHAKE_ANIMATION_LOWER_LIMIT = -2;
     const int SHAKE_ANIMATION_UPPER_LIMIT = 2;

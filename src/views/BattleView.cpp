@@ -1,19 +1,15 @@
 #include "BattleView.h"
-#include "../../Game.h"
 #include "../../Player.h"
 #include "../../Enemy.h"
 #include "../collections/WeaponManager.h"
-#include "../entities/Weapon.h"
+#include "../collections/GemManager.h"
 
 void BattleView::handleInput() {
   if (arduboy.justPressed(RIGHT_BUTTON)) paused = !paused;
-  if (paused || weaponManager->isClearing()) return;
-  if (arduboy.justPressed(UP_BUTTON)) weaponManager->decrementActiveIndex();
-  if (arduboy.justPressed(DOWN_BUTTON)) weaponManager->incrementActiveIndex();
-  if (arduboy.justPressed(A_BUTTON)) {
-    weaponManager->swap();
-    gemManager->moveGemsInObstructedRows(weaponManager->activeIndex, weaponManager->activeIndex + 1);
-  }
+  if (paused) return;
+  if (arduboy.justPressed(UP_BUTTON)) weaponManager->decrementCursor();
+  if (arduboy.justPressed(DOWN_BUTTON)) weaponManager->incrementCursor();
+  if (arduboy.justPressed(A_BUTTON)) weaponManager->swap();
 }
 
 void BattleView::update() {
@@ -21,7 +17,6 @@ void BattleView::update() {
   player->update();
   enemy->update();
   weaponManager->update();
-  gemManager->update();
 }
 
 void BattleView::render() {
@@ -31,7 +26,6 @@ void BattleView::render() {
   renderPreviewDivider();
   enemy->render();
   weaponManager->render();
-  gemManager->render();
   renderPaused();
 }
 

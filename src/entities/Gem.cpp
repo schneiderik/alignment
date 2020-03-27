@@ -1,17 +1,9 @@
 #include "Gem.h"
-#include "../../Game.h"
-#include "../../Player.h"
-#include "Weapon.h"
-#include "../collections/WeaponManager.h"
 
-static const int Gem::Y_OFFSETS[Weapon::COUNT] = {14, 26, 38, 50};
-static const int Gem::X_OFFSETS[Weapon::GEM_MAX] = {17, 29, 41, 53, 65, 77, 89};
-
-void Gem::init(int row) {
+void Gem::init(int x, int y) {
   type_ = random(0, COUNT);
-  row_ = row;
-  x_ = PREVIEW_GEM_X;
-  y_ = Y_OFFSETS[row];
+  x_ = x;
+  y_ = y;
   state_ = STATE_INACTIVE;
 }
 
@@ -22,41 +14,24 @@ void Gem::render() {
 void Gem::update() {
   switch (state_) {
     case STATE_FALLING:
-      updateY();
-      updateX();
-      break;
-    case STATE_STACKED:
-      updateY();
+      updateX_();
       break;
     case STATE_POPPING:
-      updatePop();
+      updatePop_();
       break;
     case STATE_CLEARING:
-      updateClear();
+      updateClear_();
       break;
   }
 }
 
-bool Gem::updateX() {
+void Gem::updateX_() {
   if (arduboy.everyXFrames(INITIAL_GAME_SPEED)) {
-    if (!atEndOfRowX()) { 
-      x_ -= 3;
-    } else {
-      stack();
-      return false;
-    }
+    x_ += MOVE_X_INCREMENT;
   }
-
-  return true;
 }
 
-void Gem::updateY() {
-  if (y_ != Y_OFFSETS[row_]) {
-    y_ += y_ < Y_OFFSETS[row_] ? 3 : -3;
-  }  
-}
-
-bool Gem::updateClear() {
+void Gem::updateClear_() {
   if (arduboy.everyXFrames(5)) {
     if (y_ < SCREEN_HEIGHT) {
       y_ += yVel_;
@@ -64,14 +39,11 @@ bool Gem::updateClear() {
       yVel_ += GRAVITY_ACCELERATION;
     } else {
       hide();
-      return false;
     }
   }
-
-  return true;
 }
 
-void Gem::updatePop() {
+void Gem::updatePop_() {
   if (arduboy.everyXFrames(5)) {
     if (type_ < POPPING_ANIMATION_END_FRAME) {
       type_++;
@@ -81,29 +53,9 @@ void Gem::updatePop() {
   }
 }
 
-Weapon& Gem::getWeapon() {
-  return weaponManager->get(row_);
-}
-
-bool Gem::atEndOfRowX() {
-  return x_ <= getWeapon().getEndOfRowX();
-}
-
-bool Gem::belowEndOfRowX() {
-  return x_ < getWeapon().getEndOfRowX();
-}
-
-bool Gem::belowPreviewThreshold() {
-  return x_ <= PREVIEW_THRESHOLD_X;
-}
-
-void Gem::changeRowIfObstructed(int row1, int row2) {
-  if (belowEndOfRowX()) row_ = row_ == row1 ? row2 : row1;
-}
-
-void Gem::drop() {
-  state_ = STATE_FALLING;
-}
+void Gem::stop() { state_ = STATE_INACTIVE; }
+void Gem::drop() { state_ = STATE_FALLING; }
+void Gem::hide() { state_ = STATE_HIDDEN; }
 
 void Gem::clear() {
   xVel_ = random(0, 3) - 1;
@@ -116,27 +68,16 @@ void Gem::pop() {
   state_ = STATE_POPPING;
 }
 
-void Gem::stack() {
-  state_ = STATE_STACKED;
-  getWeapon().addGem(*this);
-  player->addScore(10);
-}
-
-void Gem::hide() {
-  state_ = STATE_HIDDEN;
-}
 
 bool Gem::isInactive() { return state_ == STATE_INACTIVE; }
 bool Gem::isFalling() { return state_ == STATE_FALLING; }
-bool Gem::isStacked() { return state_ == STATE_STACKED; }
 bool Gem::isClearing() { return state_ == STATE_CLEARING; }
 bool Gem::isPopping() { return state_ == STATE_POPPING; }
 bool Gem::isHidden() { return state_ == STATE_HIDDEN; }
 
-Gem* Gem::getNextInCollection() const { return nextInCollection_; }
-void Gem::setNextInCollection(Gem* next) { nextInCollection_ = next; }
-Gem* Gem::getNextInContext() const { return nextInContext_; }
-void Gem::setNextInContext(Gem* next) { nextInContext_ = next; }
-int Gem::getRow() const { return row_; }
-void Gem::setRow(int row) { row_ = row; }
+Gem* Gem::getNext() const { return next_; }
+void Gem::setNext(Gem* next) { next_ = next; }
+int Gem::getX() const { return x_; }
+int Gem::getY() const { return y_; }
+void Gem::setY(int y) { y_ = y; }
 int Gem::getType() const { return type_; }
