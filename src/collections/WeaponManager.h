@@ -14,6 +14,7 @@ class WeaponManager {
     void incrementCursor();
     void decrementCursor();
     void swap();
+    void slashRandomWeapon();
 
   private:
     static const int STATE_DEFAULT = 0;
@@ -36,6 +37,7 @@ class WeaponManager {
     void dropPreviewGems_();
     void populatePreviewGems_();
     void populatePreviewGemForRandomWeapon_();
+    Weapon* getRandomWeapon_();
 
     bool isReadyToPopulatePreview_();
     bool isReadyToDropPreview_();

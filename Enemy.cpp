@@ -88,7 +88,7 @@ void Enemy::update() {
 
   attackFrame_++;
   if (attackFrame_ == attackInterval_) {
-    attackAnimation_->run();
+    attack_();
     setRandomAttackInterval_();
     attackFrame_ = 0;
   }
@@ -120,6 +120,16 @@ void Enemy::takeDamage(int rawDamage, int weaponType) {
   damageIndicatorAnimation_->run();
 
   damageIndicatorNum_ += -damage;
+}
+
+void Enemy::attack_() {
+  attackAnimation_->run();
+
+  switch(type_) {
+    case SKELETON:
+      weaponManager->slashRandomWeapon();
+      break;
+  }
 }
 
 int Enemy::getType() {

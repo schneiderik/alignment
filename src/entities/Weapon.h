@@ -19,7 +19,7 @@ class Weapon {
     void createPreviewGem();
     void dropPreviewGem();
     void stackFallingGem();
-    void swap(Weapon&);
+    void slashLastGem();
 
     bool isClearing();
     bool hasPreviewGem();
@@ -34,8 +34,9 @@ class Weapon {
     void setPreviewGem(Gem*);
     Gem* getFallingGem();
     void setFallingGem(Gem*);
-    void setGemStackTargetY(int);
-
+    Gem* getLastGemInStack();
+    Gem* getLastGemInStack(Gem*);
+  
   private:
     static const int STATE_DEFAULT = 0;
     static const int STATE_CLEARING = 1;

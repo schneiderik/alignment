@@ -152,6 +152,15 @@ void Weapon::clearStackedGems_() {
   }
 }
 
+void Weapon::slashLastGem() {
+  Gem* gem = getLastGemInStack();
+
+  if (gem == NULL) return;
+
+  gem->pop();
+  gemCount_--;
+}
+
 void Weapon::removeGemFromStack_(Gem* gem) {
   if (gem == lastGem_) {
     lastGem_ = gem->getNext();
@@ -179,7 +188,11 @@ Gem* Weapon::getPreviewGem() { return previewGem_; }
 void Weapon::setPreviewGem(Gem* gem) { previewGem_ = gem; }
 Gem* Weapon::getFallingGem() { return fallingGem_; }
 void Weapon::setFallingGem(Gem* gem) { fallingGem_ = gem; }
-
+Gem* Weapon::getLastGemInStack() { return getLastGemInStack(lastGem_); }
+Gem* Weapon::getLastGemInStack(Gem* gem) { 
+  if (gem == NULL) return gem;
+  return gem->isInactive() ? gem : getLastGemInStack(gem->getNext());
+}
 bool Weapon::isMisaligned_() { return y_ != Weapon::Y_OFFSETS[order_]; }
 bool Weapon::isFull_() { return gemCount_ == Weapon::GEM_MAX - 1; }
 bool Weapon::isOverflowed_() { return gemCount_ == Weapon::GEM_MAX; }

@@ -82,6 +82,20 @@ Weapon* WeaponManager::getWeaponAtIndex_(int order) {
   }
 }
 
+Weapon* WeaponManager::getRandomWeapon_() {
+  return weapons_[random(0, Weapon::COUNT)];
+}
+
+void WeaponManager::slashRandomWeapon() {
+  Weapon* weapon = getRandomWeapon_();
+
+  if (weapon->getLastGemInStack() == NULL) {
+    slashRandomWeapon();
+  } else {
+    weapon->slashLastGem();
+  }
+}
+
 void WeaponManager::dropPreviewGems_() {
   for (int i = 0; i < Weapon::COUNT; i++) weapons_[i]->dropPreviewGem();
 }
@@ -91,7 +105,7 @@ void WeaponManager::populatePreviewGems_() {
 }
 
 void WeaponManager::populatePreviewGemForRandomWeapon_() {
-  Weapon* weapon = weapons_[random(0, Weapon::COUNT)];
+  Weapon* weapon = getRandomWeapon_();
 
   if (weapon->hasPreviewGem()) {
     populatePreviewGemForRandomWeapon_();
