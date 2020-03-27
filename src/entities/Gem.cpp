@@ -1,4 +1,5 @@
 #include "Gem.h"
+#include "../../Game.h"
 
 void Gem::init(int x, int y) {
   type_ = random(0, COUNT);
@@ -26,7 +27,7 @@ void Gem::update() {
 }
 
 void Gem::updateX_() {
-  if (arduboy.everyXFrames(INITIAL_GAME_SPEED)) {
+  if (arduboy.everyXFrames(game->getGameSpeed())) {
     x_ += MOVE_X_INCREMENT;
   }
 }

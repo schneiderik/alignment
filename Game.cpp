@@ -74,3 +74,15 @@ void Game::goToBattleView() {
   battleView_.reset();
   state_ = GAME_STATE_BATTLE;
 }
+
+int Game::getGameSpeed() {
+  return fastFall_ ? FAST_FALL_SPEED : INITIAL_GAME_SPEED;
+}
+
+void Game::enableFastFall() {
+  fastFall_ = true;
+}
+
+void Game::disableFastFall() {
+  fastFall_ = false;
+}

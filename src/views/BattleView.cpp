@@ -1,4 +1,5 @@
 #include "BattleView.h"
+#include "../../Game.h"
 #include "../../Player.h"
 #include "../../Enemy.h"
 #include "../collections/WeaponManager.h"
@@ -7,6 +8,8 @@
 void BattleView::handleInput() {
   if (arduboy.justPressed(RIGHT_BUTTON)) paused = !paused;
   if (paused) return;
+  if (arduboy.pressed(LEFT_BUTTON)) game->enableFastFall();
+  if (arduboy.justReleased(LEFT_BUTTON)) game->disableFastFall();
   if (arduboy.justPressed(UP_BUTTON)) weaponManager->decrementCursor();
   if (arduboy.justPressed(DOWN_BUTTON)) weaponManager->incrementCursor();
   if (arduboy.justPressed(A_BUTTON)) weaponManager->swap();
@@ -30,6 +33,7 @@ void BattleView::render() {
 }
 
 void BattleView::reset() {
+  game->disableFastFall();
   player->resetHealth();
   gemManager->reset();
   weaponManager->reset();

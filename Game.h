@@ -32,7 +32,12 @@ class Game {
     void goToWinView();
     void goToLoseView();
 
+    int getGameSpeed();
+    void enableFastFall();
+    void disableFastFall();
+
   private:
+    bool fastFall_ = false;
     int state_ = GAME_STATE_TITLE;
 
     TitleView titleView_;

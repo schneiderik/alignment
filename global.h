@@ -18,8 +18,6 @@ class Weapon;
 class WeaponManager;
 class GemManager;
 
-#include "helpers.h"
-
 #define FPS 60
 #define INTERVAL_LENGTH 30
 #define SCREEN_WIDTH 128
@@ -27,9 +25,12 @@ class GemManager;
 #define PREVIEW_GEM_X 92
 #define PREVIEW_THRESHOLD_X 86
 #define INITIAL_GAME_SPEED 8
+#define FAST_FALL_SPEED 4
 #define GRAVITY_ACCELERATION 1
 #define NUMBER_HEIGHT 6
 #define SMALL_NUMBER_HEIGHT 5
+
+#include "helpers.h"
 
 extern Game* game;
 extern Player* player;
