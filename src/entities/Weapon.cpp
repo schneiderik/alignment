@@ -109,7 +109,7 @@ void Weapon::renderDivider_() {
 
 void Weapon::createPreviewGem() {
   previewGem_ = gemManager->create();
-  previewGem_->init(PREVIEW_GEM_X, y_);
+  previewGem_->init(PREVIEW_GEM_X, Weapon::Y_OFFSETS[order_]);
 }
 
 void Weapon::dropPreviewGem() {
