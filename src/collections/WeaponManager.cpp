@@ -6,22 +6,42 @@ WeaponManager::WeaponManager() {
 }
 
 void WeaponManager::update() {
-  if (isClearing_()) {
-    updateClearingWeapons_();
-  } else {
-    updateWeapons_();
-    if (isReadyToPopulatePreview_()) populatePreviewGems_();
-    if (isReadyToDropPreview_()) dropPreviewGems_();
+  initNextState_();
+
+  if (!state_.isClearing) {
+    if (state_.isReadyToPopulatePreview) populatePreviewGems_();
+    if (state_.isReadyToDropPreview) dropPreviewGems_();
   }
+
+  updateWeapons_();
+
+  applyNextState_();
+}
+
+void WeaponManager::initNextState_() {
+  nextState_.isReadyToPopulatePreview = true;  
+  nextState_.isReadyToDropPreview = true;  
+  nextState_.hasStackedGems = false;
+  nextState_.isClearing = false;
+}
+
+void WeaponManager::applyNextState_() {
+  state_.isReadyToPopulatePreview = nextState_.isReadyToPopulatePreview;  
+  state_.isReadyToDropPreview = nextState_.isReadyToDropPreview;  
+  state_.hasStackedGems = nextState_.hasStackedGems;
+  state_.isClearing = nextState_.isClearing;
 }
 
 void WeaponManager::updateWeapons_() {
-  for (int i = 0; i < Weapon::COUNT; i++) weapons_[i]->update();
-}
-
-void WeaponManager::updateClearingWeapons_() {
   for (int i = 0; i < Weapon::COUNT; i++) {
-    if (weapons_[i]->isClearing()) weapons_[i]->update();
+    if (!state_.isClearing || (state_.isClearing && weapons_[i]->isClearing())) {
+      weapons_[i]->update();
+    }
+
+    if (!weapons_[i]->previewIsEmpty()) nextState_.isReadyToPopulatePreview = false;  
+    if (weapons_[i]->hasFallingGem()) nextState_.isReadyToDropPreview = false;  
+    if (!weapons_[i]->isEmpty()) nextState_.hasStackedGems = true;
+    if (weapons_[i]->isClearing()) nextState_.isClearing = true;
   }
 }
 
@@ -35,7 +55,7 @@ void WeaponManager::reset() {
 }
 
 void WeaponManager::incrementCursor() {
-  if (isClearing_()) return;
+  if (state_.isClearing) return;
   if (cursor_ == CURSOR_MAX) return;
 
   cursor_++;
@@ -43,7 +63,7 @@ void WeaponManager::incrementCursor() {
 }
 
 void WeaponManager::decrementCursor() {
-  if (isClearing_()) return;
+  if (state_.isClearing) return;
   if (cursor_ == CURSOR_MIN) return;
 
   cursor_--;  
@@ -51,7 +71,7 @@ void WeaponManager::decrementCursor() {
 }
 
 void WeaponManager::swap() { 
-  if (isClearing_()) return;
+  if (state_.isClearing) return;
 
   Weapon* weapon1 = getWeaponAtIndex_(cursor_);
   Weapon* weapon2 = getWeaponAtIndex_(cursor_ + 1);
@@ -87,6 +107,8 @@ Weapon* WeaponManager::getRandomWeapon_() {
 }
 
 void WeaponManager::slashRandomWeapon() {
+  if (!state_.hasStackedGems) return;
+
   Weapon* weapon = getRandomWeapon_();
 
   if (weapon->getLastGemInStack() == NULL) {
@@ -112,30 +134,6 @@ void WeaponManager::populatePreviewGemForRandomWeapon_() {
   } else {
     weapon->createPreviewGem();
   }
-}
-
-bool WeaponManager::isReadyToPopulatePreview_() { 
-  for (int i = 0; i < Weapon::COUNT; i++) {
-    if (!weapons_[i]->previewIsEmpty()) return false;
-  }
-
-  return true;
-}
-
-bool WeaponManager::isReadyToDropPreview_() { 
-  for (int i = 0; i < Weapon::COUNT; i++) {
-    if (weapons_[i]->hasFallingGem()) return false;
-  }
-
-  return true;
-}
-
-bool WeaponManager::isClearing_() { 
-  for (int i = 0; i < Weapon::COUNT; i++) {
-    if (weapons_[i]->isClearing()) return true;
-  }
-
-  return false;
 }
 
 bool WeaponManager::isActiveWeapon_(int i) {

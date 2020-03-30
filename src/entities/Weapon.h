@@ -22,6 +22,7 @@ class Weapon {
     void slashLastGem();
 
     bool isClearing();
+    bool isEmpty();
     bool hasPreviewGem();
     bool hasFallingGem();
     bool previewIsEmpty();
@@ -65,7 +66,6 @@ class Weapon {
 
     bool isFull_();
     bool isOverflowed_();
-    bool isEmpty_();
     bool isMisaligned_();
     bool isMatchable_();
     bool isCleared_();

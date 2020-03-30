@@ -4,6 +4,13 @@
 #include "../../global.h";
 #include "../entities/Weapon.h";
 
+struct WeaponManagerState {
+  bool isReadyToPopulatePreview = false;
+  bool isReadyToDropPreview = false;
+  bool hasStackedGems = false;
+  bool isClearing = false;
+};
+
 class WeaponManager {
   public:
     WeaponManager();
@@ -17,21 +24,18 @@ class WeaponManager {
     void slashRandomWeapon();
 
   private:
-    static const int STATE_DEFAULT = 0;
-    static const int STATE_PREVIEW_EMPTY = 1;
-    static const int STATE_READY_TO_DROP_PREVIEW = 2;
-    static const int STATE_CLEARING_GEMS = 3;
-
     static const int CURSOR_MIN = 0;
     static const int CURSOR_MAX = 2;
 
     int cursor_ = CURSOR_MIN;
-    int state_ = STATE_DEFAULT;
 
     Weapon* weapons_[Weapon::COUNT];
+    WeaponManagerState state_;
+    WeaponManagerState nextState_;
 
     void updateWeapons_();
-    void updateClearingWeapons_();
+    void initNextState_();
+    void applyNextState_();
 
     Weapon* getWeaponAtIndex_(int);
     void dropPreviewGems_();
@@ -39,9 +43,6 @@ class WeaponManager {
     void populatePreviewGemForRandomWeapon_();
     Weapon* getRandomWeapon_();
 
-    bool isReadyToPopulatePreview_();
-    bool isReadyToDropPreview_();
-    bool isClearing_();
     bool isActiveWeapon_(int);
 };
 

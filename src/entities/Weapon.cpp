@@ -196,7 +196,7 @@ Gem* Weapon::getLastGemInStack(Gem* gem) {
 bool Weapon::isMisaligned_() { return y_ != Weapon::Y_OFFSETS[order_]; }
 bool Weapon::isFull_() { return gemCount_ == Weapon::GEM_MAX - 1; }
 bool Weapon::isOverflowed_() { return gemCount_ == Weapon::GEM_MAX; }
-bool Weapon::isEmpty_() { return gemCount_ == 0; }
+bool Weapon::isEmpty() { return gemCount_ == 0; }
 bool Weapon::isMatchable_() { return gemCount_ >= 2 && !lastGem_->isPopping(); }
 bool Weapon::isClearing() { return state_ == STATE_CLEARING; }
 bool Weapon::hasPreviewGem() { return previewGem_ != NULL; }
