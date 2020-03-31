@@ -35,9 +35,12 @@ class Game {
     int getGameSpeed();
     void enableFastFall();
     void disableFastFall();
+    void forceEnableFastFall();
+    void forceDisableFastFall();
 
   private:
     bool fastFall_ = false;
+    bool forcedFastFall_ = false;
     int state_ = GAME_STATE_TITLE;
 
     TitleView titleView_;

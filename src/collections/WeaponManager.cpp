@@ -123,14 +123,14 @@ void WeaponManager::dropPreviewGems_() {
 }
 
 void WeaponManager::populatePreviewGems_() {
-  for (int i = 0; i < 2; i++) populatePreviewGemForRandomWeapon_();
+  for (int i = 0; i < 2; i++) populatePreviewGemForRandomWeapon();
 }
 
-void WeaponManager::populatePreviewGemForRandomWeapon_() {
+void WeaponManager::populatePreviewGemForRandomWeapon() {
   Weapon* weapon = getRandomWeapon_();
 
   if (weapon->hasPreviewGem()) {
-    populatePreviewGemForRandomWeapon_();
+    populatePreviewGemForRandomWeapon();
   } else {
     weapon->createPreviewGem();
   }

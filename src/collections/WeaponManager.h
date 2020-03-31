@@ -26,6 +26,7 @@ class WeaponManager {
     void decrementCursor();
     void swap();
     Gem* popLastGemOfRandomWeapon();
+    void populatePreviewGemForRandomWeapon();
 
   private:
     int cursor_ = WEAPON_MANAGER_CURSOR_MIN;
@@ -41,7 +42,6 @@ class WeaponManager {
     Weapon* getWeaponAtIndex_(int);
     void dropPreviewGems_();
     void populatePreviewGems_();
-    void populatePreviewGemForRandomWeapon_();
     Weapon* getRandomWeapon_();
 
     bool isActiveWeapon_(int);

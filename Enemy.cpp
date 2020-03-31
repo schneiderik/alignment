@@ -69,6 +69,7 @@ Enemy::Enemy() {
 void Enemy::init(int type) {
   type_ = type;
   attackFrame_ = 0;
+  demonAttackCounter_ = -1;
   setRandomAttackInterval_();
   health_ = getHealthData_(type);
   healthBarWidth_ = ENEMY_HEALTH_BAR_WIDTH_MAX;
@@ -94,6 +95,13 @@ void Enemy::update() {
   damageIndicatorAnimation_->update();
   idleAnimation_->update();
   if (slashAnimation_->isRunning()) slashAnimation_->update();
+
+  if (demonAttackCounter_ == DEMON_ATTACK_COUNTER_MAX) {
+    game->forceDisableFastFall();
+    demonAttackCounter_ = DEMON_ATTACK_COUNTER_INACTIVE;
+  } else if (demonAttackCounter_ >= DEMON_ATTACK_COUNTER_MIN) {
+    demonAttackCounter_++;
+  }
 
   if (!damageIndicatorAnimation_->isRunning()) damageIndicatorNum_ = 0;
 
@@ -147,15 +155,48 @@ void Enemy::attack_() {
 
   switch(type_) {
     case SKELETON:
-      Gem* targetGem = weaponManager->popLastGemOfRandomWeapon();
-
-      if (targetGem != NULL) {
-        slashX_ = targetGem->getX() + 4;
-        slashY_ = targetGem->getY() - 2;
-        slashAnimation_->run();
-      }
+      skeletonAttack_();
+      break;
+    case ORC:
+      orcAttack_();
+      break;
+    case GOLEM:
+      golemAttack_();
+      break;
+    case DEMON:
+      demonAttack_();
+      break;
+    case SORCERER:
+      sorcererAttack_();
       break;
   }
+}
+
+void Enemy::skeletonAttack_() {
+  Gem* targetGem = weaponManager->popLastGemOfRandomWeapon();
+
+  if (targetGem != NULL) {
+    slashX_ = targetGem->getX() + 4;
+    slashY_ = targetGem->getY() - 2;
+    slashAnimation_->run();
+  }
+}
+
+void Enemy::orcAttack_() {
+  weaponManager->populatePreviewGemForRandomWeapon();
+}
+
+void Enemy::golemAttack_() {
+  // lock a random gem for X frames;
+}
+
+void Enemy::demonAttack_() {
+  game->forceEnableFastFall();
+  demonAttackCounter_ = DEMON_ATTACK_COUNTER_MIN; 
+}
+
+void Enemy::sorcererAttack_() {
+  // morph random gem into a different gem
 }
 
 int Enemy::getType() {

@@ -84,5 +84,15 @@ void Game::enableFastFall() {
 }
 
 void Game::disableFastFall() {
+  if (!forcedFastFall_) fastFall_ = false;
+}
+
+void Game::forceEnableFastFall() {
+  fastFall_ = true;
+  forcedFastFall_ = true;
+}
+
+void Game::forceDisableFastFall() {
   fastFall_ = false;
+  forcedFastFall_ = false;
 }

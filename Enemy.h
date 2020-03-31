@@ -59,6 +59,10 @@
 #define SLASH_ANIMATION_COUNT 1
 #define SLASH_ANIMATION_LOOP false
 
+#define DEMON_ATTACK_COUNTER_INACTIVE -1
+#define DEMON_ATTACK_COUNTER_MIN 0
+#define DEMON_ATTACK_COUNTER_MAX 200
+
 class Enemy {
   public:
     static const int SKELETON = 0;
@@ -96,6 +100,11 @@ class Enemy {
     int getFrame_();
     void setRandomAttackInterval_();
     void attack_();
+    void skeletonAttack_();
+    void orcAttack_();
+    void golemAttack_();
+    void demonAttack_();
+    void sorcererAttack_();
 
     Animation* flashAnimation_;
     Animation* shakeAnimation_;
@@ -112,6 +121,7 @@ class Enemy {
     int attackInterval_ = 0;
     int slashX_ = 0;
     int slashY_ = 0;
+    int demonAttackCounter_ = -1;
 };
 
 #endif
