@@ -54,6 +54,15 @@ Enemy::Enemy() {
     ATTACK_ANIMATION_LOOP
   );
 
+  slashAnimation_ = new Animation(
+    SLASH_ANIMATION_INITIAL_VALUE,
+    SLASH_ANIMATION_LOWER_LIMIT,
+    SLASH_ANIMATION_UPPER_LIMIT,
+    SLASH_ANIMATION_COUNT,
+    SLASH_ANIMATION_DURATION,
+    SLASH_ANIMATION_LOOP
+  );
+
   init(SKELETON);
 }
 
@@ -67,6 +76,7 @@ void Enemy::init(int type) {
   shakeAnimation_->reset();
   damageIndicatorAnimation_->reset();
   idleAnimation_->reset();
+  slashAnimation_->reset();
 }
 
 void Enemy::initNext() {
@@ -83,6 +93,7 @@ void Enemy::update() {
   shakeAnimation_->update();
   damageIndicatorAnimation_->update();
   idleAnimation_->update();
+  if (slashAnimation_->isRunning()) slashAnimation_->update();
 
   if (!damageIndicatorAnimation_->isRunning()) damageIndicatorNum_ = 0;
 
@@ -107,6 +118,15 @@ void Enemy::render() {
   renderPortrait_();
   renderHealthBar_();
   renderDamageIndicator_();
+
+  if (slashAnimation_->isRunning()) {
+    sprites.drawSelfMasked(
+      slashX_,
+      slashY_,
+      slashSprite,
+      slashAnimation_->getValue()
+    );    
+  }
 }
 
 void Enemy::takeDamage(int rawDamage, int weaponType) {
@@ -127,7 +147,13 @@ void Enemy::attack_() {
 
   switch(type_) {
     case SKELETON:
-      weaponManager->slashRandomWeapon();
+      Gem* targetGem = weaponManager->popLastGemOfRandomWeapon();
+
+      if (targetGem != NULL) {
+        slashX_ = targetGem->getX() + 4;
+        slashY_ = targetGem->getY() - 2;
+        slashAnimation_->run();
+      }
       break;
   }
 }

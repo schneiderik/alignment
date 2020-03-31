@@ -19,7 +19,7 @@ class Weapon {
     void createPreviewGem();
     void dropPreviewGem();
     void stackFallingGem();
-    void slashLastGem();
+    Gem* popLastGem();
 
     bool isClearing();
     bool isEmpty();

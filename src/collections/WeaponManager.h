@@ -21,7 +21,7 @@ class WeaponManager {
     void incrementCursor();
     void decrementCursor();
     void swap();
-    void slashRandomWeapon();
+    Gem* popLastGemOfRandomWeapon();
 
   private:
     static const int CURSOR_MIN = 0;

@@ -4,6 +4,57 @@
 #include "global.h";
 #include "src/animations/Animation.h";
 
+#define PORTRAIT_X 104
+#define PORTRAIT_Y 12
+#define HEALTH_BAR_X 106
+#define HEALTH_BAR_Y 62
+#define HEALTH_BAR_HEIGHT 1
+#define HEALTH_BAR_WIDTH_MAX 20
+
+#define FLASH_ANIMATION_INITIAL_VALUE 0
+#define FLASH_ANIMATION_LOWER_LIMIT 0
+#define FLASH_ANIMATION_UPPER_LIMIT 1
+#define FLASH_ANIMATION_DURATION 40
+#define FLASH_ANIMATION_COUNT 3
+#define FLASH_ANIMATION_LOOP true
+
+#define SHAKE_ANIMATION_INITIAL_VALUE 0
+#define SHAKE_ANIMATION_LOWER_LIMIT -2
+#define SHAKE_ANIMATION_UPPER_LIMIT 2
+#define SHAKE_ANIMATION_DURATION 40
+#define SHAKE_ANIMATION_COUNT 2
+#define SHAKE_ANIMATION_LOOP true
+
+#define DAMAGE_INDICATOR_ANIMATION_INITIAL_VALUE 0
+#define DAMAGE_INDICATOR_ANIMATION_LOWER_LIMIT 0
+#define DAMAGE_INDICATOR_ANIMATION_UPPER_LIMIT -4
+#define DAMAGE_INDICATOR_ANIMATION_DURATION 20
+#define DAMAGE_INDICATOR_ANIMATION_COUNT 1
+#define DAMAGE_INDICATOR_ANIMATION_LOOP false
+
+#define DAMAGE_INDICATOR_Y 46
+#define DAMAGE_INDICATOR_X 116
+
+#define IDLE_ANIMATION_INITIAL_VALUE 0
+#define IDLE_ANIMATION_LOWER_LIMIT 0
+#define IDLE_ANIMATION_UPPER_LIMIT 3
+#define IDLE_ANIMATION_SPEED 30
+#define IDLE_ANIMATION_LOOP false
+
+#define ATTACK_ANIMATION_INITIAL_VALUE 4
+#define ATTACK_ANIMATION_LOWER_LIMIT 4
+#define ATTACK_ANIMATION_UPPER_LIMIT 9
+#define ATTACK_ANIMATION_DURATION 50
+#define ATTACK_ANIMATION_COUNT 1
+#define ATTACK_ANIMATION_LOOP false
+
+#define SLASH_ANIMATION_INITIAL_VALUE 0
+#define SLASH_ANIMATION_LOWER_LIMIT 0
+#define SLASH_ANIMATION_UPPER_LIMIT 3
+#define SLASH_ANIMATION_DURATION 20
+#define SLASH_ANIMATION_COUNT 1
+#define SLASH_ANIMATION_LOOP false
+
 class Enemy {
   public:
     static const int SKELETON = 0;
@@ -36,50 +87,6 @@ class Enemy {
     static int getHealthData_(int);
     static int getWeaponModifierData_(int, int);
 
-    const int PORTRAIT_X = 104;
-    const int PORTRAIT_Y = 12;
-    const int HEALTH_BAR_X = 106;
-    const int HEALTH_BAR_Y = 62;
-    const int HEALTH_BAR_HEIGHT = 1;
-    const int HEALTH_BAR_WIDTH_MAX = 20;
-
-    const int FLASH_ANIMATION_INITIAL_VALUE = 0;
-    const int FLASH_ANIMATION_LOWER_LIMIT = 0;
-    const int FLASH_ANIMATION_UPPER_LIMIT = 1;
-    const int FLASH_ANIMATION_DURATION = 40;
-    const int FLASH_ANIMATION_COUNT = 3;
-    const bool FLASH_ANIMATION_LOOP = true;
-    
-    const int SHAKE_ANIMATION_INITIAL_VALUE = 0;
-    const int SHAKE_ANIMATION_LOWER_LIMIT = -2;
-    const int SHAKE_ANIMATION_UPPER_LIMIT = 2;
-    const int SHAKE_ANIMATION_DURATION = 40;
-    const int SHAKE_ANIMATION_COUNT = 2;
-    const bool SHAKE_ANIMATION_LOOP = true;
-
-    const int DAMAGE_INDICATOR_ANIMATION_INITIAL_VALUE = 0;
-    const int DAMAGE_INDICATOR_ANIMATION_LOWER_LIMIT = 0;
-    const int DAMAGE_INDICATOR_ANIMATION_UPPER_LIMIT = -4;
-    const int DAMAGE_INDICATOR_ANIMATION_DURATION = 20;
-    const int DAMAGE_INDICATOR_ANIMATION_COUNT = 1;
-    const bool DAMAGE_INDICATOR_ANIMATION_LOOP = false;
-
-    const int DAMAGE_INDICATOR_Y = 46;
-    const int DAMAGE_INDICATOR_X = 116;
-
-    const int IDLE_ANIMATION_INITIAL_VALUE = 0;
-    const int IDLE_ANIMATION_LOWER_LIMIT = 0;
-    const int IDLE_ANIMATION_UPPER_LIMIT = 3;
-    const int IDLE_ANIMATION_SPEED = 30;
-    const bool IDLE_ANIMATION_LOOP = false;
-
-    const int ATTACK_ANIMATION_INITIAL_VALUE = 4;
-    const int ATTACK_ANIMATION_LOWER_LIMIT = 4;
-    const int ATTACK_ANIMATION_UPPER_LIMIT = 9;
-    const int ATTACK_ANIMATION_DURATION = 50;
-    const int ATTACK_ANIMATION_COUNT = 1;
-    const bool ATTACK_ANIMATION_LOOP = false;
-
     void renderPortrait_();
     void renderHealthBar_();
     void renderDamageIndicator_();
@@ -95,6 +102,10 @@ class Enemy {
     Animation* damageIndicatorAnimation_;
     Animation* idleAnimation_;
     Animation* attackAnimation_;
+    Animation* slashAnimation_;
+
+    int slashX_ = 0;
+    int slashY_ = 0;
 
     int type_;
     int health_;

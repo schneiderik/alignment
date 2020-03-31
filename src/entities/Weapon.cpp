@@ -130,13 +130,23 @@ void Weapon::stackFallingGem() {
 }
 
 void Weapon::popLastGems_() {
-  lastGem_->pop();
-  lastGem_->getNext()->pop();
-  gemCount_ -= 2;
+  popLastGem();
+  popLastGem();
 
   player->addScore(100);
   enemy->takeDamage(5, type_);            
   confirmSound();
+}
+
+Gem* Weapon::popLastGem() {
+  Gem* gem = getLastGemInStack();
+
+  if (gem == NULL) return;
+
+  gem->pop();
+  gemCount_--;
+
+  return gem;
 }
 
 void Weapon::clearStackedGems_() {
@@ -150,15 +160,6 @@ void Weapon::clearStackedGems_() {
     currentGem->clear();
     currentGem = currentGem->getNext();
   }
-}
-
-void Weapon::slashLastGem() {
-  Gem* gem = getLastGemInStack();
-
-  if (gem == NULL) return;
-
-  gem->pop();
-  gemCount_--;
 }
 
 void Weapon::removeGemFromStack_(Gem* gem) {

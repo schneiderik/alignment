@@ -106,15 +106,15 @@ Weapon* WeaponManager::getRandomWeapon_() {
   return weapons_[random(0, Weapon::COUNT)];
 }
 
-void WeaponManager::slashRandomWeapon() {
-  if (!state_.hasStackedGems) return;
+Gem* WeaponManager::popLastGemOfRandomWeapon() {
+  if (!state_.hasStackedGems) return NULL;
 
   Weapon* weapon = getRandomWeapon_();
 
   if (weapon->getLastGemInStack() == NULL) {
-    slashRandomWeapon();
+    return popLastGemOfRandomWeapon();
   } else {
-    weapon->slashLastGem();
+    return weapon->popLastGem();
   }
 }
 
