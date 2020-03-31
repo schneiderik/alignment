@@ -50,13 +50,13 @@ void WeaponManager::render() {
 }
 
 void WeaponManager::reset() {
-  cursor_ = CURSOR_MIN;
+  cursor_ = WEAPON_MANAGER_CURSOR_MIN;
   for (int i = 0; i < Weapon::COUNT; i++) weapons_[i]->reset(i);
 }
 
 void WeaponManager::incrementCursor() {
   if (state_.isClearing) return;
-  if (cursor_ == CURSOR_MAX) return;
+  if (cursor_ == WEAPON_MANAGER_CURSOR_MAX) return;
 
   cursor_++;
   moveSound();
@@ -64,7 +64,7 @@ void WeaponManager::incrementCursor() {
 
 void WeaponManager::decrementCursor() {
   if (state_.isClearing) return;
-  if (cursor_ == CURSOR_MIN) return;
+  if (cursor_ == WEAPON_MANAGER_CURSOR_MIN) return;
 
   cursor_--;  
   moveSound();

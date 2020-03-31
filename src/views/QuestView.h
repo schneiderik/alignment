@@ -5,6 +5,19 @@
 #include "../../Enemy.h"
 #include "../animations/Animation.h"
 
+#define DATA_LENGTH 2
+#define DATA_X 0
+#define DATA_Y 1
+
+#define GRAVE_INDEX 6
+#define MYSTERY_INDEX 5
+
+#define BOUNCE_ANIMATION_INITIAL_VALUE 0
+#define BOUNCE_ANIMATION_LOWER_LIMIT -1
+#define BOUNCE_ANIMATION_UPPER_LIMIT 1
+#define BOUNCE_ANIMATION_SPEED 8
+#define BOUNCE_ANIMATION_LOOP true
+
 class QuestView {
   public:
     QuestView();
@@ -14,22 +27,10 @@ class QuestView {
     void render();
 
   private:
-    static const int DATA_LENGTH = 2;
-    static const int DATA_X = 0;
-    static const int DATA_Y = 1;
     static const int DATA[Enemy::COUNT][DATA_LENGTH];
 
     static int getXData_(int);
     static int getYData_(int);
-
-    const int GRAVE_INDEX = 6;
-    const int MYSTERY_INDEX = 5;
-
-    const int BOUNCE_ANIMATION_INITIAL_VALUE = 0;
-    const int BOUNCE_ANIMATION_LOWER_LIMIT = -1;
-    const int BOUNCE_ANIMATION_UPPER_LIMIT = 1;
-    const int BOUNCE_ANIMATION_SPEED = 8;
-    const bool BOUNCE_ANIMATION_LOOP = true;
 
     void renderText_();
     void renderCursor_();

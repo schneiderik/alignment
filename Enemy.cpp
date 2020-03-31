@@ -1,7 +1,7 @@
 #include "Enemy.h"
 #include "Game.h"
 
-const int Enemy::DATA[COUNT][DATA_LENGTH] = {
+const int Enemy::DATA[COUNT][ENEMY_DATA_LENGTH] = {
   {100, 0, 0, 0, 0},
   {200, 0, 0, 0, 0},
   {200, -1, 2, -2, 1},
@@ -71,7 +71,7 @@ void Enemy::init(int type) {
   attackFrame_ = 0;
   setRandomAttackInterval_();
   health_ = getHealthData_(type);
-  healthBarWidth_ = HEALTH_BAR_WIDTH_MAX;
+  healthBarWidth_ = ENEMY_HEALTH_BAR_WIDTH_MAX;
   flashAnimation_->reset();
   shakeAnimation_->reset();
   damageIndicatorAnimation_->reset();
@@ -198,10 +198,10 @@ void Enemy::renderPortrait_() {
 
 void Enemy::renderHealthBar_() {
   arduboy.fillRect(
-    HEALTH_BAR_X,
-    HEALTH_BAR_Y,
+    ENEMY_HEALTH_BAR_X,
+    ENEMY_HEALTH_BAR_Y,
     healthBarWidth_,
-    HEALTH_BAR_HEIGHT,
+    ENEMY_HEALTH_BAR_HEIGHT,
     WHITE
   ); 
 }
@@ -219,14 +219,14 @@ void Enemy::renderDamageIndicator_() {
 
 int Enemy::getHealthBarWidth_() {
   float healthPercent = (float)health_ / (float)getHealthData_(type_);
-  float healthBarWidth = healthPercent * (float)HEALTH_BAR_WIDTH_MAX;
+  float healthBarWidth = healthPercent * (float)ENEMY_HEALTH_BAR_WIDTH_MAX;
   return (int)ceil(healthBarWidth);
 }
 
 int Enemy::getHealthData_(int type) {
-  return DATA[type][DATA_HEALTH];
+  return DATA[type][ENEMY_DATA_HEALTH];
 }
 
 int Enemy::getWeaponModifierData_(int type, int weaponType) {
-  return DATA[type][DATA_WEAPON_MODIFIERS + weaponType];
+  return DATA[type][ENEMY_DATA_WEAPON_MODIFIERS + weaponType];
 }

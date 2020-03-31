@@ -4,6 +4,10 @@
 #include "../../global.h";
 #include "../entities/Weapon.h";
 
+#define WEAPON_MANAGER_CURSOR_MIN 0
+#define WEAPON_MANAGER_CURSOR_MAX 2
+
+
 struct WeaponManagerState {
   bool isReadyToPopulatePreview = false;
   bool isReadyToDropPreview = false;
@@ -24,10 +28,7 @@ class WeaponManager {
     Gem* popLastGemOfRandomWeapon();
 
   private:
-    static const int CURSOR_MIN = 0;
-    static const int CURSOR_MAX = 2;
-
-    int cursor_ = CURSOR_MIN;
+    int cursor_ = WEAPON_MANAGER_CURSOR_MIN;
 
     Weapon* weapons_[Weapon::COUNT];
     WeaponManagerState state_;

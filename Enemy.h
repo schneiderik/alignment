@@ -4,12 +4,16 @@
 #include "global.h";
 #include "src/animations/Animation.h";
 
+#define ENEMY_DATA_LENGTH 5
+#define ENEMY_DATA_HEALTH 0
+#define ENEMY_DATA_WEAPON_MODIFIERS 1
+
 #define PORTRAIT_X 104
 #define PORTRAIT_Y 12
-#define HEALTH_BAR_X 106
-#define HEALTH_BAR_Y 62
-#define HEALTH_BAR_HEIGHT 1
-#define HEALTH_BAR_WIDTH_MAX 20
+#define ENEMY_HEALTH_BAR_X 106
+#define ENEMY_HEALTH_BAR_Y 62
+#define ENEMY_HEALTH_BAR_HEIGHT 1
+#define ENEMY_HEALTH_BAR_WIDTH_MAX 20
 
 #define FLASH_ANIMATION_INITIAL_VALUE 0
 #define FLASH_ANIMATION_LOWER_LIMIT 0
@@ -78,11 +82,7 @@ class Enemy {
 
   private:
     static const int LAST_ENEMY = COUNT - 1;
-
-    static const int DATA_LENGTH = 5;
-    static const int DATA_HEALTH = 0;
-    static const int DATA_WEAPON_MODIFIERS = 1;
-    static const int DATA[COUNT][DATA_LENGTH];
+    static const int DATA[COUNT][ENEMY_DATA_LENGTH];
 
     static int getHealthData_(int);
     static int getWeaponModifierData_(int, int);
@@ -104,15 +104,14 @@ class Enemy {
     Animation* attackAnimation_;
     Animation* slashAnimation_;
 
-    int slashX_ = 0;
-    int slashY_ = 0;
-
     int type_;
     int health_;
-    int healthBarWidth_ = HEALTH_BAR_WIDTH_MAX;
+    int healthBarWidth_ = ENEMY_HEALTH_BAR_WIDTH_MAX;
     int damageIndicatorNum_ = 0;
     int attackFrame_ = 0;
     int attackInterval_ = 0;
+    int slashX_ = 0;
+    int slashY_ = 0;
 };
 
 #endif

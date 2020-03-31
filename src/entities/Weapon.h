@@ -3,6 +3,11 @@
 
 #include "../../global.h";
 
+#define WEAPON_STATE_DEFAULT 0
+#define WEAPON_STATE_CLEARING 1
+
+#define WEAPON_MOVE_Y_INCREMENT 3
+
 class Weapon {
   public:
     static const int COUNT = 4;
@@ -39,14 +44,9 @@ class Weapon {
     Gem* getLastGemInStack(Gem*);
   
   private:
-    static const int STATE_DEFAULT = 0;
-    static const int STATE_CLEARING = 1;
-
-    const int MOVE_Y_INCREMENT = 3;
-
     int type_;
     int order_;
-    int state_ = STATE_DEFAULT;
+    int state_ = WEAPON_STATE_DEFAULT;
     int y_;
     int gemCount_ = 0;
     Gem* lastGem_ = NULL;

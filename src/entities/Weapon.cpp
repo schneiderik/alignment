@@ -27,8 +27,8 @@ void Weapon::update() {
   updateGemStack_();
 
   switch (state_) {
-    case STATE_CLEARING:
-      if (lastGem_ == NULL) state_ = STATE_DEFAULT;
+    case WEAPON_STATE_CLEARING:
+      if (lastGem_ == NULL) state_ = WEAPON_STATE_DEFAULT;
       break;
     default:
       updateFallingGem_();
@@ -43,7 +43,7 @@ void Weapon::updateY_() {
   if (isMisaligned_()) {
     Gem* currentGem = lastGem_;
 
-    y_ += y_ < Weapon::Y_OFFSETS[order_] ? MOVE_Y_INCREMENT : -MOVE_Y_INCREMENT;
+    y_ += y_ < Weapon::Y_OFFSETS[order_] ? WEAPON_MOVE_Y_INCREMENT : -WEAPON_MOVE_Y_INCREMENT;
 
     while (currentGem != NULL) {
       currentGem->setY(y_);
@@ -150,7 +150,7 @@ Gem* Weapon::popLastGem() {
 }
 
 void Weapon::clearStackedGems_() {
-  state_ = STATE_CLEARING;
+  state_ = WEAPON_STATE_CLEARING;
   player->takeDamage();
   gemCount_ = 0;
 
@@ -199,7 +199,7 @@ bool Weapon::isFull_() { return gemCount_ == Weapon::GEM_MAX - 1; }
 bool Weapon::isOverflowed_() { return gemCount_ == Weapon::GEM_MAX; }
 bool Weapon::isEmpty() { return gemCount_ == 0; }
 bool Weapon::isMatchable_() { return gemCount_ >= 2 && !lastGem_->isPopping(); }
-bool Weapon::isClearing() { return state_ == STATE_CLEARING; }
+bool Weapon::isClearing() { return state_ == WEAPON_STATE_CLEARING; }
 bool Weapon::hasPreviewGem() { return previewGem_ != NULL; }
 bool Weapon::hasFallingGem() { return fallingGem_ != NULL; }
 bool Weapon::previewIsEmpty() { return !hasPreviewGem() && (!hasFallingGem() || fallingGem_->getX() <= PREVIEW_THRESHOLD_X); }
