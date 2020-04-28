@@ -2,11 +2,12 @@
 #define WIN_VIEW_H
 
 #include "../../global.h"
+#include "./View.h"
 
-class WinView {
+class WinView: public View {
   public:
-    void handleInput();
-    void render();
+    void handleInput() override;
+    void render() override;
 };
 
 #endif

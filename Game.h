@@ -11,13 +11,6 @@
 #include "src/collections/WeaponManager.h"
 #include "src/collections/GemManager.h"
 
-#define GAME_STATE_TITLE 0
-#define GAME_STATE_INFO 1
-#define GAME_STATE_QUEST 2
-#define GAME_STATE_BATTLE 3
-#define GAME_STATE_WIN 4
-#define GAME_STATE_LOSE 5
-
 class Game {
   public:
     void handleInput();
@@ -41,7 +34,7 @@ class Game {
   private:
     bool fastFall_ = false;
     bool forcedFastFall_ = false;
-    int state_ = GAME_STATE_TITLE;
+    View* view_ = NULL;
 
     TitleView titleView_;
     BattleView battleView_;

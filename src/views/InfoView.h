@@ -2,11 +2,12 @@
 #define INFO_VIEW_H
 
 #include "../../global.h"
+#include "./View.h"
 
-class InfoView {
+class InfoView: public View {
   public:
-    void handleInput();
-    void render();
+    void handleInput() override;
+    void render() override;
 };
 
 #endif

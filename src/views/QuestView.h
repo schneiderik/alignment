@@ -2,6 +2,7 @@
 #define QUEST_VIEW_H
 
 #include "../../global.h"
+#include "./View.h"
 #include "../../Enemy.h"
 #include "../animations/Animation.h"
 
@@ -18,13 +19,13 @@
 #define BOUNCE_ANIMATION_SPEED 8
 #define BOUNCE_ANIMATION_LOOP true
 
-class QuestView {
+class QuestView: public View {
   public:
     QuestView();
 
-    void handleInput();
-    void update();
-    void render();
+    void handleInput() override;
+    void update() override;
+    void render() override;
 
   private:
     static const int DATA[Enemy::COUNT][DATA_LENGTH];

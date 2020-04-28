@@ -2,11 +2,12 @@
 #define LOSE_VIEW_H
 
 #include "../../global.h"
+#include "./View.h"
 
-class LoseView {
+class LoseView: public View {
   public:
-    void handleInput();
-    void render();
+    void handleInput() override;
+    void render() override;
 };
 
 #endif

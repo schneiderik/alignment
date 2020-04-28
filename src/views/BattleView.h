@@ -2,12 +2,13 @@
 #define BATTLE_VIEW_H
 
 #include "../../global.h"
+#include "./View.h"
 
-class BattleView {
+class BattleView: public View {
   public:    
-    void handleInput();
-    void update();
-    void render();
+    void handleInput() override;
+    void update() override;
+    void render() override;
     void reset();
 
     void renderTopBar();
