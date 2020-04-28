@@ -38,7 +38,7 @@ class QuestView {
     void renderEnemies_();
     void renderEnemy_(int);
 
-    Animation* bounceAnimation_;
+    Animation bounceAnimation_;
 };
 
 #endif

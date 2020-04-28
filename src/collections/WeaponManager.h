@@ -31,7 +31,7 @@ class WeaponManager {
   private:
     int cursor_ = WEAPON_MANAGER_CURSOR_MIN;
 
-    Weapon* weapons_[Weapon::COUNT];
+    Weapon weapons_[Weapon::COUNT];
     WeaponManagerState state_;
     WeaponManagerState nextState_;
 
@@ -39,10 +39,10 @@ class WeaponManager {
     void initNextState_();
     void applyNextState_();
 
-    Weapon* getWeaponAtIndex_(int);
+    Weapon getWeaponAtIndex_(int);
     void dropPreviewGems_();
     void populatePreviewGems_();
-    Weapon* getRandomWeapon_();
+    Weapon getRandomWeapon_();
 
     bool isActiveWeapon_(int);
 };

@@ -10,7 +10,7 @@ const int Enemy::DATA[COUNT][ENEMY_DATA_LENGTH] = {
 };
 
 Enemy::Enemy() {
-  flashAnimation_ = new Animation(
+  flashAnimation_.init(
     FLASH_ANIMATION_INITIAL_VALUE,
     FLASH_ANIMATION_LOWER_LIMIT,
     FLASH_ANIMATION_UPPER_LIMIT,
@@ -19,7 +19,7 @@ Enemy::Enemy() {
     FLASH_ANIMATION_LOOP
   );
 
-  shakeAnimation_ = new Animation(
+  shakeAnimation_.init(
     SHAKE_ANIMATION_INITIAL_VALUE,
     SHAKE_ANIMATION_LOWER_LIMIT,
     SHAKE_ANIMATION_UPPER_LIMIT,
@@ -28,7 +28,7 @@ Enemy::Enemy() {
     SHAKE_ANIMATION_LOOP
   );
 
-  damageIndicatorAnimation_ = new Animation(
+  damageIndicatorAnimation_.init(
     DAMAGE_INDICATOR_ANIMATION_INITIAL_VALUE,
     DAMAGE_INDICATOR_ANIMATION_LOWER_LIMIT,
     DAMAGE_INDICATOR_ANIMATION_UPPER_LIMIT,
@@ -37,7 +37,7 @@ Enemy::Enemy() {
     DAMAGE_INDICATOR_ANIMATION_LOOP
   );
 
-  idleAnimation_ = new Animation(
+  idleAnimation_.init(
     IDLE_ANIMATION_INITIAL_VALUE,
     IDLE_ANIMATION_LOWER_LIMIT,
     IDLE_ANIMATION_UPPER_LIMIT,
@@ -45,7 +45,7 @@ Enemy::Enemy() {
     IDLE_ANIMATION_LOOP
   );
 
-  attackAnimation_ = new Animation(
+  attackAnimation_.init(
     ATTACK_ANIMATION_INITIAL_VALUE,
     ATTACK_ANIMATION_LOWER_LIMIT,
     ATTACK_ANIMATION_UPPER_LIMIT,
@@ -54,7 +54,7 @@ Enemy::Enemy() {
     ATTACK_ANIMATION_LOOP
   );
 
-  slashAnimation_ = new Animation(
+  slashAnimation_.init(
     SLASH_ANIMATION_INITIAL_VALUE,
     SLASH_ANIMATION_LOWER_LIMIT,
     SLASH_ANIMATION_UPPER_LIMIT,
@@ -73,11 +73,11 @@ void Enemy::init(int type) {
   setRandomAttackInterval_();
   health_ = getHealthData_(type);
   healthBarWidth_ = ENEMY_HEALTH_BAR_WIDTH_MAX;
-  flashAnimation_->reset();
-  shakeAnimation_->reset();
-  damageIndicatorAnimation_->reset();
-  idleAnimation_->reset();
-  slashAnimation_->reset();
+  flashAnimation_.reset();
+  shakeAnimation_.reset();
+  damageIndicatorAnimation_.reset();
+  idleAnimation_.reset();
+  slashAnimation_.reset();
 }
 
 void Enemy::initNext() {
@@ -89,12 +89,12 @@ void Enemy::setRandomAttackInterval_() {
 }
 
 void Enemy::update() {
-  attackAnimation_->update();
-  flashAnimation_->update();
-  shakeAnimation_->update();
-  damageIndicatorAnimation_->update();
-  idleAnimation_->update();
-  if (slashAnimation_->isRunning()) slashAnimation_->update();
+  attackAnimation_.update();
+  flashAnimation_.update();
+  shakeAnimation_.update();
+  damageIndicatorAnimation_.update();
+  idleAnimation_.update();
+  if (slashAnimation_.isRunning()) slashAnimation_.update();
 
   if (demonAttackCounter_ == DEMON_ATTACK_COUNTER_MAX) {
     game->forceDisableFastFall();
@@ -103,7 +103,7 @@ void Enemy::update() {
     demonAttackCounter_++;
   }
 
-  if (!damageIndicatorAnimation_->isRunning()) damageIndicatorNum_ = 0;
+  if (!damageIndicatorAnimation_.isRunning()) damageIndicatorNum_ = 0;
 
   attackFrame_++;
   if (attackFrame_ == attackInterval_) {
@@ -127,12 +127,12 @@ void Enemy::render() {
   renderHealthBar_();
   renderDamageIndicator_();
 
-  if (slashAnimation_->isRunning()) {
+  if (slashAnimation_.isRunning()) {
     sprites.drawSelfMasked(
       slashX_,
       slashY_,
       slashSprite,
-      slashAnimation_->getValue()
+      slashAnimation_.getValue()
     );    
   }
 }
@@ -143,15 +143,15 @@ void Enemy::takeDamage(int rawDamage, int weaponType) {
   health_ -= damage;
   healthBarWidth_ = getHealthBarWidth_();
   
-  flashAnimation_->run();
-  shakeAnimation_->run();
-  damageIndicatorAnimation_->run();
+  flashAnimation_.run();
+  shakeAnimation_.run();
+  damageIndicatorAnimation_.run();
 
   damageIndicatorNum_ += -damage;
 }
 
 void Enemy::attack_() {
-  attackAnimation_->run();
+  attackAnimation_.run();
 
   switch(type_) {
     case SKELETON:
@@ -178,7 +178,7 @@ void Enemy::skeletonAttack_() {
   if (targetGem != NULL) {
     slashX_ = targetGem->getX() + 4;
     slashY_ = targetGem->getY() - 2;
-    slashAnimation_->run();
+    slashAnimation_.run();
   }
 }
 
@@ -212,23 +212,23 @@ bool Enemy::isLastEnemy() {
 }
 
 int Enemy::getFrame_() {
-  if (attackAnimation_->isRunning()) return attackAnimation_->getValue();
-  if (shakeAnimation_->isRunning()) return 9;
-  return idleAnimation_->getValue();
+  if (attackAnimation_.isRunning()) return attackAnimation_.getValue();
+  if (shakeAnimation_.isRunning()) return 9;
+  return idleAnimation_.getValue();
 }
 
 void Enemy::renderPortrait_() {
-  if (flashAnimation_->getValue() == 0) {
+  if (flashAnimation_.getValue() == 0) {
     if (type_ < ORC) {
       sprites.drawOverwrite(
-        PORTRAIT_X + shakeAnimation_->getValue(),
+        PORTRAIT_X + shakeAnimation_.getValue(),
         PORTRAIT_Y,
         skeletonSprite,
         getFrame_()
       );
     } else {
       sprites.drawOverwrite(
-        PORTRAIT_X + shakeAnimation_->getValue(),
+        PORTRAIT_X + shakeAnimation_.getValue(),
         PORTRAIT_Y,
         enemySprite,
         type_
@@ -248,12 +248,12 @@ void Enemy::renderHealthBar_() {
 }
 
 void Enemy::renderDamageIndicator_() {
-  if (!damageIndicatorAnimation_->isRunning()) return;
+  if (!damageIndicatorAnimation_.isRunning()) return;
 
   renderIndicator(
     damageIndicatorNum_,
     DAMAGE_INDICATOR_X, 
-    DAMAGE_INDICATOR_Y + damageIndicatorAnimation_->getValue(),
+    DAMAGE_INDICATOR_Y + damageIndicatorAnimation_.getValue(),
     BLACK
   );
 }

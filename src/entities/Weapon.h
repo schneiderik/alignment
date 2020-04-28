@@ -15,9 +15,9 @@ class Weapon {
     static const int Y_OFFSETS[COUNT];
     static const int GEM_X_OFFSETS[GEM_MAX];
 
-    Weapon(int i);
-        
-    void reset(int);
+    Weapon();
+
+    void init(int);
     void render(bool);
     void update();
 

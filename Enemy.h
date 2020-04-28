@@ -106,12 +106,12 @@ class Enemy {
     void demonAttack_();
     void sorcererAttack_();
 
-    Animation* flashAnimation_;
-    Animation* shakeAnimation_;
-    Animation* damageIndicatorAnimation_;
-    Animation* idleAnimation_;
-    Animation* attackAnimation_;
-    Animation* slashAnimation_;
+    Animation flashAnimation_;
+    Animation shakeAnimation_;
+    Animation damageIndicatorAnimation_;
+    Animation idleAnimation_;
+    Animation attackAnimation_;
+    Animation slashAnimation_;
 
     int type_;
     int health_;

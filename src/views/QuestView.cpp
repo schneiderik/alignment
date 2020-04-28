@@ -10,7 +10,7 @@ const int QuestView::DATA[Enemy::COUNT][DATA_LENGTH] = {
 };
 
 QuestView::QuestView() {
-  bounceAnimation_ = new Animation(
+  bounceAnimation_.init(
     BOUNCE_ANIMATION_INITIAL_VALUE,
     BOUNCE_ANIMATION_LOWER_LIMIT,
     BOUNCE_ANIMATION_UPPER_LIMIT,
@@ -27,7 +27,7 @@ void QuestView::handleInput() {
 }
 
 void QuestView::update() {
-  bounceAnimation_->update();
+  bounceAnimation_.update();
 }
 
 void QuestView::render() {
@@ -44,7 +44,7 @@ void QuestView::renderText_() {
 void QuestView::renderCursor_() {
   sprites.drawOverwrite(
     getXData_(enemy->getType()) + 8,
-    getYData_(enemy->getType()) - 4 + bounceAnimation_->getValue(),
+    getYData_(enemy->getType()) - 4 + bounceAnimation_.getValue(),
     questCursorImage,
     0
   );  

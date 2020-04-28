@@ -2,7 +2,7 @@
 #include "../entities/Weapon.h"
 
 WeaponManager::WeaponManager() {
-  for (int i = 0; i < Weapon::COUNT; i++) weapons_[i] = new Weapon(i); 
+  for (int i = 0; i < Weapon::COUNT; i++) weapons_[i].init(i); 
 }
 
 void WeaponManager::update() {
@@ -34,24 +34,24 @@ void WeaponManager::applyNextState_() {
 
 void WeaponManager::updateWeapons_() {
   for (int i = 0; i < Weapon::COUNT; i++) {
-    if (!state_.isClearing || (state_.isClearing && weapons_[i]->isClearing())) {
-      weapons_[i]->update();
+    if (!state_.isClearing || (state_.isClearing && weapons_[i].isClearing())) {
+      weapons_[i].update();
     }
 
-    if (!weapons_[i]->previewIsEmpty()) nextState_.isReadyToPopulatePreview = false;  
-    if (weapons_[i]->hasFallingGem()) nextState_.isReadyToDropPreview = false;  
-    if (!weapons_[i]->isEmpty()) nextState_.hasStackedGems = true;
-    if (weapons_[i]->isClearing()) nextState_.isClearing = true;
+    if (!weapons_[i].previewIsEmpty()) nextState_.isReadyToPopulatePreview = false;  
+    if (weapons_[i].hasFallingGem()) nextState_.isReadyToDropPreview = false;  
+    if (!weapons_[i].isEmpty()) nextState_.hasStackedGems = true;
+    if (weapons_[i].isClearing()) nextState_.isClearing = true;
   }
 }
 
 void WeaponManager::render() {
-  for (int i = 0; i < Weapon::COUNT; i++) weapons_[i]->render(isActiveWeapon_(i));
+  for (int i = 0; i < Weapon::COUNT; i++) weapons_[i].render(isActiveWeapon_(i));
 }
 
 void WeaponManager::reset() {
   cursor_ = WEAPON_MANAGER_CURSOR_MIN;
-  for (int i = 0; i < Weapon::COUNT; i++) weapons_[i]->reset(i);
+  for (int i = 0; i < Weapon::COUNT; i++) weapons_[i].init(i);
 }
 
 void WeaponManager::incrementCursor() {
@@ -73,53 +73,53 @@ void WeaponManager::decrementCursor() {
 void WeaponManager::swap() { 
   if (state_.isClearing) return;
 
-  Weapon* weapon1 = getWeaponAtIndex_(cursor_);
-  Weapon* weapon2 = getWeaponAtIndex_(cursor_ + 1);
+  Weapon weapon1 = getWeaponAtIndex_(cursor_);
+  Weapon weapon2 = getWeaponAtIndex_(cursor_ + 1);
 
-  int tmpOrder = weapon1->getOrder();
-  weapon1->setOrder(weapon2->getOrder());
-  weapon2->setOrder(tmpOrder);
+  int tmpOrder = weapon1.getOrder();
+  weapon1.setOrder(weapon2.getOrder());
+  weapon2.setOrder(tmpOrder);
 
-  Gem* tmpPreviewGem = weapon1->getPreviewGem();
-  weapon1->setPreviewGem(weapon2->getPreviewGem());
-  weapon2->setPreviewGem(tmpPreviewGem);
+  Gem* tmpPreviewGem = weapon1.getPreviewGem();
+  weapon1.setPreviewGem(weapon2.getPreviewGem());
+  weapon2.setPreviewGem(tmpPreviewGem);
 
-  bool weapon1Unobstructed = weapon1->fallingGemAboveX(weapon2->getEndOfRowX());
-  bool weapon2Unobstructed = weapon2->fallingGemAboveX(weapon1->getEndOfRowX());
+  bool weapon1Unobstructed = weapon1.fallingGemAboveX(weapon2.getEndOfRowX());
+  bool weapon2Unobstructed = weapon2.fallingGemAboveX(weapon1.getEndOfRowX());
 
   if (weapon1Unobstructed && weapon2Unobstructed) {
-    Gem* tmpFallingGem = weapon1->getFallingGem();
-    weapon1->setFallingGem(weapon2->getFallingGem());
-    weapon2->setFallingGem(tmpFallingGem);
+    Gem* tmpFallingGem = weapon1.getFallingGem();
+    weapon1.setFallingGem(weapon2.getFallingGem());
+    weapon2.setFallingGem(tmpFallingGem);
   }
 
   swapSound();
 }
 
-Weapon* WeaponManager::getWeaponAtIndex_(int order) {
+Weapon WeaponManager::getWeaponAtIndex_(int order) {
   for (int i = 0; i < Weapon::COUNT; i++) {
-    if (weapons_[i]->getOrder() == order) return weapons_[i];
+    if (weapons_[i].getOrder() == order) return weapons_[i];
   }
 }
 
-Weapon* WeaponManager::getRandomWeapon_() {
+Weapon WeaponManager::getRandomWeapon_() {
   return weapons_[random(0, Weapon::COUNT)];
 }
 
 Gem* WeaponManager::popLastGemOfRandomWeapon() {
   if (!state_.hasStackedGems) return NULL;
 
-  Weapon* weapon = getRandomWeapon_();
+  Weapon weapon = getRandomWeapon_();
 
-  if (weapon->getLastGemInStack() == NULL) {
+  if (weapon.getLastGemInStack() == NULL) {
     return popLastGemOfRandomWeapon();
   } else {
-    return weapon->popLastGem();
+    return weapon.popLastGem();
   }
 }
 
 void WeaponManager::dropPreviewGems_() {
-  for (int i = 0; i < Weapon::COUNT; i++) weapons_[i]->dropPreviewGem();
+  for (int i = 0; i < Weapon::COUNT; i++) weapons_[i].dropPreviewGem();
 }
 
 void WeaponManager::populatePreviewGems_() {
@@ -127,16 +127,16 @@ void WeaponManager::populatePreviewGems_() {
 }
 
 void WeaponManager::populatePreviewGemForRandomWeapon() {
-  Weapon* weapon = getRandomWeapon_();
+  Weapon weapon = getRandomWeapon_();
 
-  if (weapon->hasPreviewGem()) {
+  if (weapon.hasPreviewGem()) {
     populatePreviewGemForRandomWeapon();
   } else {
-    weapon->createPreviewGem();
+    weapon.createPreviewGem();
   }
 }
 
 bool WeaponManager::isActiveWeapon_(int i) {
-  int order = weapons_[i]->getOrder();
+  int order = weapons_[i].getOrder();
   return order == cursor_ || order == cursor_ + 1;
 }

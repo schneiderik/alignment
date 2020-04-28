@@ -7,11 +7,9 @@
 static const int Weapon::Y_OFFSETS[Weapon::COUNT] = {13, 25, 37, 49};
 static const int Weapon::GEM_X_OFFSETS[Weapon::GEM_MAX] = {16, 28, 40, 52, 64, 76, 88};
 
-Weapon::Weapon(int order) {
-  reset(order);
-}
+Weapon::Weapon() {}
 
-void Weapon::reset(int order) {
+void Weapon::init(int order) {
   type_ = order;
   order_ = order;
   y_ = Weapon::Y_OFFSETS[order];

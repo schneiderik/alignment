@@ -1,43 +1,44 @@
 #include "Animation.h"
 
+Animation::Animation() {}
+
 // loop false: lower limit to upper limit forever at X speed
 // loop true: loop through limits forever at X speed
-Animation::Animation(
+void Animation::init(
   int initialValue,
   int lowerLimit,
   int upperLimit,
   int speed,
   bool loop
-):
-  initialValue_(initialValue),
-  lowerLimit_(lowerLimit),
-  upperLimit_(upperLimit),
-  intervalCount_(0),
-  currentInterval_(0),
-  intervalLength_(speed),
-  initialVelocity_(upperLimit < lowerLimit ? -1 : 1),
-  velocity_(initialVelocity_),
-  isLooping_(loop)
-{};
+) {
+  initialValue_ = initialValue;
+  lowerLimit_ = lowerLimit;
+  upperLimit_ = upperLimit;
+  intervalCount_ = 0;
+  currentInterval_ = 0;
+  intervalLength_ = speed;
+  initialVelocity_ = upperLimit < lowerLimit ? -1 : 1;
+  velocity_ = initialVelocity_;
+  isLooping_ = loop;
+};
 
 // loop false: lower limit to upper limit X times over duration
 // loop true: loop through limits X times over duration
-Animation::Animation(
+void Animation::init(
   int initialValue,
   int lowerLimit,
   int upperLimit,
   int count,
   int duration,
   bool loop
-):
-  initialValue_(initialValue),
-  lowerLimit_(lowerLimit),
-  upperLimit_(upperLimit),
-  count_(count),
-  initialVelocity_(upperLimit < lowerLimit ? -1 : 1),
-  velocity_(initialVelocity_),
-  isLooping_(loop)
-{
+) {
+  initialValue_ = initialValue;
+  lowerLimit_ = lowerLimit;
+  upperLimit_ = upperLimit;
+  count_ = count;
+  initialVelocity_ = upperLimit < lowerLimit ? -1 : 1;
+  velocity_ = initialVelocity_;
+  isLooping_ = loop; 
   intervalCount_ = abs(upperLimit - lowerLimit) * (loop ? 2 : 1) * count;
   intervalLength_ = (int)ceil((float)duration/(float)intervalCount_);
   currentInterval_ = intervalCount_;

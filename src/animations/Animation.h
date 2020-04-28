@@ -5,8 +5,10 @@
 
 class Animation {
   public:
-    Animation(int, int, int, int, bool);
-    Animation(int, int, int, int, int, bool);
+    Animation();
+
+    void init(int, int, int, int, bool);
+    void init(int, int, int, int, int, bool);
 
     void run();
     void reset();
