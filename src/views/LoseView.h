@@ -7,6 +7,7 @@
 class LoseView: public View {
   public:
     void handleInput() override;
+    void handleNavigateFrom() override;
     void render() override;
 };
 

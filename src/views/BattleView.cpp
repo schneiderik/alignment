@@ -15,6 +15,13 @@ void BattleView::handleInput() {
   if (arduboy.justPressed(A_BUTTON)) weaponManager->swap();
 }
 
+void BattleView::handleNavigateTo() {
+  game->disableFastFall();
+  player->resetHealth();
+  gemManager->reset();
+  weaponManager->reset();
+}
+
 void BattleView::update() {
   if (paused) return;
   player->update();
@@ -30,13 +37,6 @@ void BattleView::render() {
   enemy->render();
   weaponManager->render();
   renderPaused();
-}
-
-void BattleView::reset() {
-  game->disableFastFall();
-  player->resetHealth();
-  gemManager->reset();
-  weaponManager->reset();
 }
 
 void BattleView::renderTopBar() {

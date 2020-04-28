@@ -3,7 +3,12 @@
 #include "../../Player.h"
 
 void WinView::handleInput() {
-  if (arduboy.justPressed(A_BUTTON)) game->reset(); 
+  if (arduboy.justPressed(A_BUTTON)) game->goToTitleView();
+}
+
+void WinView::handleNavigateFrom() {
+  enemy->init(Enemy::SKELETON);
+  player->reset();
 }
 
 void WinView::render() {

@@ -3,7 +3,12 @@
 #include "../../Player.h"
 
 void LoseView::handleInput() {
-  if (arduboy.justPressed(A_BUTTON)) game->reset();
+  if (arduboy.justPressed(A_BUTTON)) game->goToTitleView();
+}
+
+void LoseView::handleNavigateFrom() {
+  enemy->init(Enemy::SKELETON);
+  player->reset();
 }
 
 void LoseView::render() {

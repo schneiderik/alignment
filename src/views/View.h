@@ -1,8 +1,6 @@
 #ifndef VIEW_H
 #define VIEW_H
 
-#include "../../global.h"
-
 class View {
   public:
     virtual void handleInput() {};

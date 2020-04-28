@@ -7,6 +7,7 @@
 class BattleView: public View {
   public:    
     void handleInput() override;
+    void handleNavigateTo() override;
     void update() override;
     void render() override;
     void reset();

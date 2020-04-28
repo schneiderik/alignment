@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "src/views/Router.h"
 #include "src/views/TitleView.h"
 #include "src/views/InfoView.h"
 #include "src/views/QuestView.h"
@@ -13,10 +14,11 @@
 
 class Game {
   public:
+    Game();
+
     void handleInput();
     void update();
     void render();
-    void reset();
     
     void goToTitleView();
     void goToInfoView();
@@ -34,8 +36,8 @@ class Game {
   private:
     bool fastFall_ = false;
     bool forcedFastFall_ = false;
-    View* view_ = NULL;
 
+    Router router_;
     TitleView titleView_;
     BattleView battleView_;
     InfoView infoView_;
