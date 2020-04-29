@@ -3,6 +3,8 @@
 
 #include "global.h";
 #include "src/animations/Animation.h";
+#include "src/collections/WeaponManager.h"
+#include "src/collections/GemManager.h"
 
 #define ENEMY_DATA_LENGTH 5
 #define ENEMY_DATA_HEALTH 0

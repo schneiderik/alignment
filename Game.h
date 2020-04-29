@@ -9,9 +9,6 @@
 #include "src/views/WinView.h"
 #include "src/views/LoseView.h"
 
-#include "src/collections/WeaponManager.h"
-#include "src/collections/GemManager.h"
-
 class Game {
   public:
     Game();
