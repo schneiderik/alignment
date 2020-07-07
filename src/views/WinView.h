@@ -2,13 +2,12 @@
 #define WIN_VIEW_H
 
 #include "../../global.h"
-#include "./View.h"
+#include "View.h"
 
 class WinView: public View {
   public:
-    void handleInput() override;
-    void handleNavigateFrom() override;
-    void render() override;
+    void handleInput(Game) override;
+    void render(Game) override;
 };
 
 #endif

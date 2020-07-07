@@ -2,8 +2,7 @@
 #define QUEST_VIEW_H
 
 #include "../../global.h"
-#include "./View.h"
-#include "../../Enemy.h"
+#include "View.h"
 #include "../animations/Animation.h"
 
 #define DATA_LENGTH 2
@@ -21,23 +20,22 @@
 
 class QuestView: public View {
   public:
-    QuestView();
-
-    void handleInput() override;
-    void update() override;
-    void render() override;
+    void init(game) override;
+    void handleInput(Game) override;
+    void update(Game) override;
+    void render(Game) override;
 
   private:
-    static const int DATA[Enemy::COUNT][DATA_LENGTH];
+    static const int DATA[ENEMY_COUNT][DATA_LENGTH];
 
     static int getXData_(int);
     static int getYData_(int);
 
     void renderText_();
-    void renderCursor_();
+    void renderCursor_(Game);
     void renderPaths_();
-    void renderEnemies_();
-    void renderEnemy_(int);
+    void renderEnemies_(Game);
+    void renderEnemy_(int, Game);
 
     Animation bounceAnimation_;
 };

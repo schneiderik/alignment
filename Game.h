@@ -1,7 +1,11 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "src/views/Router.h"
+#include "Audio.h"
+#include "Player.h"
+#include "Enemy.h"
+
+#include "src/views/View.h"
 #include "src/views/TitleView.h"
 #include "src/views/InfoView.h"
 #include "src/views/QuestView.h"
@@ -17,6 +21,7 @@ class Game {
     void update();
     void render();
     
+    void navigateTo(View*);
     void goToTitleView();
     void goToInfoView();
     void goToQuestView();
@@ -24,23 +29,23 @@ class Game {
     void goToWinView();
     void goToLoseView();
 
-    int getGameSpeed();
-    void enableFastFall();
-    void disableFastFall();
-    void forceEnableFastFall();
-    void forceDisableFastFall();
+    Player getPlayer();
+    Enemy getCurrentEnemy();
+    Audio getAudio();
 
   private:
-    bool fastFall_ = false;
-    bool forcedFastFall_ = false;
+    View* view_ = NULL;
 
-    Router router_;
     TitleView titleView_;
     BattleView battleView_;
     InfoView infoView_;
     QuestView questView_;
     WinView winView_;
     LoseView loseView_;
+
+    Player player_;
+    Enemy enemy_;
+    Audio audio_;
 };
 
 #endif

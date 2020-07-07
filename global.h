@@ -2,21 +2,9 @@
 #define GLOBAL_H
 
 #include <Arduboy2.h>
-#include <ArduboyTones.h>
 
 extern Arduboy2 arduboy;
 extern Sprites sprites;
-extern ArduboyTones sound;
-
-#include "images.h"
-
-class Player;
-class Enemy;
-class Game;
-class Gem;
-class Weapon;
-class WeaponManager;
-class GemManager;
 
 #define FPS 60
 #define INTERVAL_LENGTH 30
@@ -29,13 +17,12 @@ class GemManager;
 #define GRAVITY_ACCELERATION 1
 #define NUMBER_HEIGHT 6
 #define SMALL_NUMBER_HEIGHT 5
+#define ENEMY_COUNT 5
+#define HEALTH_MAX 3
+#define ALIGN_LEFT 0
+#define ALIGN_CENTER 1
+#define ALIGN_RIGHT 2
 
-#include "helpers.h"
-
-extern Game* game;
-extern Player* player;
-extern Enemy* enemy;
-extern WeaponManager* weaponManager;
-extern GemManager* gemManager;
+#include "images.h"
 
 #endif

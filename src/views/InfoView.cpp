@@ -1,13 +1,12 @@
 #include "InfoView.h"
-#include "../../Game.h"
 
-void InfoView::handleInput() {
+void InfoView::handleInput(Game game) {
   if (arduboy.justPressed(A_BUTTON)) {
-    game->goToTitleView();
-    confirmSound();
+    game.goToTitleView();
+    game.getAudio().playConfirmSound();
   }
 }
 
-void InfoView::render() {
+void InfoView::render(Game game) {
   sprites.drawOverwrite(11, 4, infoImage, 0);
 }

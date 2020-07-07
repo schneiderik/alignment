@@ -2,13 +2,9 @@
 #define PLAYER_H
 
 #include "global.h"
-#include "Enemy.h"
 
 class Player {
   public:
-    static const int HEALTH_MAX = 3;
-
-    void update();
     void reset();
 
     unsigned long int getScore();

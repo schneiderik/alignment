@@ -2,7 +2,7 @@
 #define TITLE_VIEW_H
 
 #include "../../global.h"
-#include "./View.h"
+#include "View.h"
 
 #define TITLE_STATE_PLAY 0
 #define TITLE_STATE_INFO 1
@@ -13,17 +13,19 @@
 
 class TitleView: public View {
   public:
-    void handleInput() override;
-    void decrementState();
-    void incrementState();
-    void selectOption();
-    
-    void render() override;
-    void renderMainImage();
-    void renderPlayOption();
-    void renderInfoOption();
-    void renderSfxOption();
-    void renderCursor(int, int, int);
+    void handleInput(Game) override;
+    void render(Game) override;
+
+  private:
+    void decrementState_(Game);
+    void incrementState_(Game);
+    void selectOption_(Game);
+
+    void renderMainImage_();
+    void renderPlayOption_();
+    void renderInfoOption_();
+    void renderSfxOption_();
+    void renderCursor_(int, int, int);
 
     int state = TITLE_STATE_PLAY;
 };

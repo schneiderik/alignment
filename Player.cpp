@@ -1,9 +1,4 @@
 #include "Player.h"
-#include "Game.h"
-
-void Player::update() {
-  if (isDead()) game->goToLoseView(); 
-}
 
 void Player::reset() {
   score_ = 0;
@@ -24,7 +19,6 @@ bool Player::isDead() {
 
 void Player::takeDamage() {
   health_--;
-  loseHeartSound();
 }
 
 int Player::getHealth() {

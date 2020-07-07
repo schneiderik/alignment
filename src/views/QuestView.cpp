@@ -1,7 +1,6 @@
 #include "QuestView.h"
-#include "../../Game.h"
 
-const int QuestView::DATA[Enemy::COUNT][DATA_LENGTH] = {
+const int QuestView::DATA[ENEMY_COUNT][DATA_LENGTH] = {
   {5, 16},
   {29, 31},
   {53, 16},
@@ -9,7 +8,7 @@ const int QuestView::DATA[Enemy::COUNT][DATA_LENGTH] = {
   {101, 16}
 };
 
-QuestView::QuestView() {
+void QuestView::init(Game game) {
   bounceAnimation_.init(
     BOUNCE_ANIMATION_INITIAL_VALUE,
     BOUNCE_ANIMATION_LOWER_LIMIT,
@@ -19,32 +18,32 @@ QuestView::QuestView() {
   );
 }
 
-void QuestView::handleInput() {
+void QuestView::handleInput(Game game) {
   if (arduboy.justPressed(A_BUTTON)) {
-    game->goToBattleView();
-    confirmSound();
+    game.goToBattleView();
+    game.getAudio().playConfirmSound();
   }
 }
 
-void QuestView::update() {
+void QuestView::update(Game game) {
   bounceAnimation_.update();
 }
 
-void QuestView::render() {
+void QuestView::render(Game game) {
   renderText_();
-  renderCursor_();
+  renderCursor_(game);
   renderPaths_();
-  renderEnemies_();
+  renderEnemies_(game);
 }
 
 void QuestView::renderText_() {
   sprites.drawOverwrite(32, 2, questText, 0);     
 }
 
-void QuestView::renderCursor_() {
+void QuestView::renderCursor_(Game game) {
   sprites.drawOverwrite(
-    getXData_(enemy->getType()) + 8,
-    getYData_(enemy->getType()) - 4 + bounceAnimation_.getValue(),
+    getXData_(game.getCurrentEnemy().getType()) + 8,
+    getYData_(game.getCurrentEnemy().getType()) - 4 + bounceAnimation_.getValue(),
     questCursorImage,
     0
   );  
@@ -57,18 +56,18 @@ void QuestView::renderPaths_() {
   sprites.drawOverwrite(102, 50, pathReverseImage, 0);  
 }
 
-void QuestView::renderEnemies_() {
-  for (int i = 0; i < Enemy::COUNT; i++) renderEnemy_(i); 
+void QuestView::renderEnemies_(Game game) {
+  for (int i = 0; i < Enemy::COUNT; i++) renderEnemy_(i, game); 
 }
 
-void QuestView::renderEnemy_(int type) {
+void QuestView::renderEnemy_(int type, Game game) {
   sprites.drawOverwrite(
     getXData_(type),
     getYData_(type),
     questSprite,
-    enemy->getType() == type
+    game.getCurrentEnemy().getType() == type
       ? type
-      : type < enemy->getType()
+      : type < game.getCurrentEnemy().getType()
         ? GRAVE_INDEX
         : MYSTERY_INDEX
   );   
