@@ -21,8 +21,19 @@ void Enemy::initNext() {
   init(type_ + 1);
 }
 
-void Enemy::takeDamage(int damage, int weaponType) {
-  health_ -= damage + getWeaponModifierData_(type_, weaponType);
+void Enemy::onNotify(Weapon weapon, Event event) {
+  switch (event) {
+    case Event::WEAPON_MATCH:
+      takeDamage(weapon);
+      break;
+  }
+}
+
+void Enemy::takeDamage(Weapon weapon) {
+  health_ -= DAMAGE_BASE + getWeaponModifierData_(type_, weapon.getType());
+  notify(*this, Event::ENEMY_DAMAGED);
+
+  if (isDead()) notify(*this, Event::ENEMY_DEFEATED);
 }
 
 int Enemy::getType() {

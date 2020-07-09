@@ -2,7 +2,6 @@
 
 void EnemyPanel::init(Enemy enemy) {
   portrait_.init(enemy);
-  healthBar_.init(enemy);
 }
 
 void EnemyPanel::update() {
@@ -14,10 +13,7 @@ void EnemyPanel::render(int x, int y) {
   healthBar_.render(x + HEALTH_BAR_X, y + HEALTH_BAR_Y);
 }
 
-void EnemyPanel::takeDamage() {
-  portrait_.takeDamage();
-}
-
-void EnemyPanel::attack() {
-  portrait_.attack();
+void EnemyPanel::reset() {
+  healthBar_.reset();
+  portrait_.reset();
 }

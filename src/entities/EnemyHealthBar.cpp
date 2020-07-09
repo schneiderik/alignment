@@ -1,14 +1,22 @@
 #include "EnemyHealthBar.h"
 
-void EnemyHealthBar::init(Enemy enemy) {
-  enemy_ = &enemy;
+void EnemyHealthBar::onNotify(Enemy enemy, Event event) {
+  switch (event) {
+    case Event::ENEMY_DAMAGED:
+      width_ = (int)ceil(enemy.getPercentHealth() * (float)ENEMY_HEALTH_BAR_WIDTH_MAX),
+      break;
+  }
+}
+
+void EnemyHealthBar::reset() {
+  width_ = ENEMY_HEALTH_BAR_WIDTH_MAX;
 }
 
 void EnemyHealthBar::render(int x, int y) {
   arduboy.fillRect(
     x,
     y,
-    (int)ceil(enemy_.getPercentHealth() * (float)ENEMY_HEALTH_BAR_WIDTH_MAX),
+    width_,
     ENEMY_HEALTH_BAR_HEIGHT,
     WHITE
   ); 

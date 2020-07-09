@@ -8,11 +8,12 @@
 
 class EnemyHealthBar {
   public:
-    void init(Enemy);
+    void onNotify(Enemy, Event) override;
+    void reset();
     void render(int, int);
 
   private:
-    Enemy* enemy_ = NULL;
+    int width_ = ENEMY_HEALTH_BAR_WIDTH_MAX;
 }
 
 #endif

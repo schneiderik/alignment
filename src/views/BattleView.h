@@ -9,7 +9,7 @@
 #define PLAYER_PANEL_Y 0
 
 #define PUZZLE_X 0
-#define PUZZLE_Y 15
+#define PUZZLE_Y 14
 
 #define ENEMY_PANEL_X 104
 #define ENEMY_PANEL_Y 12
@@ -30,12 +30,10 @@ class BattleView: public View {
 
   private:
     void renderPaused();
-    void attack_();
 
     EnemyPanel enemyPanel_;
     PlayerPanel playerPanel_;
     Puzzle puzzle_;
-    Interval attackInterval_;
 
     int paused = false;
 };

@@ -1,70 +1,74 @@
+#include "Puzzle.h"
+
 void Puzzle::render(int x, int y) {
-  renderPreviewDivider_();
-  weaponManager_.render();
+  renderPreviewDivider_(x, y);
+  weaponManager_.render(x + PUZZLE_WEAPONS_X, y + PUZZLE_WEAPONS_Y);
 }
 
 void Puzzle::update() {
   weaponManager_.update();
 }
 
+void Puzzle::onNotify(Event event, Enemy enemy) {
+  switch (event) {
+    case Event::ENEMY_ATTACKING:
+      triggerAttackEffect_(enemy);
+      break;
+  }
+}
 
-  puzzle_.forceDisableFastFall();
+void Puzzle::triggerAttackEffect_(Enemy enemy) {
+  switch (enemy.getType()) {
+    case Enemy::SKELETON:
+      weaponManager_.popLastGemOfRandomWeapon();
+      break;
+    case Enemy::ORC:
+      // puzzle_.queueGem();
+      break;
+    case Enemy::GOLEM:
+      // puzzle_.lockWeapons();
+      break;
+    case Enemy::DEMON:
+      // puzzle_.forceFastFall(3000);
+      break;
+    case Enemy::SORCERER:
+      // puzzle_.addRandomGem();
+      break;
+  }
+}
+
+void Puzzle::reset() {
+  forceDisableFastFall();
   weaponManager_.reset();
-
-void BattleView::renderPreviewDivider_() {
-  arduboy.fillRect(89, 14, 1, 48);
 }
 
-int BattleView::getGameSpeed_() {
-  return fastFall_ ? FAST_FALL_SPEED : INITIAL_GAME_SPEED;
-}
-
-void BattleView::enableFastFall_() {
+void Puzzle::enableFastFall() {
   fastFall_ = true;
 }
 
-void BattleView::disableFastFall_() {
+void Puzzle::disableFastFall() {
   if (!forcedFastFall_) fastFall_ = false;
 }
 
-void BattleView::forceEnableFastFall_() {
+void Puzzle::forceEnableFastFall() {
   fastFall_ = true;
   forcedFastFall_ = true;
 }
 
-void BattleView::forceDisableFastFall_() {
+void Puzzle::forceDisableFastFall() {
   fastFall_ = false;
   forcedFastFall_ = false;
 }
 
+void Puzzle::renderPreviewDivider_(int x, int y) {
+  arduboy.fillRect(
+    x + PUZZLE_PREVIEW_DIVIDER_X,
+    y + PUZZLE_PREVIEW_DIVIDER_Y,
+    PUZZLE_PREVIEW_DIVIDER_WIDTH,
+    PUZZLE_PREVIEW_DIVIDER_HEIGHT
+  );
+}
 
-// void Enemy::skeletonAttack_() {
-//   Gem* targetGem = weaponManager->popLastGemOfRandomWeapon();
-// 
-//   if (targetGem != NULL) {
-//     slashX_ = targetGem->getX() + 3;
-//     slashY_ = targetGem->getY() - 1;
-//     slashAnimation_.run();
-//   }
-// }
-
-// slashAnimation_.init(
-//   SLASH_ANIMATION_INITIAL_VALUE,
-//   SLASH_ANIMATION_LOWER_LIMIT,
-//   SLASH_ANIMATION_UPPER_LIMIT,
-//   SLASH_ANIMATION_COUNT,
-//   SLASH_ANIMATION_DURATION,
-//   SLASH_ANIMATION_LOOP
-// );
-
-// if (slashAnimation_.isRunning()) {
-//   sprites.drawSelfMasked(
-//     slashX_,
-//     slashY_,
-//     slashSprite,
-//     slashAnimation_.getValue()
-//   );    
-// }
-//
-// if (slashAnimation_.isRunning()) slashAnimation_.update();
-
+int Puzzle::getGameSpeed_() {
+  return fastFall_ ? FAST_FALL_SPEED : INITIAL_GAME_SPEED;
+}

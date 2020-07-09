@@ -1,7 +1,6 @@
 void PlayerPanel::init(Player player) {
   hearts_.init(player);
   score_.init(player);
-  player_ = &player;
 }
 
 void PlayerPanel::render(int x, int y) {

@@ -1,7 +1,9 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#include "global.h";
+#include "global.h"
+#include "Event.h"
+#include "Weapon.h"
 
 #define ENEMY_DATA_LENGTH 5
 #define ENEMY_DATA_HEALTH 0
@@ -19,6 +21,7 @@ class Enemy {
     
     void init(int);
     void initNext();
+    void onNotify(Weapon, Event) override;
 
     void takeDamage(int, int);
     int getType();

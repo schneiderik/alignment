@@ -1,0 +1,14 @@
+#ifndef EVENT_H
+#define EVENT_H
+
+class enum Event {
+  ENEMY_ATTACKING,
+  ENEMY_DAMAGED,
+  ENEMY_DEFEATED,
+  PLAYER_DAMAGED,
+  PLAYER_DEFEATED,
+  WEAPON_MATCH,
+  GEM_LOCK
+}
+
+#endif

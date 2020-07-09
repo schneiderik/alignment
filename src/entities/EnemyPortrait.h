@@ -1,4 +1,9 @@
+#ifndef ENEMY_PORTRAIT_H
+#define ENEMY_PORTRAIT_H
 
+#define ENEMY_FRAME_COUNT 9
+#define ENEMY_DAMAGE_FRAME 9
+#define ENEMY_ATTACK_EFFECT_FRAME 3
 
 #define FLASH_ANIMATION_INITIAL_VALUE 0
 #define FLASH_ANIMATION_LOWER_LIMIT 0
@@ -26,3 +31,27 @@
 #define ATTACK_ANIMATION_DURATION 50
 #define ATTACK_ANIMATION_COUNT 1
 #define ATTACK_ANIMATION_LOOP false
+
+#include "../../global.h"
+#include "Event.h"
+#include "../../Enemy.h"
+#include "Interval.h"
+
+class EnemyPortrait {
+  public:
+    void init(Enemy);
+    void update();
+    void render(int, int);
+    void reset();
+
+    void onNotify(Enemy, Event) override;
+
+  private:
+    Enemy* enemy_ = NULL;
+    Interval attackInterval_;
+    int frame_ = 0;
+
+    void updateFrame_();
+}
+
+#endif

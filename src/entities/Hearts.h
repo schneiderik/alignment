@@ -1,10 +1,10 @@
 #ifndef HEARTS_H
 #define HEARTS_H
 
+#include "../../global.h";
 #include "../../Player.h"
 
-
-class Hearts
+class Hearts {
   public:
     void init(Player);
     void render(int, int);

@@ -8,26 +8,31 @@ Game::Game() {
 }
 
 void Game::handleInput() { view_->handleInput(*this); }
+void Game::update() { view_->update(*this); }
+void Game::render() { view_->render(*this); }
 
-void Game::update() {
-  if (player_.isDead()) {
-    goToLoseView();
+void Gem::onNotify(Player player, Event event) {
+  switch (event) {
+    case Event::PLAYER_DEFEATED:
+      goToLoseView();
+      break;
   }
-
-  if (enemy_.isDead()) {
-    if (enemy_.isLastEnemy()) {
-      goToWinView();
-    } else {
-      player_.resetHealth();
-      enemy_.initNext();
-      goToQuestView();
-    }
-  }
-
-  view_->update(*this);
 }
 
-void Game::render() { view_->render(*this); }
+void Game::onNotify(Enemy enemy, Event event) {
+  switch (event) {
+    case Event::ENEMY_DEFEATED:
+      if (enemy.isLastEnemy()) {
+        goToWinView();
+      } else {
+        player_.resetHealth();
+        enemy.initNext();
+        goToQuestView();
+      }
+      break;
+  }
+}
+
 void Game::reset() {
   enemy_.init(Enemy::SKELETON);
   player_->reset();

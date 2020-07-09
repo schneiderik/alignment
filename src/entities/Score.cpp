@@ -19,7 +19,7 @@ void Score::render(int x, int y, int alignment, int color) {
 }
 
 int Score::calculateDigitCount_() {
-  unsigned long int num = player_.getScore();
+  unsigned long int num = player_->getScore();
   int count = 1;
   
   while (num /= 10) count++;  
@@ -30,7 +30,7 @@ int Score::calculateDigitCount_() {
 int Score::calculateWidth_() {
   int digitWidth = numberSprite[0] + 2;
   
-  return (calculateDigitCount_() * digitWidth) - 2 + (player_.getScore() < 0 ? 5 : 0);  
+  return (calculateDigitCount_() * digitWidth) - 2 + (player_->getScore() < 0 ? 5 : 0);  
 }
 
 void Score::renderDigit_(int digit, int x, int y, int color) {
@@ -47,7 +47,7 @@ void Score::renderAlignRight_(int x, int y, int color) {
 
   int index = 0;
   int offset = 0;
-  unsigned long int absNum = abs(player_.getScore());
+  unsigned long int absNum = abs(player_->getScore());
 
   while (absNum) {
     unsigned long int digit = absNum % 10;
@@ -59,7 +59,7 @@ void Score::renderAlignRight_(int x, int y, int color) {
     index++;
   }
 
-  if (player_.getScore() < 0) {
+  if (player_->getScore() < 0) {
     arduboy.fillRect(
       x - offset - 5 - numberSprite[0],
       y + (NUMBER_HEIGHT/2) - 1,

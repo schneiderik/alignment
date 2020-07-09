@@ -10,6 +10,7 @@
 #define HEARTS_X 2
 #define HEARTS_Y 2
 
+#include "../../global.h";
 #include "../../Player.h"
 #include "Hearts.h"
 #include "Score.h"
@@ -20,7 +21,6 @@ class PlayerPanel {
     void render(int, int)
 
   private:
-    Player* player_ = NULL;
     Hearts hearts_;
     Score score_;
 }

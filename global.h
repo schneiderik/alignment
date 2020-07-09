@@ -25,4 +25,8 @@ extern Sprites sprites;
 
 #include "images.h"
 
+class Weapon;
+class Gem;
+class Enemy;
+
 #endif

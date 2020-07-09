@@ -1,11 +1,18 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#define WEAPON_MATCH_POINTS 100
+#define GEM_LOCK_POINTS 10
+
 #include "global.h"
+#include "Event.h"
 
 class Player {
   public:
     void reset();
+
+    void onNotify(Weapon, Event);
+    void onNotify(Gem, Event);
 
     unsigned long int getScore();
     void addScore(int);

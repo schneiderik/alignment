@@ -1,6 +1,7 @@
 #ifndef SCORE_H
 #define SCORE_H
 
+#include "../../global.h";
 #include "../../Player"
 
 class Score {
@@ -9,7 +10,7 @@ class Score {
     void render(int, int, int, int);
 
   private:
-    Player* player_;
+    Player* player_ = NULL;
 
     void renderDigit_(int, int, int);
     void renderAlignCenter_(int, int, int);

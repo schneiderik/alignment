@@ -1,4 +1,8 @@
-Enemy::Enemy() {
+void EnemyPortrait::init(Enemy enemy) {
+  enemy_ = &enemy;
+
+  attackInterval_.init(ATTACK_INTERVAL_MIN, ATTACK_INTERVAL_MAX);
+
   flashAnimation_.init(
     FLASH_ANIMATION_INITIAL_VALUE,
     FLASH_ANIMATION_LOWER_LIMIT,
@@ -35,41 +39,59 @@ Enemy::Enemy() {
   );
 }
 
-void Enemy::init(int type) {
-  attackFrame_ = 0;
-  flashAnimation_.reset();
-  shakeAnimation_.reset();
-  idleAnimation_.reset();
-  slashAnimation_.reset();
-}
+void EnemyPortrait::update() {
+  attackInterval_.update();
 
-void Enemy::update() {
+  if (attackInterval_.isActive()) attackAnimation_.run();
+
   attackAnimation_.update();
   flashAnimation_.update();
   shakeAnimation_.update();
   idleAnimation_.update();
+
+  if (attackAnimation_.getValue() == ENEMY_ATTACK_EFFECT_FRAME) {
+    notify(*enemy_, Event::ENEMY_ATTACKING);
+  }
+
+  updateFrame_();
 }
 
-void Enemy::renderPortrait_() {
+void EnemyPortrait::render(int x, int y) {
   if (flashAnimation_.getValue() == 0) {
     sprites.drawOverwrite(
-      PORTRAIT_X + shakeAnimation_.getValue(),
-      PORTRAIT_Y,
+      x + shakeAnimation_.getValue(),
+      y,
       enemySprite,
-      getFrame_() + (type_ * 8)
+      frame_;
     );
   }
 }
 
-int Enemy::getFrame_() {
-  if (attackAnimation_.isRunning()) return attackAnimation_.getValue();
-  if (shakeAnimation_.isRunning()) return 9;
-  return idleAnimation_.getValue();
+void EnemyPortrait::reset() {
+  attackInterval_.reset();
+  attackAnimation_.reset();
+  flashAnimation_.reset();
+  shakeAnimation_.reset();
+  idleAnimation_.reset();
 }
 
-void Enemy::takeDamage(int rawDamage, int weaponType) {
-  healthBarWidth_ = getHealthBarWidth_();
-  
-  flashAnimation_.run();
-  shakeAnimation_.run();
+void EnemyPortrait::onNotify(Enemy enemy, Event event) {
+  switch (event) {
+    case Event::ENEMY_DAMAGED:
+      flashAnimation_.run();
+      shakeAnimation_.run();
+      break;
+  }
+}
+
+void EnemyPortrait::updateFrame_() {
+  int frame = idleAnimation_.getValue();
+
+  if (attackAnimation_.isRunning()) {
+    frame = attackAnimation_.getValue();
+  } else if (shakeAnimation_.isRunning()) {
+    frame = ENEMY_DAMAGE_FRAME;
+  }
+
+  frame_ = frame + (enemy_->getType() * ENEMY_FRAME_COUNT);
 }
