@@ -1,6 +1,6 @@
 #include "Hearts.h"
 
-void Hearts::init(Player player) {
+void Hearts::init(const Player& player) {
   player_ = &player;
 }
 

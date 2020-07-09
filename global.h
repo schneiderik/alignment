@@ -2,6 +2,7 @@
 #define GLOBAL_H
 
 #include <Arduboy2.h>
+#include <ArduboyTones.h>
 
 extern Arduboy2 arduboy;
 extern Sprites sprites;
@@ -29,5 +30,7 @@ class Game;
 class Weapon;
 class Gem;
 class Enemy;
+class Player;
+class Observer;
 
 #endif

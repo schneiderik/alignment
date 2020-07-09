@@ -6,9 +6,10 @@
 class Observer {
   public:
     virtual ~Observer() {}
-    virtual void onNotify(const Player& player, Event event) = 0;
-    virtual void onNotify(const Enemy& enemy, Event event) = 0;
-    virtual void onNotify(const Weapon& weapon, Event event) = 0;
+    virtual void onNotify(const Player& player, Event event) {};
+    virtual void onNotify(const Enemy& enemy, Event event) {};
+    virtual void onNotify(const Weapon& weapon, Event event) {};
+    virtual void onNotify(const Gem& gem, Event event) {};
 };
 
 #endif

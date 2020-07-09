@@ -1,6 +1,6 @@
 #include "Score.h"
 
-void Score::init(Player player) {
+void Score::init(const Player& player) {
   player_ = &player;
 }
 

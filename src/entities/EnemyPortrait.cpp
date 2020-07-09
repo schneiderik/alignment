@@ -1,6 +1,6 @@
 #include "EnemyPortrait.h"
 
-void EnemyPortrait::init(Enemy enemy) {
+void EnemyPortrait::init(const Enemy& enemy) {
   enemy_ = &enemy;
 
   attackInterval_.init(ATTACK_INTERVAL_MIN, ATTACK_INTERVAL_MAX);
@@ -77,7 +77,7 @@ void EnemyPortrait::reset() {
   idleAnimation_.reset();
 }
 
-void EnemyPortrait::onNotify(Enemy enemy, Event event) {
+void EnemyPortrait::onNotify(const Enemy& enemy, Event event) {
   switch (event) {
     case Event::ENEMY_DAMAGED:
       flashAnimation_.run();

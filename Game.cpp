@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "Enemy.h"
 
 Game::Game() {
   battleView_.init(*this);

@@ -2,11 +2,10 @@
 #define SCORE_H
 
 #include "../../global.h";
-#include "../../Player.h"
 
 class Score {
   public:
-    void init(Player);
+    void init(const &Player);
     void render(int, int, int, int);
 
   private:

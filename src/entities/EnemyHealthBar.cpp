@@ -1,6 +1,6 @@
 #include "EnemyHealthBar.h"
 
-void EnemyHealthBar::onNotify(Enemy enemy, Event event) {
+void EnemyHealthBar::onNotify(const Enemy& enemy, Event event) {
   switch (event) {
     case Event::ENEMY_DAMAGED:
       width_ = (int)ceil(enemy.getPercentHealth() * (float)ENEMY_HEALTH_BAR_WIDTH_MAX),

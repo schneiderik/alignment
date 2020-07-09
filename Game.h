@@ -26,8 +26,8 @@ class Game: public Observer {
     void render();
     void reset();
 
-    virtual void onNotify(const Player&, Event) override;
-    virtual void onNotify(const Enemy&, Event) override;
+    void onNotify(const Player&, Event) override;
+    void onNotify(const Enemy&, Event) override;
     
     void navigateTo(View*);
     void goToTitleView();

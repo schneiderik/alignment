@@ -10,12 +10,12 @@
 
 class EnemyHealthBar: public Observer {
   public:
-    void onNotify(Enemy, Event) override;
+    void onNotify(const Enemy&, Event) override;
     void reset();
     void render(int, int);
 
   private:
     int width_ = ENEMY_HEALTH_BAR_WIDTH_MAX;
-}
+};
 
 #endif

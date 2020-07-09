@@ -21,7 +21,7 @@ void Enemy::initNext() {
   init(type_ + 1);
 }
 
-void Enemy::onNotify(Weapon weapon, Event event) {
+void Enemy::onNotify(const Weapon& weapon, Event event) {
   switch (event) {
     case Event::WEAPON_MATCH:
       takeDamage(weapon);
@@ -29,7 +29,7 @@ void Enemy::onNotify(Weapon weapon, Event event) {
   }
 }
 
-void Enemy::takeDamage(Weapon weapon) {
+void Enemy::takeDamage(const Weapon& weapon) {
   health_ -= DAMAGE_BASE + getWeaponModifierData_(type_, weapon.getType());
   notify(*this, Event::ENEMY_DAMAGED);
 

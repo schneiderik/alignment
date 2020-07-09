@@ -4,13 +4,13 @@
 #include "global.h"
 #include "Event.h"
 #include "Observer.h"
-#include "src/entities/Weapon.h"
+#include "Subject.h"
 
 #define ENEMY_DATA_LENGTH 5
 #define ENEMY_DATA_HEALTH 0
 #define ENEMY_DATA_WEAPON_MODIFIERS 1
 
-class Enemy: public Observer {
+class Enemy: public Observer: public Subject {
   public:
     static const int SKELETON = 0;
     static const int ORC = 1;
@@ -22,12 +22,13 @@ class Enemy: public Observer {
     
     void init(int);
     void initNext();
-    void onNotify(Weapon, Event) override;
+    void onNotify(const Weapon&, Event) override;
 
-    void takeDamage(int, int);
+    void takeDamage(const Weapon&);
     int getType();
     int getHealth();
     int getMaxHealth();
+    float getPercentHealth();
     bool isDead();
     bool isLastEnemy();
 

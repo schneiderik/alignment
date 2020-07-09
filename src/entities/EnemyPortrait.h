@@ -38,17 +38,17 @@
 #include "../../global.h"
 #include "../../Event.h"
 #include "../../Observer.h"
-#include "../../Enemy.h"
+#include "../../Subject.h"
 #include "Interval.h"
 
-class EnemyPortrait: public Observer {
+class EnemyPortrait: public Observer: public Subject {
   public:
     void init(Enemy);
     void update();
     void render(int, int);
     void reset();
 
-    void onNotify(Enemy, Event) override;
+    virtual void onNotify(const Enemy&, Event) override;
 
   private:
     Enemy* enemy_ = NULL;
@@ -56,6 +56,6 @@ class EnemyPortrait: public Observer {
     int frame_ = 0;
 
     void updateFrame_();
-}
+};
 
 #endif

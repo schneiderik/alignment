@@ -1,6 +1,6 @@
 #include "EnemyPanel.h"
 
-void EnemyPanel::init(Enemy enemy) {
+void EnemyPanel::init(const Enemy& enemy) {
   portrait_.init(enemy);
 }
 

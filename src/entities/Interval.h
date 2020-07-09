@@ -17,6 +17,6 @@ class Interval {
     int interval_ = 0;
     int intervalMin_ = 0;
     int intervalMax_ = 0;
-}
+};
 
 #endif

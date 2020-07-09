@@ -11,18 +11,17 @@
 #define HEARTS_Y 2
 
 #include "../../global.h";
-#include "../../Player.h"
 #include "Hearts.h"
 #include "Score.h"
 
 class PlayerPanel {
   public:
-    void init(Player);
-    void render(int, int)
+    void init(const Player&);
+    void render(int, int);
 
   private:
     Hearts hearts_;
     Score score_;
-}
+};
 
 #endif

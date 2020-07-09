@@ -2,7 +2,6 @@
 #define AUDIO_H
 
 #include "global.h"
-#include <ArduboyTones.h>
 
 class Audio {
   public:

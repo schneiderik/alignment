@@ -9,7 +9,7 @@ void Puzzle::update() {
   weaponManager_.update();
 }
 
-void Puzzle::onNotify(Event event, Enemy enemy) {
+void Puzzle::onNotify(const Enemy& enemy, Event event) {
   switch (event) {
     case Event::ENEMY_ATTACKING:
       triggerAttackEffect_(enemy);
@@ -17,7 +17,7 @@ void Puzzle::onNotify(Event event, Enemy enemy) {
   }
 }
 
-void Puzzle::triggerAttackEffect_(Enemy enemy) {
+void Puzzle::triggerAttackEffect_(const Enemy& enemy) {
   switch (enemy.getType()) {
     case Enemy::SKELETON:
       weaponManager_.popLastGemOfRandomWeapon();

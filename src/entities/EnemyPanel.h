@@ -8,13 +8,12 @@
 #define HEALTH_BAR_Y 50
 
 #include "../../global.h"
-#include "../../Enemy.h"
 #include "EnemyPortrait.h"
 #include "EnemyHealthBar.h"
 
 class EnemyPanel {
   public:
-    void init(Enemy);
+    void init(const Enemy&);
     void update();
     void render(int, int);
     void reset();
@@ -22,6 +21,6 @@ class EnemyPanel {
   private:
     EnemyPortrait portrait_;
     EnemyHealthBar healthBar_;
-}
+};
 
 #endif

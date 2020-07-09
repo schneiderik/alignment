@@ -7,13 +7,14 @@
 #include "global.h"
 #include "Event.h"
 #include "Observer.h"
+#include "Subject.h"
 
-class Player: public Observer {
+class Player: public Observer: public Subject {
   public:
     void reset();
 
-    void onNotify(Weapon, Event);
-    void onNotify(Gem, Event);
+    void onNotify(const Weapon&, Event);
+    void onNotify(const Gem&, Event);
 
     unsigned long int getScore();
     void addScore(int);

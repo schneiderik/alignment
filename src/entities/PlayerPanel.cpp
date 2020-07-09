@@ -1,4 +1,4 @@
-void PlayerPanel::init(Player player) {
+void PlayerPanel::init(const Player& player) {
   hearts_.init(player);
   score_.init(player);
 }

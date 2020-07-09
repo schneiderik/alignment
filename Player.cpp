@@ -9,7 +9,7 @@ unsigned long int Player::getScore() {
   return score_;
 }
 
-void Player::onNotify(Weapon weapon, Event event) {
+void Player::onNotify(const Weapon& weapon, Event event) {
   switch (event) {
     case Event::WEAPON_OVERFLOW:
       takeDamage();
@@ -20,7 +20,7 @@ void Player::onNotify(Weapon weapon, Event event) {
   }
 }
 
-void Player::onNotify(Gem gem, Event event) {
+void Player::onNotify(const Gem& gem, Event event) {
   switch (event) {
     case Event::GEM_LOCK:
       addScore(GEM_LOCK_POINTS);
