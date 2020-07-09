@@ -1,3 +1,5 @@
+#include "EnemyPortrait.h"
+
 void EnemyPortrait::init(Enemy enemy) {
   enemy_ = &enemy;
 

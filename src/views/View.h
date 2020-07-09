@@ -1,16 +1,16 @@
 #ifndef VIEW_H
 #define VIEW_H
 
-#include "../../Game.h"
+#include "../../global.h"
 
 class View {
   public:
-    virtual void init(Game) {};
-    virtual void handleInput(Game) {};
-    virtual void update(Game) {};
-    virtual void render(Game) {};
-    virtual void navigateTo(Game) {};
-    virtual void navigateFrom(Game) {};
+    virtual void init(const Game&) {};
+    virtual void handleInput(const Game&) {};
+    virtual void update(const Game&) {};
+    virtual void render(const Game&) {};
+    virtual void navigateTo(const Game&) {};
+    virtual void navigateFrom(const Game&) {};
 };
 
 #endif

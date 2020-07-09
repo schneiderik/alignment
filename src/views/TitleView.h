@@ -13,13 +13,13 @@
 
 class TitleView: public View {
   public:
-    void handleInput(Game) override;
-    void render(Game) override;
+    void handleInput(const Game&) override;
+    void render(const Game&) override;
 
   private:
-    void decrementState_(Game);
-    void incrementState_(Game);
-    void selectOption_(Game);
+    void decrementState_(const Game&);
+    void incrementState_(const Game&);
+    void selectOption_(const Game&);
 
     void renderMainImage_();
     void renderPlayOption_();

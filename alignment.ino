@@ -1,6 +1,8 @@
 #include "global.h"
 #include "Game.h"
 
+Game* game;
+
 void setup() {
   arduboy.initRandomSeed();
   arduboy.begin();

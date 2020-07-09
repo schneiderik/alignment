@@ -1,9 +1,13 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "global.h"
+
 #include "Audio.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Event.h"
+#include "Observer.h"
 
 #include "src/views/View.h"
 #include "src/views/TitleView.h"
@@ -13,13 +17,17 @@
 #include "src/views/WinView.h"
 #include "src/views/LoseView.h"
 
-class Game {
+class Game: public Observer {
   public:
     Game();
 
     void handleInput();
     void update();
     void render();
+    void reset();
+
+    virtual void onNotify(const Player&, Event) override;
+    virtual void onNotify(const Enemy&, Event) override;
     
     void navigateTo(View*);
     void goToTitleView();
@@ -29,9 +37,9 @@ class Game {
     void goToWinView();
     void goToLoseView();
 
-    Player getPlayer();
-    Enemy getCurrentEnemy();
-    Audio getAudio();
+    Player& getPlayer();
+    Enemy& getCurrentEnemy();
+    Audio& getAudio();
 
   private:
     View* view_ = NULL;

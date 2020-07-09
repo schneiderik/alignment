@@ -3,13 +3,14 @@
 
 #include "global.h"
 #include "Event.h"
-#include "Weapon.h"
+#include "Observer.h"
+#include "src/entities/Weapon.h"
 
 #define ENEMY_DATA_LENGTH 5
 #define ENEMY_DATA_HEALTH 0
 #define ENEMY_DATA_WEAPON_MODIFIERS 1
 
-class Enemy {
+class Enemy: public Observer {
   public:
     static const int SKELETON = 0;
     static const int ORC = 1;

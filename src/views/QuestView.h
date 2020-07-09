@@ -20,10 +20,10 @@
 
 class QuestView: public View {
   public:
-    void init(game) override;
-    void handleInput(Game) override;
-    void update(Game) override;
-    void render(Game) override;
+    void init(const Game&) override;
+    void handleInput(const Game&) override;
+    void update(const Game&) override;
+    void render(const Game&) override;
 
   private:
     static const int DATA[ENEMY_COUNT][DATA_LENGTH];
@@ -32,10 +32,10 @@ class QuestView: public View {
     static int getYData_(int);
 
     void renderText_();
-    void renderCursor_(Game);
+    void renderCursor_(const Game&);
     void renderPaths_();
-    void renderEnemies_(Game);
-    void renderEnemy_(int, Game);
+    void renderEnemies_(const Game&);
+    void renderEnemy_(int, const Game&);
 
     Animation bounceAnimation_;
 };

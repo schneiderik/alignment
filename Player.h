@@ -6,8 +6,9 @@
 
 #include "global.h"
 #include "Event.h"
+#include "Observer.h"
 
-class Player {
+class Player: public Observer {
   public:
     void reset();
 

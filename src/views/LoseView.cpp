@@ -1,6 +1,6 @@
 #include "LoseView.h"
 
-void LoseView::handleInput(Game game) {
+void LoseView::handleInput(const Game& game) {
   if (arduboy.justPressed(A_BUTTON)) {
     game.goToTitleView();
     game.reset();
@@ -8,7 +8,7 @@ void LoseView::handleInput(Game game) {
   }
 }
 
-void LoseView::render() {
+void LoseView::render(const Game& game) {
   sprites.drawOverwrite(23, 9, youDiedImage, 0);
   sprites.drawOverwrite(48, 35, tryAgainImage, 0);   
   sprites.drawOverwrite(53, 42, dividerImage, 0);

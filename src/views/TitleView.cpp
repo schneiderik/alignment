@@ -1,26 +1,26 @@
 #include "TitleView.h"
 
-void TitleView::handleInput(Game game) {
+void TitleView::handleInput(const Game& game) {
   if (arduboy.justPressed(UP_BUTTON)) decrementState_(game);   
   if (arduboy.justPressed(DOWN_BUTTON)) incrementState_(game);
   if (arduboy.justPressed(A_BUTTON)) selectOption_(game);   
 }
 
-void TitleView::decrementState_(Game game) {
+void TitleView::decrementState_(const Game& game) {
   if (state > 0) {
     state--;  
     game.getAudio().playMoveSound();
   }  
 }
 
-void TitleView::incrementState_(Game game) {
+void TitleView::incrementState_(const Game& game) {
   if (state < LAST_TITLE_STATE) {
     state++;
     game.getAudio().playMoveSound();
   }  
 }
 
-void TitleView::selectOption_(Game game) {
+void TitleView::selectOption_(const Game& game) {
   switch(state) {
     case TITLE_STATE_PLAY:
       game.goToQuestView();
@@ -36,7 +36,7 @@ void TitleView::selectOption_(Game game) {
   game.getAudio().playConfirmSound();
 }
 
-void TitleView::render(Game game) {
+void TitleView::render(const Game& game) {
   renderMainImage_();
   renderPlayOption_();
   renderInfoOption_();

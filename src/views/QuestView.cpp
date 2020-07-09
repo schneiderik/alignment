@@ -8,7 +8,7 @@ const int QuestView::DATA[ENEMY_COUNT][DATA_LENGTH] = {
   {101, 16}
 };
 
-void QuestView::init(Game game) {
+void QuestView::init(const Game& game) {
   bounceAnimation_.init(
     BOUNCE_ANIMATION_INITIAL_VALUE,
     BOUNCE_ANIMATION_LOWER_LIMIT,
@@ -18,18 +18,18 @@ void QuestView::init(Game game) {
   );
 }
 
-void QuestView::handleInput(Game game) {
+void QuestView::handleInput(const Game& game) {
   if (arduboy.justPressed(A_BUTTON)) {
     game.goToBattleView();
     game.getAudio().playConfirmSound();
   }
 }
 
-void QuestView::update(Game game) {
+void QuestView::update(const Game& game) {
   bounceAnimation_.update();
 }
 
-void QuestView::render(Game game) {
+void QuestView::render(const Game& game) {
   renderText_();
   renderCursor_(game);
   renderPaths_();
@@ -40,7 +40,7 @@ void QuestView::renderText_() {
   sprites.drawOverwrite(32, 2, questText, 0);     
 }
 
-void QuestView::renderCursor_(Game game) {
+void QuestView::renderCursor_(const Game& game) {
   sprites.drawOverwrite(
     getXData_(game.getCurrentEnemy().getType()) + 8,
     getYData_(game.getCurrentEnemy().getType()) - 4 + bounceAnimation_.getValue(),
@@ -56,11 +56,11 @@ void QuestView::renderPaths_() {
   sprites.drawOverwrite(102, 50, pathReverseImage, 0);  
 }
 
-void QuestView::renderEnemies_(Game game) {
+void QuestView::renderEnemies_(const Game& game) {
   for (int i = 0; i < Enemy::COUNT; i++) renderEnemy_(i, game); 
 }
 
-void QuestView::renderEnemy_(int type, Game game) {
+void QuestView::renderEnemy_(int type, const Game& game) {
   sprites.drawOverwrite(
     getXData_(type),
     getYData_(type),

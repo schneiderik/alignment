@@ -1,7 +1,7 @@
 #ifndef INTERVAL_H
 #define INTERVAL_H
 
-class Interval
+class Interval {
   public:
     void init();
     void run();

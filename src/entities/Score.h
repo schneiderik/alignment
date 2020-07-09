@@ -2,7 +2,7 @@
 #define SCORE_H
 
 #include "../../global.h";
-#include "../../Player"
+#include "../../Player.h"
 
 class Score {
   public:

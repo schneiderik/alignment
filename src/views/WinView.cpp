@@ -1,6 +1,6 @@
 #include "WinView.h"
 
-void WinView::handleInput(Game game) {
+void WinView::handleInput(const Game& game) {
   if (arduboy.justPressed(A_BUTTON)) {
     game.goToTitleView();
     game.reset();
@@ -8,7 +8,7 @@ void WinView::handleInput(Game game) {
   }
 }
 
-void WinView::render(Game game) {
+void WinView::render(const Game& game) {
   sprites.drawOverwrite(21, 3, victoryImage, 0);
   sprites.drawOverwrite(6, 33, winTextImage, 0);    
   sprites.drawOverwrite(53, 46, dividerImage, 0);

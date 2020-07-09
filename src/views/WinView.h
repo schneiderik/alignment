@@ -6,8 +6,8 @@
 
 class WinView: public View {
   public:
-    void handleInput(Game) override;
-    void render(Game) override;
+    void handleInput(const Game&) override;
+    void render(const Game&) override;
 };
 
 #endif

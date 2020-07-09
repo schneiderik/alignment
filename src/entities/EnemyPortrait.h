@@ -1,6 +1,9 @@
 #ifndef ENEMY_PORTRAIT_H
 #define ENEMY_PORTRAIT_H
 
+#define ATTACK_INTERVAL_MIN 700
+#define ATTACK_INTERVAL_MAX 1200
+
 #define ENEMY_FRAME_COUNT 9
 #define ENEMY_DAMAGE_FRAME 9
 #define ENEMY_ATTACK_EFFECT_FRAME 3
@@ -33,11 +36,12 @@
 #define ATTACK_ANIMATION_LOOP false
 
 #include "../../global.h"
-#include "Event.h"
+#include "../../Event.h"
+#include "../../Observer.h"
 #include "../../Enemy.h"
 #include "Interval.h"
 
-class EnemyPortrait {
+class EnemyPortrait: public Observer {
   public:
     void init(Enemy);
     void update();
