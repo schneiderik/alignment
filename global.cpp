@@ -1,4 +1,5 @@
 #include "global.h"
 
-Arduboy2 arduboy;
+Arduboy2Base arduboy;
 Sprites sprites;
+ArduboyTones sound(arduboy.audio.enabled);

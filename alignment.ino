@@ -1,15 +1,16 @@
 #include "global.h"
-#include "Game.h"
 
-Game* game;
+#include "data.h"
+#include "sounds.h"
+#include "Game.h"
+#include "TitleView.h"
+#include "InfoView.h"
 
 void setup() {
   arduboy.initRandomSeed();
   arduboy.begin();
+
   arduboy.setFrameRate(FPS);
-  
-  game = new Game();
-  
   arduboy.clear();
 }
 
@@ -19,9 +20,17 @@ void loop() {
   arduboy.pollButtons();
   arduboy.clear();
 
-  game->handleInput();
-  game->update();
-  game->render();
+  switch (Game::state)
+  {
+    case GAME_STATE_TITLE:
+      TitleView::handleInput();
+      TitleView::render();
+      break;
+    case GAME_STATE_INFO:
+      InfoView::handleInput();
+      InfoView::render();
+      break;
+  }
   
   arduboy.display();
 }
