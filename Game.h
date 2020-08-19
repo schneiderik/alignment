@@ -13,6 +13,7 @@ namespace Game
   void goToTitleView();
   void goToInfoView();
   void goToQuestView();
+  void goToBattleView();
 }
 
 #endif

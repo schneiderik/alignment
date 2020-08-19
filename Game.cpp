@@ -3,6 +3,7 @@
 #include "TitleView.h"
 #include "InfoView.h"
 #include "QuestView.h"
+#include "BattleView.h"
 
 #define GAME_STATE_TITLE 0
 #define GAME_STATE_INFO 1
@@ -33,9 +34,15 @@ void Game::goToQuestView()
   state = GAME_STATE_QUEST;
 }
 
+void Game::goToBattleView()
+{
+  state = GAME_STATE_BATTLE;
+}
+
 void Game::init()
 {
   QuestView::init();
+  BattleView::init();
 }
 
 void Game::loop()
@@ -50,6 +57,9 @@ void Game::loop()
       break;
     case GAME_STATE_QUEST:
       QuestView::loop();
+      break;
+    case GAME_STATE_BATTLE:
+      BattleView::loop();
       break;
   }
 }

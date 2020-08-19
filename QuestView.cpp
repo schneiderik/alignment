@@ -42,7 +42,7 @@ namespace
   {
     if (arduboy.justPressed(A_BUTTON))
     {
-      Game::goToTitleView();
+      Game::goToBattleView();
     }
   }
 
