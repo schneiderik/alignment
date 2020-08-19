@@ -6,6 +6,7 @@
 namespace Game
 {
   extern uint8_t enemy;
+  extern uint8_t playerHealth;
 
   void init();
   void loop();

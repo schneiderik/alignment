@@ -13,6 +13,7 @@
 #define GAME_STATE_LOSE 5
 
 uint8_t Game::enemy = ENEMY_TYPE_SKELETON;
+uint8_t Game::playerHealth = PLAYER_HEALTH_MAX;
 
 namespace
 {

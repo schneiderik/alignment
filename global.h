@@ -19,10 +19,10 @@ extern ArduboyTones sound;
 #define ALIGN_RIGHT 1
 #define NUMBER_WIDTH 5
 
+#define PLAYER_HEALTH_MAX 3
+
 #define PREVIEW_GEM_X 91
 #define PREVIEW_THRESHOLD_X 85
-
-#define PLAYER_HEALTH_MAX 3
 
 #define ENEMY_TYPE_SKELETON 0
 #define ENEMY_TYPE_ORC 1
@@ -62,8 +62,6 @@ extern ArduboyTones sound;
 #define LOSE_VIEW_SCORE_Y 50
 
 
-#define PLAYER_PANEL_X 0
-#define PLAYER_PANEL_Y 0
 
 #define PUZZLE_X 0
 #define PUZZLE_Y 14
@@ -82,15 +80,6 @@ extern ArduboyTones sound;
 #define PAUSED_X 50
 #define PAUSED_Y 28
 
-#define PANEL_WIDTH 128
-#define PANEL_HEIGHT 10
-
-#define PLAYER_PANEL_SCORE_X 126
-#define PLAYER_PANEL_SCORE_Y 2
-
-#define PLAYER_PANEL_HEARTS_X 2
-#define PLAYER_PANEL_HEARTS_Y 2
-#define HEARTS_MAX 3
 
 #define PORTRAIT_X 0
 #define PORTRAIT_Y 0

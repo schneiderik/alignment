@@ -461,31 +461,6 @@
 //    );
 //  }
 //};
-//
-//
-//struct Hearts {
-//  void render(int x, int y, int health) {
-//    for (int i = 0; i < HEARTS_MAX; i++) {  
-//      sprites.drawErase(
-//        x + (i * (heartSprite[0] + 1)),
-//        y,
-//        heartSprite,
-//        i < health ? 0 : 1
-//      );
-//    }  
-//  }
-//};
-//
-//
-//struct PlayerPanel {
-//  Hearts hearts;
-//
-//  void render(int x, int y, Player& player) {
-//    arduboy.fillRect(x, y, PANEL_WIDTH, PANEL_HEIGHT);
-//    hearts.render(x + PLAYER_PANEL_HEARTS_X, y + PLAYER_PANEL_HEARTS_Y, player.health);
-//    player.score.render(x + PLAYER_PANEL_SCORE_X, y + PLAYER_PANEL_SCORE_Y, ALIGN_RIGHT, BLACK);
-//  }
-//};
 
 
 
