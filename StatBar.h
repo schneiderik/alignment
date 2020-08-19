@@ -5,7 +5,7 @@
 
 namespace StatBar
 {
-  void render(uint8_t, uint8_t);
+  void render(uint8_t, uint8_t, uint8_t, unsigned long int);
 }
 
 #endif

@@ -1,7 +1,5 @@
 #include "StatBar.h"
 
-#include "Game.h"
-
 #define STAT_BAR_X 0
 #define STAT_BAR_Y 0
 #define STAT_BAR_WIDTH 128
@@ -33,26 +31,31 @@ namespace
     );
   }
 
-  void renderHearts(uint8_t x, uint8_t y)
+  void renderHearts(uint8_t x, uint8_t y, uint8_t health)
   {
     for (uint8_t i = 0; i < PLAYER_HEALTH_MAX; i++)
     {  
       renderHeart(
         x + (i * (heartSprite[0] + 1)),
         y,
-        i < Game::playerHealth ? 0 : 1
+        i < health ? 0 : 1
       );
     }  
   }
 
-  void renderScore(uint8_t x, uint8_t y)
+  void renderScore(uint8_t x, uint8_t y, unsigned long int score)
   {
   }
 }
 
-void StatBar::render(uint8_t x, uint8_t y)
+void StatBar::render(
+  uint8_t x,
+  uint8_t y,
+  uint8_t health,
+  unsigned long int score
+)
 {
   renderBar(x + STAT_BAR_X, y + STAT_BAR_Y);
-  renderHearts(x + STAT_BAR_HEARTS_X, y + STAT_BAR_HEARTS_Y);
-  renderScore(x + STAT_BAR_SCORE_X, y + STAT_BAR_SCORE_Y);
+  renderHearts(x + STAT_BAR_HEARTS_X, y + STAT_BAR_HEARTS_Y, health);
+  renderScore(x + STAT_BAR_SCORE_X, y + STAT_BAR_SCORE_Y, score);
 }

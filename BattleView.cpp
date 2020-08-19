@@ -20,7 +20,9 @@ namespace
   {
     StatBar::render(
       BATTLE_VIEW_STAT_BAR_X,
-      BATTLE_VIEW_STAT_BAR_Y
+      BATTLE_VIEW_STAT_BAR_Y,
+      Game::playerHealth,
+      0
     );
   }
 }
