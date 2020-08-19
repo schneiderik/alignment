@@ -1,6 +1,7 @@
 #include "TitleView.h"
 
 #include "Game.h"
+#include "Sound.h"
 
 #define TITLE_VIEW_TITLE_X 0
 #define TITLE_VIEW_TITLE_Y 5
@@ -22,70 +23,74 @@
 
 namespace
 {
-  int cursor = 0;
-}
+  uint8_t cursor;
 
-void TitleView::handleInput()
-{
-  if (arduboy.justPressed(UP_BUTTON))
+  void handleInput()
   {
-    if (cursor > TITLE_VIEW_CURSOR_MIN)
+    if (arduboy.justPressed(UP_BUTTON))
     {
-      cursor--;  
-    }  
+      if (cursor > TITLE_VIEW_CURSOR_MIN)
+      {
+        cursor--;  
+      }  
+    }
+
+    if (arduboy.justPressed(DOWN_BUTTON))
+    {
+      if (cursor < TITLE_VIEW_CURSOR_MAX)
+      {
+        cursor++;
+      }  
+    }
+
+    if (arduboy.justPressed(A_BUTTON))
+    {
+      switch(cursor)
+      {
+        case 0:
+          Game::goToQuestView();
+          break;
+        case 1:
+          Game::goToInfoView();
+          break;
+        case 2:
+          Sound::toggle();
+          break;
+      };
+    }
   }
 
-  if (arduboy.justPressed(DOWN_BUTTON))
+  void renderTitle()
   {
-    if (cursor < TITLE_VIEW_CURSOR_MAX)
-    {
-      cursor++;
-    }  
+    sprites.drawOverwrite(
+      TITLE_VIEW_TITLE_X,
+      TITLE_VIEW_TITLE_Y,
+      titleImage,
+      0
+    );
   }
 
-  if (arduboy.justPressed(A_BUTTON))
+  void renderPlay()
   {
-    switch(cursor)
-    {
-      case 0:
-        //game.goToQuestView();
-        break;
-      case 1:
-        Game::state = GAME_STATE_INFO;
-        break;
-      case 2:
-        //toggleSound();
-        break;
-    };
+    sprites.drawOverwrite(
+      TITLE_VIEW_PLAY_X,
+      TITLE_VIEW_PLAY_Y,
+      playTextImage,
+      0
+    );
   }
-}
 
-void TitleView::render()
-{
-  int x, y, width;
+  void renderInfo()
+  {
+    sprites.drawOverwrite(
+      TITLE_VIEW_INFO_X,
+      TITLE_VIEW_INFO_Y,
+      infoTextImage,
+      0
+    );
+  }
 
-  sprites.drawOverwrite(
-    TITLE_VIEW_TITLE_X,
-    TITLE_VIEW_TITLE_Y,
-    titleImage,
-    0
-  );
-
-  sprites.drawOverwrite(
-    TITLE_VIEW_PLAY_X,
-    TITLE_VIEW_PLAY_Y,
-    playTextImage,
-    0
-  );
-
-  sprites.drawOverwrite(
-    TITLE_VIEW_INFO_X,
-    TITLE_VIEW_INFO_Y,
-    infoTextImage,
-    0
-  );
-
-  if (arduboy.audio.enabled())
+  void renderSfxOn()
   {
     sprites.drawOverwrite(
       TITLE_VIEW_SFX_ON_X,
@@ -94,7 +99,8 @@ void TitleView::render()
       0
     );
   }
-  else
+
+  void renderSfxOff()
   {
     sprites.drawOverwrite(
       TITLE_VIEW_SFX_OFF_X,
@@ -104,44 +110,86 @@ void TitleView::render()
     );
   }
 
-  switch(cursor)
+  void renderSfx()
   {
-    case 0:
-      x = TITLE_VIEW_PLAY_X;
-      y = TITLE_VIEW_PLAY_Y;
-      width = playTextImage[0];
-      break;
-    case 1:
-      x = TITLE_VIEW_INFO_X;
-      y = TITLE_VIEW_INFO_Y;
-      width = infoTextImage[0];
-      break;
-    case 2:
-      if (arduboy.audio.enabled()) {
-        x = TITLE_VIEW_SFX_ON_X;
-        y = TITLE_VIEW_SFX_ON_Y;
-        width = sfxOnTextImage[0];
-      }
-      else
-      {
-        x = TITLE_VIEW_SFX_OFF_X;
-        y = TITLE_VIEW_SFX_OFF_Y;
-        width = sfxOffTextImage[0];
-      }
-      break;
+    if (Sound::isOn())
+    {
+      renderSfxOn();
+    }
+    else
+    {
+      renderSfxOff();
+    }
   }
 
-  arduboy.fillRect(
-    x + TITLE_VIEW_CURSOR_LEFT_OFFSET_X,
-    y + TITLE_VIEW_CURSOR_OFFSET_Y,
-    TITLE_VIEW_CURSOR_WIDTH,
-    TITLE_VIEW_CURSOR_HEIGHT
-  );
+  void renderCursor(uint8_t x, uint8_t y, uint8_t width)
+  {
+    arduboy.fillRect(
+      x + TITLE_VIEW_CURSOR_LEFT_OFFSET_X,
+      y + TITLE_VIEW_CURSOR_OFFSET_Y,
+      TITLE_VIEW_CURSOR_WIDTH,
+      TITLE_VIEW_CURSOR_HEIGHT
+    );
 
-  arduboy.fillRect(
-    x + width + TITLE_VIEW_CURSOR_RIGHT_OFFSET_X,
-    y + TITLE_VIEW_CURSOR_OFFSET_Y,
-    TITLE_VIEW_CURSOR_WIDTH,
-    TITLE_VIEW_CURSOR_HEIGHT
-  );
+    arduboy.fillRect(
+      x + width + TITLE_VIEW_CURSOR_RIGHT_OFFSET_X,
+      y + TITLE_VIEW_CURSOR_OFFSET_Y,
+      TITLE_VIEW_CURSOR_WIDTH,
+      TITLE_VIEW_CURSOR_HEIGHT
+    );
+  }
+
+  void renderMenu()
+  {
+    renderPlay();
+    renderInfo();
+    renderSfx();
+
+    switch(cursor)
+    {
+      case 0:
+        renderCursor(
+          TITLE_VIEW_PLAY_X,
+          TITLE_VIEW_PLAY_Y,
+          playTextImage[0]
+        );
+        break;
+      case 1:
+        renderCursor(
+          TITLE_VIEW_INFO_X,
+          TITLE_VIEW_INFO_Y,
+          infoTextImage[0]
+        );
+        break;
+      case 2:
+        if (Sound::isOn()) {
+          renderCursor(
+            TITLE_VIEW_SFX_ON_X,
+            TITLE_VIEW_SFX_ON_Y,
+            sfxOnTextImage[0]
+          );
+        }
+        else
+        {
+          renderCursor(
+            TITLE_VIEW_SFX_OFF_X,
+            TITLE_VIEW_SFX_OFF_Y,
+            sfxOffTextImage[0]
+          );
+        }
+        break;
+    }
+  }
+
+  void render()
+  {
+    renderTitle();
+    renderMenu();
+  }
+}
+
+void TitleView::loop()
+{
+  handleInput();
+  render();
 }

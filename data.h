@@ -1,17 +1,3 @@
-const int questViewPathOffsets[QUEST_VIEW_PATH_COUNT] = {
-  16,
-  54,
-  64,
-  102
-};
-
-const int questViewEnemyPositions[ENEMY_COUNT][QUEST_VIEW_ENEMY_POSITIONS_LENGTH] = {
-  {5, 16},
-  {29, 31},
-  {53, 16},
-  {77, 31},
-  {101, 16}
-};
 
 const int enemyData[ENEMY_COUNT][ENEMY_DATA_LENGTH] = {
   {100, 0, 0, 0, 0},

@@ -5,7 +5,7 @@
 #include <ArduboyTones.h>
 #include "assets.h"
 
-extern Arduboy2Base arduboy;
+extern Arduboy2 arduboy;
 extern Sprites sprites;
 extern ArduboyTones sound;
 
@@ -19,13 +19,6 @@ extern ArduboyTones sound;
 #define ALIGN_RIGHT 1
 #define NUMBER_WIDTH 5
 
-#define GAME_STATE_TITLE 0
-#define GAME_STATE_INFO 1
-#define GAME_STATE_QUEST 2
-#define GAME_STATE_BATTLE 3
-#define GAME_STATE_WIN 4
-#define GAME_STATE_LOSE 5
-
 #define PREVIEW_GEM_X 91
 #define PREVIEW_THRESHOLD_X 85
 
@@ -36,6 +29,7 @@ extern ArduboyTones sound;
 #define ENEMY_TYPE_GOLEM 2
 #define ENEMY_TYPE_DEMON 3
 #define ENEMY_TYPE_SORCERER 4
+
 #define ENEMY_COUNT 5
 #define LAST_ENEMY ENEMY_COUNT - 1
 #define ENEMY_DATA_LENGTH 5
@@ -67,21 +61,6 @@ extern ArduboyTones sound;
 #define LOSE_VIEW_SCORE_X 64
 #define LOSE_VIEW_SCORE_Y 50
 
-
-#define QUEST_VIEW_TEXT_X 32
-#define QUEST_VIEW_TEXT_Y 2
-#define QUEST_VIEW_PATH_COUNT ENEMY_COUNT - 1
-#define QUEST_VIEW_PATH_Y 50
-#define QUEST_VIEW_ENEMY_SPRITE_MYSTERY_INDEX 5
-#define QUEST_VIEW_ENEMY_SPRITE_GRAVE_INDEX 6
-#define QUEST_VIEW_CURSOR_X 8
-#define QUEST_VIEW_CURSOR_Y -4
-#define QUEST_VIEW_CURSOR_ANIMATION_FRAME_LENGTH 8
-#define QUEST_VIEW_CURSOR_ANIMATION_OFFSET_Y_MIN -1
-#define QUEST_VIEW_CURSOR_ANIMATION_OFFSET_Y_MAX 1
-#define QUEST_VIEW_ENEMY_POSITIONS_LENGTH 2
-#define QUEST_VIEW_ENEMY_POSITIONS_X 0
-#define QUEST_VIEW_ENEMY_POSITIONS_Y 1
 
 #define PLAYER_PANEL_X 0
 #define PLAYER_PANEL_Y 0

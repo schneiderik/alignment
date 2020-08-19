@@ -5,7 +5,14 @@
 
 namespace Game
 {
-  extern uint8_t state;
+  extern uint8_t enemy;
+
+  void init();
+  void loop();
+
+  void goToTitleView();
+  void goToInfoView();
+  void goToQuestView();
 }
 
 #endif

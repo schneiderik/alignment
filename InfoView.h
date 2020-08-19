@@ -5,8 +5,7 @@
 
 namespace InfoView
 {
-  void handleInput();
-  void render();
+  void loop();
 }
 
 #endif

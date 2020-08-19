@@ -495,77 +495,6 @@
 
 
 
-//struct QuestView: public View {
-//  int cursorOffsetY = 0;
-//  int cursorVelocityY = -1;
-//
-//  void handleInput(Game& game) {
-//    if (arduboy.justPressed(A_BUTTON)) {
-//      game.goToBattleView();
-//      playConfirmSound();
-//    }
-//  }
-//
-//  void update(Game& game) {
-//    if (arduboy.everyXFrames(QUEST_VIEW_CURSOR_ANIMATION_FRAME_LENGTH)) {
-//      cursorOffsetY + cursorVelocityY;
-//
-//      if (cursorOffsetY == QUEST_VIEW_CURSOR_ANIMATION_OFFSET_Y_MIN) {
-//        cursorVelocityY = 1;
-//      }
-//
-//      if (cursorOffsetY == QUEST_VIEW_CURSOR_ANIMATION_OFFSET_Y_MAX) {
-//        cursorVelocityY = -1;
-//      }
-//    }
-//  }
-//
-//  int getEnemyPositionX(int i) {
-//    return questViewEnemyPositions[i][QUEST_VIEW_ENEMY_POSITIONS_X];
-//  }
-//
-//  int getEnemyPositionY(int i) {
-//    return questViewEnemyPositions[i][QUEST_VIEW_ENEMY_POSITIONS_Y];
-//  }
-//
-//  void render(Game& game) {
-//    sprites.drawOverwrite(
-//      QUEST_VIEW_TEXT_X,
-//      QUEST_VIEW_TEXT_Y,
-//      questText,
-//      0
-//    );     
-//
-//    for (int i = 0; i < ENEMY_COUNT; i++) {
-//      sprites.drawOverwrite(
-//        getEnemyPositionX(i),
-//        getEnemyPositionY(i),
-//        questSprite,
-//        game.enemy.type == i
-//          ? i
-//          : i < game.enemy.type
-//            ? QUEST_VIEW_ENEMY_SPRITE_GRAVE_INDEX
-//            : QUEST_VIEW_ENEMY_SPRITE_MYSTERY_INDEX
-//      );
-//    }
-//
-//    sprites.drawOverwrite(
-//      getEnemyPositionX(game.enemy.type) + QUEST_VIEW_CURSOR_X,
-//      getEnemyPositionY(game.enemy.type) + QUEST_VIEW_CURSOR_Y + cursorOffsetY,
-//      questCursorImage,
-//      0
-//    );  
-//
-//    for (int i = 0; i < QUEST_VIEW_PATH_COUNT; i++) {
-//      sprites.drawOverwrite(
-//        questViewPathOffsets[i],
-//        QUEST_VIEW_PATH_Y,
-//        i % 2 == 0 ? pathImage : pathReverseImage,
-//        0
-//      );
-//    }
-//  }
-//};
 //
 //
 //struct BattleView: public View {
@@ -754,15 +683,3 @@
 //    );
 //  }
 //};
-
-
-namespace Game
-{
-  //Player player;
-  //Enemy enemy;
-
-  void setView(View* view) { activeView = view; }
-  void handleInput() { activeView->handleInput(*this); }
-  void update() { activeView->handleInput(*this); }
-  void render() { activeView->handleInput(*this); }
-}

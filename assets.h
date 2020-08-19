@@ -1,5 +1,5 @@
-#ifndef IMAGES_H
-#define IMAGES_H
+#ifndef ASSETS_H
+#define ASSETS_H
 
 const unsigned char PROGMEM titleImage[] =
 {

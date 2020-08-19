@@ -5,8 +5,7 @@
 
 namespace TitleView
 {
-  void handleInput();
-  void render();
+  void loop();
 }
 
 #endif
