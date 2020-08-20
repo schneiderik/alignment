@@ -1,5 +1,7 @@
 #include "StatBar.h"
 
+#include "Number.h"
+
 #define STAT_BAR_X 0
 #define STAT_BAR_Y 0
 #define STAT_BAR_WIDTH 128
@@ -42,10 +44,6 @@ namespace
       );
     }  
   }
-
-  void renderScore(uint8_t x, uint8_t y, unsigned long int score)
-  {
-  }
 }
 
 void StatBar::render(
@@ -57,5 +55,12 @@ void StatBar::render(
 {
   renderBar(x + STAT_BAR_X, y + STAT_BAR_Y);
   renderHearts(x + STAT_BAR_HEARTS_X, y + STAT_BAR_HEARTS_Y, health);
-  renderScore(x + STAT_BAR_SCORE_X, y + STAT_BAR_SCORE_Y, score);
+
+  Number::render(
+    score,
+    x + STAT_BAR_SCORE_X,
+    y + STAT_BAR_SCORE_Y,
+    ALIGN_RIGHT,
+    BLACK
+  );
 }

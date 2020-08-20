@@ -14,6 +14,7 @@
 
 uint8_t Game::enemy = ENEMY_TYPE_SKELETON;
 uint8_t Game::playerHealth = PLAYER_HEALTH_MAX;
+unsigned long int Game::score = 0;
 
 namespace
 {

@@ -13,11 +13,10 @@ extern ArduboyTones sound;
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
 #define GRAVITY_ACCELERATION 1
-#define NUMBER_HEIGHT 6
 
-#define ALIGN_CENTER 0
-#define ALIGN_RIGHT 1
-#define NUMBER_WIDTH 5
+#define ALIGN_LEFT 0
+#define ALIGN_CENTER 1
+#define ALIGN_RIGHT 2
 
 #define PLAYER_HEALTH_MAX 3
 
