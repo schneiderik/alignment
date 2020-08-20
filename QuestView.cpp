@@ -77,9 +77,9 @@ namespace
       getEnemyPositionX(i),
       getEnemyPositionY(i),
       questSprite,
-      Game::enemy == i
+      Game::enemyType == i
         ? i
-        : i < Game::enemy
+        : i < Game::enemyType
           ? QUEST_VIEW_ENEMY_SPRITE_GRAVE_INDEX
           : QUEST_VIEW_ENEMY_SPRITE_MYSTERY_INDEX
     );
@@ -96,8 +96,8 @@ namespace
   void renderCursor()
   {
     sprites.drawOverwrite(
-      getEnemyPositionX(Game::enemy) + QUEST_VIEW_CURSOR_X,
-      getEnemyPositionY(Game::enemy) + QUEST_VIEW_CURSOR_Y + (cursorAnimation.frame - 1),
+      getEnemyPositionX(Game::enemyType) + QUEST_VIEW_CURSOR_X,
+      getEnemyPositionY(Game::enemyType) + QUEST_VIEW_CURSOR_Y + (cursorAnimation.frame - 1),
       questCursorImage,
       0
     );  

@@ -319,91 +319,11 @@
 //    //previewGems.render(x + PUZZLE_PREVIEW_GEMS_X, y);
 //  }
 //};
-//
-//
-//struct EnemyHealthBar {
-//  void render(int x, int y, Enemy& enemy) {
-//    float maxHealth = enemyData[enemy.type][ENEMY_DATA_HEALTH];
-//    float percentHealth = (float)enemy.health / maxHealth;
-//    int width = ceil(percentHealth * (float)ENEMY_HEALTH_BAR_WIDTH_MAX);
-//
-//    arduboy.fillRect(
-//      x,
-//      y,
-//      width,
-//      ENEMY_HEALTH_BAR_HEIGHT,
-//      WHITE
-//    ); 
-//  }
-//};
-//
-//
-//struct EnemyPortrait {
-//  int frame = 0;
-//  bool hidden = false;
-//
-//  void update() {
-////    attackAnimation_.update();
-////    flashAnimation_.update();
-////    idleAnimation_.update();
-////
-////    int frame = idleAnimation_.getValue();
-////
-////    if (attackAnimation_.isRunning()) {
-////      frame = attackAnimation_.getValue();
-////    } else if (flashAnimation_.isRunning()) {
-////      frame = ENEMY_DAMAGE_FRAME;
-////    }
-////
-////    enemy.frame = frame + (enemy_->getType() * ENEMY_FRAME_COUNT);
-//  };
-//
-//  void render(int x, int y, Enemy& enemy) {
-////    if (flashAnimation_.getValue() == 0) {
-////      sprites.drawOverwrite(
-////        x + shakeAnimation_.getValue(),
-////        y,
-////        enemySprite,
-////        frame_
-////      );
-////    }
-//  };
-//};
-//
-//
-//struct EnemyPanel {
-//  EnemyHealthBar healthBar;
-//  EnemyPortrait portrait;
-//
-//  void update() {
-//    portrait.update();
-//  }
-//
-//  void render(int x, int y, Enemy& enemy) {
-//    healthBar.render(
-//      x + ENEMY_PANEL_HEALTH_BAR_X, 
-//      y + ENEMY_PANEL_HEALTH_BAR_Y,
-//      enemy
-//    );
-//
-//    portrait.render(
-//      x + ENEMY_PANEL_PORTRAIT_X,
-//      y + ENEMY_PANEL_PORTRAIT_Y,
-//      enemy
-//    );
-//  }
-//};
-
-
 
 ////////
 // VIEWS
 ////////
 
-
-
-//
-//
 //struct BattleView: public View {
 //  bool paused = false;
 //
