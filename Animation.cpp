@@ -1,5 +1,11 @@
 #include "Animation.h"
 
+void Animation::init(int frameCount_, int interval_, bool autoplay) {
+  frameCount = frameCount_;
+  interval = interval_;
+  running = autoplay;
+}
+
 void Animation::init(int frameCount_, int interval_) {
   frameCount = frameCount_;
   interval = interval_;

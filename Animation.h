@@ -12,6 +12,7 @@ struct Animation
   int interval = 10;
 
   void init(int, int);
+  void init(int, int, bool);
   void reset();
   void run();
   void stop();

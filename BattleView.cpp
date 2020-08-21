@@ -18,6 +18,7 @@ namespace
 
   void update()
   {
+    Enemy::update();
   }
 
   void render()
@@ -41,6 +42,7 @@ namespace
 
 void BattleView::init()
 {
+  Enemy::init();
 }
 
 void BattleView::loop()
