@@ -3,11 +3,20 @@
 
 #include "global.h"
 
-namespace Enemy
+#include "Animation.h"
+
+namespace Game
 {
-  void init();
-  void update();
-  void render(int, int, uint8_t, int, int);
+  namespace Enemy
+  {
+    extern uint8_t type;
+    extern int health;
+    extern int healthMax;
+    extern Animation idleAnimation;
+    extern Animation attackAnimation;
+
+    void init(uint8_t);
+  }
 }
 
 #endif

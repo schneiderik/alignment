@@ -1,7 +1,7 @@
 #include "QuestView.h"
 
 #include "Game.h"
-#include "Animation.h"
+#include "Counter.h"
 
 #define QUEST_VIEW_TEXT_X 32
 #define QUEST_VIEW_TEXT_Y 2
@@ -11,13 +11,41 @@
 #define QUEST_VIEW_ENEMY_SPRITE_GRAVE_INDEX 6
 #define QUEST_VIEW_CURSOR_X 8
 #define QUEST_VIEW_CURSOR_Y -4
-#define QUEST_VIEW_CURSOR_ANIMATION_FRAME_COUNT 3
-#define QUEST_VIEW_CURSOR_ANIMATION_INTERVAL 8
+#define QUEST_VIEW_CURSOR_FRAME_COUNT 3
+#define QUEST_VIEW_CURSOR_INTERVAL 8
 #define QUEST_VIEW_CURSOR_ANIMATION_OFFSET_Y_MIN -1
 #define QUEST_VIEW_CURSOR_ANIMATION_OFFSET_Y_MAX 1
 #define QUEST_VIEW_ENEMY_POSITIONS_LENGTH 2
 #define QUEST_VIEW_ENEMY_POSITIONS_X 0
 #define QUEST_VIEW_ENEMY_POSITIONS_Y 1
+
+namespace BouncingCursor
+{
+  Counter counter(
+    QUEST_VIEW_CURSOR_FRAME_COUNT,
+    QUEST_VIEW_CURSOR_INTERVAL
+  );
+
+  init()
+  {
+    counter.alternate();
+  }
+
+  update()
+  {
+    counter.update();
+  }
+
+  render(int x, int y)
+  {
+    sprites.drawOverwrite(
+      x,
+      y + counter.value - 1,
+      questCursorImage,
+      0
+    );  
+  }
+}
 
 namespace
 {
@@ -36,8 +64,6 @@ namespace
     {101, 16}
   };
 
-  AnimationBounce cursorAnimation;
-
   void handleInput()
   {
     if (arduboy.justPressed(A_BUTTON))
@@ -48,7 +74,7 @@ namespace
 
   void update()
   {
-    cursorAnimation.update();
+    BouncingCursor::update();
   }
 
   void renderText()
@@ -77,9 +103,9 @@ namespace
       getEnemyPositionX(i),
       getEnemyPositionY(i),
       questSprite,
-      Game::enemyType == i
+      Game::Enemy::type == i
         ? i
-        : i < Game::enemyType
+        : i < Game::Enemy::type
           ? QUEST_VIEW_ENEMY_SPRITE_GRAVE_INDEX
           : QUEST_VIEW_ENEMY_SPRITE_MYSTERY_INDEX
     );
@@ -91,16 +117,6 @@ namespace
     {
       renderEnemy(i);
     }
-  }
-
-  void renderCursor()
-  {
-    sprites.drawOverwrite(
-      getEnemyPositionX(Game::enemyType) + QUEST_VIEW_CURSOR_X,
-      getEnemyPositionY(Game::enemyType) + QUEST_VIEW_CURSOR_Y + (cursorAnimation.frame - 1),
-      questCursorImage,
-      0
-    );  
   }
 
   void renderPath(uint8_t i) 
@@ -123,7 +139,10 @@ namespace
 
   void render()
   {
-    renderCursor();
+    BouncingCursor::render(
+      getEnemyPositionX(Game::Enemy::type) + QUEST_VIEW_CURSOR_X,
+      getEnemyPositionY(Game::Enemy::type) + QUEST_VIEW_CURSOR_Y
+    );
     renderText();
     renderEnemies();
     renderPaths();
@@ -132,11 +151,7 @@ namespace
 
 void QuestView::init()
 {
-  cursorAnimation.init(
-    QUEST_VIEW_CURSOR_ANIMATION_FRAME_COUNT,
-    QUEST_VIEW_CURSOR_ANIMATION_INTERVAL,
-    true
-  );
+  BouncingCursor::init();
 }
 
 void QuestView::loop()

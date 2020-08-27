@@ -2,13 +2,13 @@
 
 #include "Game.h"
 #include "StatBar.h"
-#include "Enemy.h"
+#include "EnemyPanel.h"
 
 #define BATTLE_VIEW_STAT_BAR_X 0
 #define BATTLE_VIEW_STAT_BAR_Y 0
 
-#define BATTLE_VIEW_ENEMY_X 104
-#define BATTLE_VIEW_ENEMY_Y 12
+#define BATTLE_VIEW_ENEMY_PANEL_X 104
+#define BATTLE_VIEW_ENEMY_PANEL_Y 12
 
 namespace
 {
@@ -18,7 +18,7 @@ namespace
 
   void update()
   {
-    Enemy::update();
+    Game::Enemy::idleAnimation.update();
   }
 
   void render()
@@ -30,19 +30,19 @@ namespace
       Game::score
     );
 
-    Enemy::render(
-      BATTLE_VIEW_ENEMY_X,
-      BATTLE_VIEW_ENEMY_Y,
-      Game::enemyType,
-      Game::enemyHealth,
-      Game::enemyHealthMax
+    EnemyPanel::render(
+      BATTLE_VIEW_ENEMY_PANEL_X,
+      BATTLE_VIEW_ENEMY_PANEL_Y,
+      Game::Enemy::type,
+      Game::Enemy::health,
+      Game::Enemy::healthMax,
+      Game::Enemy::idleAnimation
     );
   }
 }
 
 void BattleView::init()
 {
-  Enemy::init();
 }
 
 void BattleView::loop()

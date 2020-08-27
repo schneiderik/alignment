@@ -3,30 +3,14 @@
 
 #include "global.h"
 
-struct Animation
-{
-  bool running = false;
-  int frame = 0;
-  int frameCount = 1;
-  int direction = 1;
-  int interval = 10;
+#include "Counter.h"
 
-  void init(int, int);
-  void init(int, int, bool);
-  void reset();
-  void run();
-  void stop();
-  void update();
-};
-
-struct AnimationLoop: public Animation
+struct Animation: public Counter
 {
-  void update();
-};
+  char* sprite;
 
-struct AnimationBounce: public Animation
-{
-  void update();
+  void init(char*, int, int);
+  void render(int, int);
 };
 
 #endif
