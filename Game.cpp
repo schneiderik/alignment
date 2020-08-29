@@ -4,6 +4,8 @@
 #include "InfoView.h"
 #include "QuestView.h"
 #include "BattleView.h"
+#include "WinView.h"
+#include "LoseView.h"
 
 #define GAME_STATE_TITLE 0
 #define GAME_STATE_INFO 1
@@ -40,6 +42,16 @@ void Game::goToBattleView()
   state = GAME_STATE_BATTLE;
 }
 
+void Game::goToWinView()
+{
+  state = GAME_STATE_WIN;
+}
+
+void Game::goToLoseView()
+{
+  state = GAME_STATE_LOSE;
+}
+
 void Game::init()
 {
   CurrentEnemy::init(ENEMY_TYPE_SKELETON);
@@ -62,6 +74,12 @@ void Game::loop()
       break;
     case GAME_STATE_BATTLE:
       BattleView::loop();
+      break;
+    case GAME_STATE_WIN:
+      WinView::loop();
+      break;
+    case GAME_STATE_LOSE:
+      LoseView::loop();
       break;
   }
 }

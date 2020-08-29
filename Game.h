@@ -17,6 +17,8 @@ namespace Game
   void goToInfoView();
   void goToQuestView();
   void goToBattleView();
+  void goToWinView();
+  void goToLoseView();
 }
 
 #endif
