@@ -12,6 +12,7 @@ namespace
 {
   Animation idleAnimation;
   Animation attackAnimation;
+  int strikeFrame;
   bool shouldAttack;
 
   void renderHealthBar(
@@ -34,6 +35,8 @@ namespace
   }
 }
 
+bool EnemyPanel::didStrike;
+
 void EnemyPanel::init(
   uint8_t type,
   unsigned char* idleSprite,
@@ -41,7 +44,8 @@ void EnemyPanel::init(
   int idleSpriteFrameDuration,
   unsigned char* attackSprite,
   int attackSpriteFrameCount,
-  int attackSpriteFrameDuration
+  int attackSpriteFrameDuration,
+  int attackSpriteStrikeFrame
 )
 {
   idleAnimation.init(
@@ -59,12 +63,20 @@ void EnemyPanel::init(
     attackSpriteFrameCount,
     attackSpriteFrameDuration
   );
+
+  strikeFrame = attackSpriteStrikeFrame;
 }
 
 void EnemyPanel::update()
 {
   if (attackAnimation.running)
   {
+    didStrike = false;
+
+    if (attackAnimation.frameJustCompleted(strikeFrame - 1)) {
+      didStrike = true;
+    }
+
     attackAnimation.update();
   }
   else

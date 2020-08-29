@@ -7,7 +7,9 @@
 
 namespace EnemyPanel
 {
-  void init(uint8_t, unsigned char*, int, int, unsigned char*, int, int);
+  extern bool didStrike;
+
+  void init(uint8_t, unsigned char*, int, int, unsigned char*, int, int, int);
   void update();
   void attack();
   void render(int, int, int, int);

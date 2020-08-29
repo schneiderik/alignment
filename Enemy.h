@@ -18,6 +18,7 @@ namespace Game
     extern unsigned char* attackSprite;
     extern int attackSpriteFrameCount;
     extern int attackSpriteFrameDuration;
+    extern int attackSpriteStrikeFrame;
 
     void init(uint8_t);
   }
