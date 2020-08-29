@@ -14,11 +14,15 @@ namespace
 {
   void handleInput()
   {
+    if (arduboy.justPressed(A_BUTTON))
+    {
+      EnemyPanel::attack();
+    }
   }
 
   void update()
   {
-    Game::Enemy::idleAnimation.update();
+    EnemyPanel::update();
   }
 
   void render()
@@ -33,16 +37,23 @@ namespace
     EnemyPanel::render(
       BATTLE_VIEW_ENEMY_PANEL_X,
       BATTLE_VIEW_ENEMY_PANEL_Y,
-      Game::Enemy::type,
-      Game::Enemy::health,
-      Game::Enemy::healthMax,
-      Game::Enemy::idleAnimation
+      Game::CurrentEnemy::health,
+      Game::CurrentEnemy::healthMax
     );
   }
 }
 
 void BattleView::init()
 {
+  EnemyPanel::init(
+    Game::CurrentEnemy::type,
+    Game::CurrentEnemy::idleSprite,
+    Game::CurrentEnemy::idleSpriteFrameCount,
+    Game::CurrentEnemy::idleSpriteFrameDuration,
+    Game::CurrentEnemy::attackSprite,
+    Game::CurrentEnemy::attackSpriteFrameCount,
+    Game::CurrentEnemy::attackSpriteFrameDuration
+  );
 }
 
 void BattleView::loop()

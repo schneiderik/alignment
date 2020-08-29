@@ -40,7 +40,7 @@ namespace BouncingCursor
   {
     sprites.drawOverwrite(
       x,
-      y + counter.value - 1,
+      y + counter.frame - 1,
       questCursorImage,
       0
     );  
@@ -103,9 +103,9 @@ namespace
       getEnemyPositionX(i),
       getEnemyPositionY(i),
       questSprite,
-      Game::Enemy::type == i
+      Game::CurrentEnemy::type == i
         ? i
-        : i < Game::Enemy::type
+        : i < Game::CurrentEnemy::type
           ? QUEST_VIEW_ENEMY_SPRITE_GRAVE_INDEX
           : QUEST_VIEW_ENEMY_SPRITE_MYSTERY_INDEX
     );
@@ -140,8 +140,8 @@ namespace
   void render()
   {
     BouncingCursor::render(
-      getEnemyPositionX(Game::Enemy::type) + QUEST_VIEW_CURSOR_X,
-      getEnemyPositionY(Game::Enemy::type) + QUEST_VIEW_CURSOR_Y
+      getEnemyPositionX(Game::CurrentEnemy::type) + QUEST_VIEW_CURSOR_X,
+      getEnemyPositionY(Game::CurrentEnemy::type) + QUEST_VIEW_CURSOR_Y
     );
     renderText();
     renderEnemies();

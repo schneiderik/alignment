@@ -7,10 +7,11 @@ struct Counter
 {
   bool running = false;
   uint8_t mode;
-  int value = 0;
-  int count = 1;
+  int frame = 0;
+  int previousFrame = 0;
+  int frameCount = 1;
   int direction = 1;
-  int interval = 10;
+  int frameDuration = 10;
 
   Counter();
   Counter(int, int);
@@ -21,6 +22,7 @@ struct Counter
   void loop();
   void alternate();
   void stop();
+  bool frameJustCompleted(int);
   void update();
 };
 

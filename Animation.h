@@ -7,9 +7,9 @@
 
 struct Animation: public Counter
 {
-  char* sprite;
+  unsigned char* sprite;
 
-  void init(char*, int, int);
+  void init(unsigned char*, int, int);
   void render(int, int);
 };
 

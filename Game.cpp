@@ -42,7 +42,7 @@ void Game::goToBattleView()
 
 void Game::init()
 {
-  Enemy::init(ENEMY_TYPE_SKELETON);
+  CurrentEnemy::init(ENEMY_TYPE_SKELETON);
   QuestView::init();
   BattleView::init();
 }

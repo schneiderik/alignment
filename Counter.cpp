@@ -6,20 +6,21 @@
 
 Counter::Counter() {}
 
-Counter::Counter(int count_, int interval_) 
+Counter::Counter(int frameCount_, int frameDuration_) 
 {
-  init(count_, interval_);
+  init(frameCount_, frameDuration_);
 }
 
-void Counter::init(int count_, int interval_)
+void Counter::init(int frameCount_, int frameDuration_)
 {
-  count = count_;
-  interval = interval_;
+  frameCount = frameCount_;
+  frameDuration = frameDuration_;
 }
 
 void Counter::reset()
 {
-  value = 0;
+  frame = 0;
+  previousFrame = 0;
 }
 
 void Counter::run()
@@ -43,6 +44,11 @@ void Counter::alternate()
   running = true;
 }
 
+bool Counter::frameJustCompleted(int target)
+{
+  return previousFrame == target && previousFrame != frame;
+}
+
 void Counter::stop()
 {
   running = false;
@@ -52,33 +58,41 @@ void Counter::update()
 {
   if (!running) return;
 
-  if (arduboy.everyXFrames(interval))
-  {
-    value += direction;
+  previousFrame = frame;
 
+  if (arduboy.everyXFrames(frameDuration))
+  {
     switch (mode)
     {
       case COUNTER_MODE_LOOP:
-        if (value == count)
+        frame += direction;
+
+        if (frame == frameCount)
         {
           reset();
         }
         break;
       case COUNTER_MODE_ALTERNATE:
-        if (value == count - 1)
+        frame += direction;
+
+        if (frame == frameCount - 1)
         {
           direction = -1;
         }
 
-        if (value == 0)
+        if (frame == 0)
         {
           direction = 1;
         }
         break;
       default:
-        if (value == count - 1)
+        if (frame == frameCount - 1)
         {
           stop();
+        }
+        else
+        {
+          frame += direction;
         }
         break;
     }

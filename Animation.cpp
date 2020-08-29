@@ -1,10 +1,10 @@
 #include "Animation.h"
 
-void Animation::init(char* sprite_, int count_, int interval_)
+void Animation::init(unsigned char* sprite_, int frameCount_, int frameDuration_)
 {
   sprite = sprite_;
-  count = count_;
-  interval = interval_;
+  frameCount = frameCount_;
+  frameDuration = frameDuration_;
 }
 
 void Animation::render(int x, int y)
@@ -14,7 +14,7 @@ void Animation::render(int x, int y)
       x,
       y,
       sprite,
-      value
+      frame
     );
   }
 }

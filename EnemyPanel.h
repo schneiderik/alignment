@@ -7,9 +7,10 @@
 
 namespace EnemyPanel
 {
-  void init();
+  void init(uint8_t, unsigned char*, int, int, unsigned char*, int, int);
   void update();
-  void render(int, int, uint8_t, int, int, Animation&);
+  void attack();
+  void render(int, int, int, int);
 }
 
 #endif

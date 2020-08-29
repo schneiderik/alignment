@@ -10,6 +10,10 @@
 
 namespace
 {
+  Animation idleAnimation;
+  Animation attackAnimation;
+  bool shouldAttack;
+
   void renderHealthBar(
     int x,
     int y,
@@ -30,13 +34,63 @@ namespace
   }
 }
 
+void EnemyPanel::init(
+  uint8_t type,
+  unsigned char* idleSprite,
+  int idleSpriteFrameCount,
+  int idleSpriteFrameDuration,
+  unsigned char* attackSprite,
+  int attackSpriteFrameCount,
+  int attackSpriteFrameDuration
+)
+{
+  idleAnimation.init(
+    idleSprite,
+    idleSpriteFrameCount,
+    idleSpriteFrameDuration
+  );
+
+  type == ENEMY_TYPE_DEMON
+    ? idleAnimation.loop()
+    : idleAnimation.alternate();
+
+  attackAnimation.init(
+    attackSprite,
+    attackSpriteFrameCount,
+    attackSpriteFrameDuration
+  );
+}
+
+void EnemyPanel::update()
+{
+  if (attackAnimation.running)
+  {
+    attackAnimation.update();
+  }
+  else
+  {
+    if (shouldAttack && idleAnimation.frameJustCompleted(0))
+    {
+      attackAnimation.run();
+      shouldAttack = false;
+    } 
+    else
+    {
+      idleAnimation.update();
+    }
+  }
+}
+
+void EnemyPanel::attack()
+{
+  shouldAttack = true;
+}
+
 void EnemyPanel::render(
   int x,
   int y,
-  uint8_t type,
   int health,
-  int maxHealth,
-  Animation& animation
+  int maxHealth
 )
 {
   renderHealthBar(
@@ -46,8 +100,18 @@ void EnemyPanel::render(
     maxHealth
   );
 
-  animation.render(
-    x + ENEMY_PANEL_ANIMATION_X,
-    y + ENEMY_PANEL_ANIMATION_Y
-  );
+  if (attackAnimation.running)
+  {
+    attackAnimation.render(
+      x + ENEMY_PANEL_ANIMATION_X,
+      y + ENEMY_PANEL_ANIMATION_Y
+    );
+  }
+  else
+  {
+    idleAnimation.render(
+      x + ENEMY_PANEL_ANIMATION_X,
+      y + ENEMY_PANEL_ANIMATION_Y
+    );
+  }
 }

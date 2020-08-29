@@ -7,13 +7,17 @@
 
 namespace Game
 {
-  namespace Enemy
+  namespace CurrentEnemy
   {
     extern uint8_t type;
     extern int health;
     extern int healthMax;
-    extern Animation idleAnimation;
-    extern Animation attackAnimation;
+    extern unsigned char* idleSprite;
+    extern int idleSpriteFrameCount;
+    extern int idleSpriteFrameDuration;
+    extern unsigned char* attackSprite;
+    extern int attackSpriteFrameCount;
+    extern int attackSpriteFrameDuration;
 
     void init(uint8_t);
   }
