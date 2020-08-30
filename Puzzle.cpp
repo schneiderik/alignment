@@ -1,0 +1,29 @@
+#include "Puzzle.h"
+
+#define PUZZLE_PREVIEW_DIVIDER_X 89
+#define PUZZLE_PREVIEW_DIVIDER_Y 0
+#define PUZZLE_PREVIEW_DIVIDER_WIDTH 1
+#define PUZZLE_PREVIEW_DIVIDER_HEIGHT 49
+
+#define PUZZLE_WEAPONS_X 0
+#define PUZZLE_WEAPONS_Y 1
+
+#define PUZZLE_CURSOR_MIN 0
+#define PUZZLE_CURSOR_MAX 2
+
+namespace
+{
+}
+
+void Puzzle::render(
+  uint8_t x,
+  uint8_t y
+)
+{
+  arduboy.fillRect(
+    x + PUZZLE_PREVIEW_DIVIDER_X,
+    y + PUZZLE_PREVIEW_DIVIDER_Y,
+    PUZZLE_PREVIEW_DIVIDER_WIDTH,
+    PUZZLE_PREVIEW_DIVIDER_HEIGHT
+  );
+}

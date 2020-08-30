@@ -3,12 +3,19 @@
 #include "Game.h"
 #include "StatBar.h"
 #include "EnemyPanel.h"
+#include "Puzzle.h"
 
 #define BATTLE_VIEW_STAT_BAR_X 0
 #define BATTLE_VIEW_STAT_BAR_Y 0
 
+#define BATTLE_VIEW_PUZZLE_X 0
+#define BATTLE_VIEW_PUZZLE_Y 14
+
 #define BATTLE_VIEW_ENEMY_PANEL_X 104
 #define BATTLE_VIEW_ENEMY_PANEL_Y 12
+
+#define BATTLE_VIEW_PAUSED_X 50
+#define BATTLE_VIEW_PAUSED_Y 28
 
 #define BATTLE_VIEW_ATTACK_INTERVAL_MIN 1000
 #define BATTLE_VIEW_ATTACK_INTERVAL_MAX 1400
@@ -16,9 +23,14 @@
 namespace
 {
   Counter attackCounter;
+  bool paused;
 
   void handleInput()
   {
+    if (arduboy.justPressed(RIGHT_BUTTON))
+    {
+      paused = !paused;
+    }
   }
 
   void handleStrike(uint8_t enemyType)
@@ -57,6 +69,8 @@ namespace
 
   void update()
   {
+    if (paused) return;
+
     EnemyPanel::update();
     
     if (EnemyPanel::didStrike)
@@ -88,6 +102,20 @@ namespace
       Game::CurrentEnemy::health,
       Game::CurrentEnemy::healthMax
     );
+
+    Puzzle::render(
+      BATTLE_VIEW_PUZZLE_X,
+      BATTLE_VIEW_PUZZLE_Y
+    );
+
+    if (paused) {
+      sprites.drawOverwrite(
+        BATTLE_VIEW_PAUSED_X,
+        BATTLE_VIEW_PAUSED_Y,
+        pausedTextImage,
+        0
+      );
+    }
   }
 }
 
