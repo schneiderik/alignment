@@ -1,5 +1,7 @@
 #include "Puzzle.h"
 
+#include "Weapon.h"
+
 #define PUZZLE_PREVIEW_DIVIDER_X 89
 #define PUZZLE_PREVIEW_DIVIDER_Y 0
 #define PUZZLE_PREVIEW_DIVIDER_WIDTH 1
@@ -21,18 +23,6 @@
 
 #define PUZZLE_PREVIEW_GEM_X 91
 
-#define PUZZLE_WEAPON_CURSOR_X 0
-#define PUZZLE_WEAPON_CURSOR_WIDTH 12
-#define PUZZLE_WEAPON_CURSOR_HEIGHT 12
-
-#define PUZZLE_WEAPON_ICON_X 2
-#define PUZZLE_WEAPON_ICON_Y 2
-
-#define PUZZLE_WEAPON_DIVIDER_X 14
-#define PUZZLE_WEAPON_DIVIDER_Y 1
-#define PUZZLE_WEAPON_DIVIDER_WIDTH 1
-#define PUZZLE_WEAPON_DIVIDER_HEIGHT 10
-
 namespace
 {
   uint8_t cursor = PUZZLE_CURSOR_MIN;
@@ -44,6 +34,7 @@ namespace
     {0, 0}
   };
 
+  Weapon weapons[PUZZLE_WEAPON_COUNT];
   uint8_t weaponPositions[PUZZLE_WEAPON_COUNT] = {0, 1, 2, 3};
   uint8_t weaponYOffsets[PUZZLE_WEAPON_COUNT] = {0, 12, 24, 36};
 
@@ -71,6 +62,10 @@ namespace
 void Puzzle::init(
 )
 {
+  for(uint8_t i = 0; i < PUZZLE_WEAPON_COUNT; i++)
+  {
+    weapons[i].init(i);
+  }
 }
 
 void Puzzle::incrementCursor()
@@ -143,37 +138,10 @@ void Puzzle::render(
 
   for (uint8_t i = 0; i < PUZZLE_WEAPON_COUNT; i++)
   {
-    arduboy.fillRect(
-      x + PUZZLE_WEAPON_DIVIDER_X,
-      y  + weaponYOffsets[i] + PUZZLE_WEAPON_DIVIDER_Y,
-      PUZZLE_WEAPON_DIVIDER_WIDTH,
-      PUZZLE_WEAPON_DIVIDER_HEIGHT
+    weapons[weaponPositions[i]].render(
+      x + PUZZLE_WEAPONS_X,
+      y + PUZZLE_WEAPONS_Y + weaponYOffsets[i],
+      i == cursor || i == cursor + 1
     );
-
-    if (i == cursor || i == cursor + 1)
-    {
-      arduboy.fillRect(
-        x + PUZZLE_WEAPON_CURSOR_X,
-        y + weaponYOffsets[i],
-        PUZZLE_WEAPON_CURSOR_WIDTH,
-        PUZZLE_WEAPON_CURSOR_HEIGHT
-      ); 
-
-      sprites.drawErase(
-        x + PUZZLE_WEAPON_ICON_X,
-        y + weaponYOffsets[i] + PUZZLE_WEAPON_ICON_Y,
-        weaponSprite,
-        weaponPositions[i]
-      );  
-    }
-    else
-    {
-      sprites.drawOverwrite(
-        x + PUZZLE_WEAPON_ICON_X,
-        y + weaponYOffsets[i] + PUZZLE_WEAPON_ICON_Y,
-        weaponSprite,
-        weaponPositions[i]
-      );  
-    }  
   }
 }
