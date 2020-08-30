@@ -21,8 +21,16 @@
 
 #define PUZZLE_PREVIEW_GEM_X 91
 
+#define PUZZLE_WEAPON_CURSOR_X 0
+#define PUZZLE_WEAPON_CURSOR_WIDTH 12
+#define PUZZLE_WEAPON_CURSOR_HEIGHT 12
+
+#define PUZZLE_WEAPON_ICON_X 2
+#define PUZZLE_WEAPON_ICON_Y 2
+
 namespace
 {
+  uint8_t cursor = PUZZLE_CURSOR_MIN;
   uint8_t previewGemCount = 0;
   uint8_t preview[PUZZLE_WEAPON_COUNT][PUZZLE_PREVIEW_GEM_DATA_LENGTH] = {
     {0, 0},
@@ -31,6 +39,7 @@ namespace
     {0, 0}
   };
 
+  uint8_t weaponPositions[PUZZLE_WEAPON_COUNT] = {0, 1, 2, 3};
   uint8_t weaponYOffsets[PUZZLE_WEAPON_COUNT] = {0, 12, 24, 36};
 
   uint8_t emptyPreviewPosition() {
@@ -66,6 +75,34 @@ void Puzzle::init(
 {
 }
 
+void Puzzle::incrementCursor()
+{
+  if (cursor < PUZZLE_CURSOR_MAX)
+  {
+    cursor++;
+  }
+}
+
+void Puzzle::decrementCursor()
+{
+  if (cursor > PUZZLE_CURSOR_MIN)
+  {
+    cursor--;
+  }
+}
+
+void Puzzle::swap(uint8_t a, uint8_t b)
+{
+  uint8_t tmp = weaponPositions[a];
+  weaponPositions[a] = weaponPositions[b];
+  weaponPositions[b] = tmp;
+}
+
+void Puzzle::swap()
+{
+  swap(cursor, cursor + 1);
+}
+
 void Puzzle::render(
   uint8_t x,
   uint8_t y
@@ -86,5 +123,34 @@ void Puzzle::render(
       gemSpritePlusMask,
       preview[i][PUZZLE_PREVIEW_GEM_DATA_TYPE]
     );
+  }
+
+  for (uint8_t i = 0; i < PUZZLE_WEAPON_COUNT; i++)
+  {
+    if (i == cursor || i == cursor + 1)
+    {
+      arduboy.fillRect(
+        x + PUZZLE_WEAPON_CURSOR_X,
+        y + weaponYOffsets[i],
+        PUZZLE_WEAPON_CURSOR_WIDTH,
+        PUZZLE_WEAPON_CURSOR_HEIGHT
+      ); 
+
+      sprites.drawErase(
+        x + PUZZLE_WEAPON_ICON_X,
+        y + weaponYOffsets[i] + PUZZLE_WEAPON_ICON_Y,
+        weaponSprite,
+        weaponPositions[i]
+      );  
+    }
+    else
+    {
+      sprites.drawOverwrite(
+        x + PUZZLE_WEAPON_ICON_X,
+        y + weaponYOffsets[i] + PUZZLE_WEAPON_ICON_Y,
+        weaponSprite,
+        weaponPositions[i]
+      );  
+    }  
   }
 }

@@ -6,6 +6,10 @@
 namespace Puzzle
 {
   void update();
+  void incrementCursor();
+  void decrementCursor();
+  void swap();
+  void swap(uint8_t, uint8_t);
   void init();
   void render(uint8_t, uint8_t);
 }

@@ -31,6 +31,23 @@ namespace
     {
       paused = !paused;
     }
+
+    if (paused) return;
+
+    if (arduboy.justPressed(UP_BUTTON))
+    {
+      Puzzle::decrementCursor();
+    }
+
+    if (arduboy.justPressed(DOWN_BUTTON))
+    {
+      Puzzle::incrementCursor();
+    }
+
+    if (arduboy.justPressed(A_BUTTON))
+    {
+      Puzzle::swap();
+    }
   }
 
   void handleStrike(uint8_t enemyType)
