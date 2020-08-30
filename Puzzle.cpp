@@ -61,13 +61,6 @@ namespace
       return emptyPreviewPosition();
     }
   }
-
-  void queuePreviewGem()
-  {
-    preview[previewGemCount][PUZZLE_PREVIEW_GEM_DATA_POSITION] = emptyPreviewPosition();
-    preview[previewGemCount][PUZZLE_PREVIEW_GEM_DATA_TYPE] = random(0, PUZZLE_GEM_TYPE_COUNT);
-    previewGemCount++;
-  }
 }
 
 void Puzzle::init(
@@ -101,6 +94,24 @@ void Puzzle::swap(uint8_t a, uint8_t b)
 void Puzzle::swap()
 {
   swap(cursor, cursor + 1);
+}
+
+void Puzzle::queuePreviewGem()
+{
+  if (previewGemCount == PUZZLE_WEAPON_COUNT) return;
+
+  preview[previewGemCount][PUZZLE_PREVIEW_GEM_DATA_POSITION] = emptyPreviewPosition();
+  preview[previewGemCount][PUZZLE_PREVIEW_GEM_DATA_TYPE] = random(0, PUZZLE_GEM_TYPE_COUNT);
+  previewGemCount++;
+}
+
+void Puzzle::update()
+{
+  if (previewGemCount == 0)
+  {
+    queuePreviewGem();
+    queuePreviewGem();
+  }
 }
 
 void Puzzle::render(

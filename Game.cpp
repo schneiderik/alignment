@@ -54,7 +54,7 @@ void Game::goToLoseView()
 
 void Game::init()
 {
-  CurrentEnemy::init(ENEMY_TYPE_SKELETON);
+  CurrentEnemy::init(ENEMY_TYPE_ORC);
   QuestView::init();
   BattleView::init();
 }

@@ -54,10 +54,9 @@ namespace
   {
     switch (enemyType) {
       case ENEMY_TYPE_SKELETON:
-        //puzzle.weapons.getRandom().popLastGem();
         break;
       case ENEMY_TYPE_ORC:
-        //puzzle.previewGems.create();
+        Puzzle::queuePreviewGem();
         break;
       case ENEMY_TYPE_GOLEM:
         //puzzle.weapons.swap(random(WEAPON_CURSOR_MIN, WEAPON_CURSOR_MAX));
@@ -87,6 +86,8 @@ namespace
   void update()
   {
     if (paused) return;
+
+    Puzzle::update();
 
     EnemyPanel::update();
     
