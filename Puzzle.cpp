@@ -11,7 +11,58 @@
 #define PUZZLE_CURSOR_MIN 0
 #define PUZZLE_CURSOR_MAX 2
 
+#define PUZZLE_WEAPON_COUNT 4
+
+#define PUZZLE_GEM_TYPE_COUNT 5
+
+#define PUZZLE_PREVIEW_GEM_DATA_LENGTH 2
+#define PUZZLE_PREVIEW_GEM_DATA_POSITION 0
+#define PUZZLE_PREVIEW_GEM_DATA_TYPE 1
+
+#define PUZZLE_PREVIEW_GEM_X 91
+
 namespace
+{
+  uint8_t previewGemCount = 0;
+  uint8_t preview[PUZZLE_WEAPON_COUNT][PUZZLE_PREVIEW_GEM_DATA_LENGTH] = {
+    {0, 0},
+    {0, 0},
+    {0, 0},
+    {0, 0}
+  };
+
+  uint8_t weaponYOffsets[PUZZLE_WEAPON_COUNT] = {0, 12, 24, 36};
+
+  uint8_t emptyPreviewPosition() {
+    uint8_t position = random(0, PUZZLE_WEAPON_COUNT);
+    bool empty = true;
+
+    for (uint8_t i = 0; i < previewGemCount; i++) {
+      if (preview[i][PUZZLE_PREVIEW_GEM_DATA_POSITION] == position)
+      {
+        empty = false;
+      }
+    }
+
+    if (empty)
+    {
+      return position;
+    }
+    else {
+      return emptyPreviewPosition();
+    }
+  }
+
+  void queuePreviewGem()
+  {
+    preview[previewGemCount][PUZZLE_PREVIEW_GEM_DATA_POSITION] = emptyPreviewPosition();
+    preview[previewGemCount][PUZZLE_PREVIEW_GEM_DATA_TYPE] = random(0, PUZZLE_GEM_TYPE_COUNT);
+    previewGemCount++;
+  }
+}
+
+void Puzzle::init(
+)
 {
 }
 
@@ -26,4 +77,14 @@ void Puzzle::render(
     PUZZLE_PREVIEW_DIVIDER_WIDTH,
     PUZZLE_PREVIEW_DIVIDER_HEIGHT
   );
+
+  for (uint8_t i = 0; i < previewGemCount; i++)
+  {
+    sprites.drawPlusMask(
+      x + PUZZLE_PREVIEW_GEM_X,
+      y + weaponYOffsets[preview[i][PUZZLE_PREVIEW_GEM_DATA_POSITION]],
+      gemSpritePlusMask,
+      preview[i][PUZZLE_PREVIEW_GEM_DATA_TYPE]
+    );
+  }
 }

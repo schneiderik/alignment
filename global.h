@@ -33,9 +33,6 @@ extern ArduboyTones sound;
 #define FALL_SPEED_DEFAULT 8
 #define FALL_SPEED_FAST 4
 
-#define PREVIEW_GEM_X 91
-#define PREVIEW_THRESHOLD_X 85
-
 
 #define FALLING_GEMS_X_MAX 92
 #define FALLING_GEMS_X_INCREMENT -3

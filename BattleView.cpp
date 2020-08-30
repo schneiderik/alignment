@@ -133,6 +133,8 @@ void BattleView::init()
   );
 
   setAttackCounter();
+
+  Puzzle::init();
 }
 
 void BattleView::loop()
