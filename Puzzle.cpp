@@ -28,6 +28,11 @@
 #define PUZZLE_WEAPON_ICON_X 2
 #define PUZZLE_WEAPON_ICON_Y 2
 
+#define PUZZLE_WEAPON_DIVIDER_X 14
+#define PUZZLE_WEAPON_DIVIDER_Y 1
+#define PUZZLE_WEAPON_DIVIDER_WIDTH 1
+#define PUZZLE_WEAPON_DIVIDER_HEIGHT 10
+
 namespace
 {
   uint8_t cursor = PUZZLE_CURSOR_MIN;
@@ -138,6 +143,13 @@ void Puzzle::render(
 
   for (uint8_t i = 0; i < PUZZLE_WEAPON_COUNT; i++)
   {
+    arduboy.fillRect(
+      x + PUZZLE_WEAPON_DIVIDER_X,
+      y  + weaponYOffsets[i] + PUZZLE_WEAPON_DIVIDER_Y,
+      PUZZLE_WEAPON_DIVIDER_WIDTH,
+      PUZZLE_WEAPON_DIVIDER_HEIGHT
+    );
+
     if (i == cursor || i == cursor + 1)
     {
       arduboy.fillRect(
