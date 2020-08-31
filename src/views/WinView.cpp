@@ -1,7 +1,7 @@
 #include "WinView.h"
 
 #include "../../Game.h"
-#include "../../Number.h"
+#include "../components/Number.h"
 
 #define WIN_VIEW_VICTORY_X 21
 #define WIN_VIEW_VICTORY_Y 3

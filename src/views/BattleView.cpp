@@ -1,7 +1,7 @@
 #include "BattleView.h"
 
 #include "../../Game.h"
-#include "../../StatBar.h"
+#include "../components/StatBar.h"
 #include "../../EnemyPanel.h"
 #include "../../Puzzle.h"
 

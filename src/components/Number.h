@@ -1,7 +1,7 @@
 #ifndef NUMBER_H
 #define NUMBER_H
 
-#include "global.h"
+#include "../../global.h"
 
 namespace Number
 {

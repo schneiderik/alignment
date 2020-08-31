@@ -1,7 +1,7 @@
 #ifndef STAT_BAR_H
 #define STAT_BAR_H
 
-#include "global.h"
+#include "../../global.h"
 
 namespace StatBar
 {
