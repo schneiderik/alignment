@@ -1,7 +1,7 @@
 #ifndef TITLE_VIEW_H
 #define TITLE_VIEW_H
 
-#include "global.h"
+#include "../../global.h"
 
 namespace TitleView
 {

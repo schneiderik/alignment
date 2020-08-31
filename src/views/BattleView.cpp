@@ -1,9 +1,9 @@
 #include "BattleView.h"
 
-#include "Game.h"
-#include "StatBar.h"
-#include "EnemyPanel.h"
-#include "Puzzle.h"
+#include "../../Game.h"
+#include "../../StatBar.h"
+#include "../../EnemyPanel.h"
+#include "../../Puzzle.h"
 
 #define BATTLE_VIEW_STAT_BAR_X 0
 #define BATTLE_VIEW_STAT_BAR_Y 0

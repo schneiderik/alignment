@@ -1,11 +1,11 @@
 #include "Game.h"
 
-#include "TitleView.h"
-#include "InfoView.h"
-#include "QuestView.h"
-#include "BattleView.h"
-#include "WinView.h"
-#include "LoseView.h"
+#include "src/views/TitleView.h"
+#include "src/views/InfoView.h"
+#include "src/views/QuestView.h"
+#include "src/views/BattleView.h"
+#include "src/views/WinView.h"
+#include "src/views/LoseView.h"
 
 #define GAME_STATE_TITLE 0
 #define GAME_STATE_INFO 1

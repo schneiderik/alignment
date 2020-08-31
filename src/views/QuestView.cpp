@@ -1,7 +1,7 @@
 #include "QuestView.h"
 
-#include "Game.h"
-#include "Counter.h"
+#include "../../Game.h"
+#include "../../Counter.h"
 
 #define QUEST_VIEW_TEXT_X 32
 #define QUEST_VIEW_TEXT_Y 2

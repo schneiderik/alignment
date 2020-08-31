@@ -1,7 +1,7 @@
 #ifndef INFO_VIEW_H
 #define INFO_VIEW_H
 
-#include "global.h"
+#include "../../global.h"
 
 namespace InfoView
 {

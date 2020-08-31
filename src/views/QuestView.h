@@ -1,7 +1,7 @@
 #ifndef QUEST_VIEW_H
 #define QUEST_VIEW_H
 
-#include "global.h"
+#include "../../global.h"
 
 namespace QuestView
 {

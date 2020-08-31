@@ -1,7 +1,7 @@
 #include "LoseView.h"
 
-#include "Game.h"
-#include "Number.h"
+#include "../../Game.h"
+#include "../../Number.h"
 
 #define LOSE_VIEW_YOU_DIED_X 23
 #define LOSE_VIEW_YOU_DIED_Y 9
