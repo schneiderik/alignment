@@ -1,7 +1,7 @@
 #include "QuestView.h"
 
 #include "../../Game.h"
-#include "../../Counter.h"
+#include "../components/BouncingCursor.h"
 
 #define QUEST_VIEW_TEXT_X 32
 #define QUEST_VIEW_TEXT_Y 2
@@ -11,41 +11,9 @@
 #define QUEST_VIEW_ENEMY_SPRITE_GRAVE_INDEX 6
 #define QUEST_VIEW_CURSOR_X 8
 #define QUEST_VIEW_CURSOR_Y -4
-#define QUEST_VIEW_CURSOR_FRAME_COUNT 3
-#define QUEST_VIEW_CURSOR_INTERVAL 8
-#define QUEST_VIEW_CURSOR_ANIMATION_OFFSET_Y_MIN -1
-#define QUEST_VIEW_CURSOR_ANIMATION_OFFSET_Y_MAX 1
 #define QUEST_VIEW_ENEMY_POSITIONS_LENGTH 2
 #define QUEST_VIEW_ENEMY_POSITIONS_X 0
 #define QUEST_VIEW_ENEMY_POSITIONS_Y 1
-
-namespace BouncingCursor
-{
-  Counter counter(
-    QUEST_VIEW_CURSOR_FRAME_COUNT,
-    QUEST_VIEW_CURSOR_INTERVAL
-  );
-
-  init()
-  {
-    counter.alternate();
-  }
-
-  update()
-  {
-    counter.update();
-  }
-
-  render(int x, int y)
-  {
-    sprites.drawOverwrite(
-      x,
-      y + counter.frame - 1,
-      questCursorImage,
-      0
-    );  
-  }
-}
 
 namespace
 {
