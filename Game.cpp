@@ -21,6 +21,7 @@ namespace
 
 uint8_t Game::playerHealth = PLAYER_HEALTH_MAX;
 unsigned long int Game::score = 0;
+Enemy Game::currentEnemy;
 
 void Game::goToTitleView()
 {
@@ -34,11 +35,13 @@ void Game::goToInfoView()
 
 void Game::goToQuestView()
 {
+  QuestView::init();
   state = GAME_STATE_QUEST;
 }
 
 void Game::goToBattleView()
 {
+  BattleView::init();
   state = GAME_STATE_BATTLE;
 }
 
@@ -54,9 +57,7 @@ void Game::goToLoseView()
 
 void Game::init()
 {
-  CurrentEnemy::init(ENEMY_TYPE_ORC);
-  QuestView::init();
-  BattleView::init();
+  currentEnemy.init(ENEMY_TYPE_SKELETON);
 }
 
 void Game::loop()

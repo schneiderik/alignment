@@ -1,7 +1,7 @@
 #include "Puzzle.h"
 
-#include "Preview.h"
-#include "Weapon.h"
+#include "../../Preview.h"
+#include "../../Weapon.h"
 
 #define PUZZLE_PREVIEW_X 89
 #define PUZZLE_PREVIEW_Y 0
@@ -55,7 +55,12 @@ void Puzzle::swap(uint8_t a, uint8_t b)
   weaponPositions[b] = tmp;
 }
 
-void Puzzle::swap()
+void Puzzle::swapActiveWeapons()
+{
+  swap(cursor, cursor + 1);
+}
+
+void Puzzle::swapRandomWeapons()
 {
   swap(cursor, cursor + 1);
 }

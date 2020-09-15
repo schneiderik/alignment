@@ -3,25 +3,13 @@
 
 #include "global.h"
 
-#include "Animation.h"
-
-namespace Game
+struct Enemy
 {
-  namespace CurrentEnemy
-  {
-    extern uint8_t type;
-    extern int health;
-    extern int healthMax;
-    extern unsigned char* idleSprite;
-    extern int idleSpriteFrameCount;
-    extern int idleSpriteFrameDuration;
-    extern unsigned char* attackSprite;
-    extern int attackSpriteFrameCount;
-    extern int attackSpriteFrameDuration;
-    extern int attackSpriteStrikeFrame;
+  uint8_t type;
+  int health;
+  int healthMax;
 
-    void init(uint8_t);
-  }
-}
+  void init(uint8_t);
+};
 
 #endif

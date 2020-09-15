@@ -1,9 +1,10 @@
 #include "BattleView.h"
 
 #include "../../Game.h"
+#include "../../Counter.h"
 #include "../components/StatBar.h"
-#include "../../EnemyPanel.h"
-#include "../../Puzzle.h"
+#include "../components/EnemyPanel.h"
+#include "../components/Puzzle.h"
 
 #define BATTLE_VIEW_STAT_BAR_X 0
 #define BATTLE_VIEW_STAT_BAR_Y 0
@@ -22,8 +23,8 @@
 
 namespace
 {
-  Counter attackCounter;
   bool paused;
+  Counter attackCounter;
 
   void handleInput()
   {
@@ -46,31 +47,11 @@ namespace
 
     if (arduboy.justPressed(A_BUTTON))
     {
-      Puzzle::swap();
+      Puzzle::swapActiveWeapons();
     }
   }
-
-  void handleStrike(uint8_t enemyType)
-  {
-    switch (enemyType) {
-      case ENEMY_TYPE_SKELETON:
-        break;
-      case ENEMY_TYPE_ORC:
-        Puzzle::queuePreviewGem();
-        break;
-      case ENEMY_TYPE_GOLEM:
-        //puzzle.weapons.swap(random(WEAPON_CURSOR_MIN, WEAPON_CURSOR_MAX));
-        break;
-      case ENEMY_TYPE_DEMON:
-        //enableForcedFastFall();
-        break;
-      case ENEMY_TYPE_SORCERER:
-        //strike(random(0, 4));
-        break;
-    }
-  }
-
-  void setAttackCounter()
+  
+  void initAttackCounter()
   {
     attackCounter.init(
       random(
@@ -83,25 +64,44 @@ namespace
     attackCounter.run();
   }
 
+  void handleStrike(uint8_t enemyType)
+  {
+    switch (enemyType) {
+      case ENEMY_TYPE_SKELETON:
+        //Puzzle::addRandomGem();
+        break;
+      case ENEMY_TYPE_ORC:
+        Puzzle::queuePreviewGem();
+        break;
+      case ENEMY_TYPE_GOLEM:
+        //Puzzle::swapRandomWeapons();
+        break;
+      case ENEMY_TYPE_DEMON:
+        //Puzzle::enableForcedFastFall();
+        break;
+      case ENEMY_TYPE_SORCERER:
+        handleStrike(random(0, 4));
+        break;
+    }
+  }
+
   void update()
   {
     if (paused) return;
 
     Puzzle::update();
-
-    EnemyPanel::update();
-    
-    if (EnemyPanel::didStrike)
-    {
-      handleStrike(Game::CurrentEnemy::type);
-    }
-
     attackCounter.update();
+    EnemyPanel::update();
 
     if (!attackCounter.running)
     {
       EnemyPanel::attack();
-      setAttackCounter();
+      initAttackCounter();
+    }
+    
+    if (EnemyPanel::isStriking)
+    {
+      handleStrike(Game::currentEnemy.type);
     }
   }
 
@@ -117,8 +117,8 @@ namespace
     EnemyPanel::render(
       BATTLE_VIEW_ENEMY_PANEL_X,
       BATTLE_VIEW_ENEMY_PANEL_Y,
-      Game::CurrentEnemy::health,
-      Game::CurrentEnemy::healthMax
+      Game::currentEnemy.health,
+      Game::currentEnemy.healthMax
     );
 
     Puzzle::render(
@@ -139,19 +139,8 @@ namespace
 
 void BattleView::init()
 {
-  EnemyPanel::init(
-    Game::CurrentEnemy::type,
-    Game::CurrentEnemy::idleSprite,
-    Game::CurrentEnemy::idleSpriteFrameCount,
-    Game::CurrentEnemy::idleSpriteFrameDuration,
-    Game::CurrentEnemy::attackSprite,
-    Game::CurrentEnemy::attackSpriteFrameCount,
-    Game::CurrentEnemy::attackSpriteFrameDuration,
-    Game::CurrentEnemy::attackSpriteStrikeFrame
-  );
-
-  setAttackCounter();
-
+  initAttackCounter();
+  EnemyPanel::init(Game::currentEnemy.type);
   Puzzle::init();
 }
 

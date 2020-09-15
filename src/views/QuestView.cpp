@@ -1,7 +1,7 @@
 #include "QuestView.h"
 
 #include "../../Game.h"
-#include "../components/BouncingCursor.h"
+#include "../../Counter.h"
 
 #define QUEST_VIEW_TEXT_X 32
 #define QUEST_VIEW_TEXT_Y 2
@@ -14,6 +14,8 @@
 #define QUEST_VIEW_ENEMY_POSITIONS_LENGTH 2
 #define QUEST_VIEW_ENEMY_POSITIONS_X 0
 #define QUEST_VIEW_ENEMY_POSITIONS_Y 1
+#define QUEST_VIEW_BOUNCING_CURSOR_FRAME_COUNT 3
+#define QUEST_VIEW_BOUNCING_CURSOR_INTERVAL 8
 
 namespace
 {
@@ -32,6 +34,11 @@ namespace
     {101, 16}
   };
 
+  Counter counter(
+    QUEST_VIEW_BOUNCING_CURSOR_FRAME_COUNT,
+    QUEST_VIEW_BOUNCING_CURSOR_INTERVAL
+  );
+
   void handleInput()
   {
     if (arduboy.justPressed(A_BUTTON))
@@ -42,7 +49,7 @@ namespace
 
   void update()
   {
-    BouncingCursor::update();
+    counter.update();
   }
 
   void renderText()
@@ -71,9 +78,9 @@ namespace
       getEnemyPositionX(i),
       getEnemyPositionY(i),
       questSprite,
-      Game::CurrentEnemy::type == i
+      Game::currentEnemy.type == i
         ? i
-        : i < Game::CurrentEnemy::type
+        : i < Game::currentEnemy.type
           ? QUEST_VIEW_ENEMY_SPRITE_GRAVE_INDEX
           : QUEST_VIEW_ENEMY_SPRITE_MYSTERY_INDEX
     );
@@ -105,12 +112,19 @@ namespace
     }
   }
 
+  void renderCursor()
+  {
+    sprites.drawOverwrite(
+      getEnemyPositionX(Game::currentEnemy.type) + QUEST_VIEW_CURSOR_X,
+      getEnemyPositionY(Game::currentEnemy.type) + QUEST_VIEW_CURSOR_Y + counter.frame - 1,
+      questCursorImage,
+      0
+    );  
+  }
+
   void render()
   {
-    BouncingCursor::render(
-      getEnemyPositionX(Game::CurrentEnemy::type) + QUEST_VIEW_CURSOR_X,
-      getEnemyPositionY(Game::CurrentEnemy::type) + QUEST_VIEW_CURSOR_Y
-    );
+    renderCursor();
     renderText();
     renderEnemies();
     renderPaths();
@@ -119,7 +133,7 @@ namespace
 
 void QuestView::init()
 {
-  BouncingCursor::init();
+  counter.alternate();
 }
 
 void QuestView::loop()

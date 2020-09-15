@@ -2,13 +2,13 @@
 #define GAME_H
 
 #include "global.h"
-
 #include "Enemy.h"
 
 namespace Game
 {
   extern uint8_t playerHealth;
   extern unsigned long int score;
+  extern Enemy currentEnemy;
 
   void init();
   void loop();
