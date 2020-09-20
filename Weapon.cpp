@@ -13,7 +13,13 @@
 #define WEAPON_DIVIDER_WIDTH 1
 #define WEAPON_DIVIDER_HEIGHT 10
 
-#define WEAPON_PREVIEW_X 89
+#define WEAPON_PREVIEW_DIVIDER_X 89
+#define WEAPON_PREVIEW_DIVIDER_Y 0
+#define WEAPON_PREVIEW_DIVIDER_WIDTH 1
+#define WEAPON_PREVIEW_DIVIDER_HEIGHT 14
+
+#define WEAPON_PREVIEW_GEM_X 92
+#define WEAPON_PREVIEW_GEM_Y 1
 
 void Weapon::init(uint8_t type_)
 {
@@ -55,10 +61,18 @@ void Weapon::render(uint8_t x, uint8_t y, bool active)
     );  
   }  
 
+  arduboy.fillRect(
+    x + WEAPON_PREVIEW_DIVIDER_X,
+    y + WEAPON_PREVIEW_DIVIDER_Y,
+    WEAPON_PREVIEW_DIVIDER_WIDTH,
+    WEAPON_PREVIEW_DIVIDER_HEIGHT,
+    WHITE
+  );
+
   if (previewGem >= 0) {
     sprites.drawPlusMask(
-      x + WEAPON_PREVIEW_X,
-      y,
+      x + WEAPON_PREVIEW_GEM_X,
+      y + WEAPON_PREVIEW_GEM_Y,
       gemSpritePlusMask,
       previewGem
     );  

@@ -62,6 +62,10 @@ void Puzzle::decrementCursor()
 
 void Puzzle::swap(uint8_t a, uint8_t b)
 {
+  int tmpPreviewGem = weapons[weaponPositions[a]].previewGem;
+  weapons[weaponPositions[a]].previewGem = weapons[weaponPositions[b]].previewGem;
+  weapons[weaponPositions[b]].previewGem = tmpPreviewGem;
+
   uint8_t tmp = weaponPositions[a];
   weaponPositions[a] = weaponPositions[b];
   weaponPositions[b] = tmp;
