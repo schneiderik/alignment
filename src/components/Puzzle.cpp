@@ -1,6 +1,5 @@
 #include "Puzzle.h"
 
-#include "../../Preview.h"
 #include "../../Weapon.h"
 
 #define PUZZLE_PREVIEW_X 89
@@ -67,16 +66,10 @@ void Puzzle::swapRandomWeapons()
 
 void Puzzle::queuePreviewGem()
 {
-  Preview::queueGem();
 }
 
 void Puzzle::update()
 {
-  if (Preview::gemCount == 0)
-  {
-    Preview::queueGem();
-    Preview::queueGem();
-  }
 }
 
 void Puzzle::render(
@@ -84,11 +77,6 @@ void Puzzle::render(
   uint8_t y
 )
 {
-  Preview::render(
-    x + PUZZLE_PREVIEW_X,
-    y + PUZZLE_PREVIEW_Y
-  );
-
   for (uint8_t i = 0; i < PUZZLE_WEAPON_COUNT; i++)
   {
     weapons[weaponPositions[i]].render(
