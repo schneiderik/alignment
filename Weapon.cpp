@@ -13,6 +13,8 @@
 #define WEAPON_DIVIDER_WIDTH 1
 #define WEAPON_DIVIDER_HEIGHT 10
 
+#define WEAPON_PREVIEW_X 89
+
 void Weapon::init(uint8_t type_)
 {
   type = type_;
@@ -52,4 +54,13 @@ void Weapon::render(uint8_t x, uint8_t y, bool active)
       type
     );  
   }  
+
+  if (previewGem >= 0) {
+    sprites.drawPlusMask(
+      x + WEAPON_PREVIEW_X,
+      y,
+      gemSpritePlusMask,
+      previewGem
+    );  
+  }
 }

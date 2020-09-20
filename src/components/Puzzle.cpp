@@ -2,9 +2,6 @@
 
 #include "../../Weapon.h"
 
-#define PUZZLE_PREVIEW_X 89
-#define PUZZLE_PREVIEW_Y 0
-
 #define PUZZLE_WEAPONS_X 0
 #define PUZZLE_WEAPONS_Y 1
 
@@ -16,10 +13,26 @@
 namespace
 {
   uint8_t cursor = PUZZLE_CURSOR_MIN;
+  uint8_t previewGemCount = 0;
 
   Weapon weapons[PUZZLE_WEAPON_COUNT];
   uint8_t weaponPositions[PUZZLE_WEAPON_COUNT] = {0, 1, 2, 3};
   uint8_t weaponYOffsets[PUZZLE_WEAPON_COUNT] = {0, 12, 24, 36};
+
+  void queuePreviewGemOnWeapon(uint8_t weaponIndex)
+  {
+    if (previewGemCount == PUZZLE_WEAPON_COUNT) return;
+
+    if (weapons[weaponIndex].previewGem >= 0)
+    {
+      queuePreviewGemOnWeapon(random(0, PUZZLE_WEAPON_COUNT));
+    }
+    else
+    {
+      previewGemCount++;
+      weapons[weaponIndex].previewGem = random(0, GEM_TYPE_COUNT);
+    }
+  }
 }
 
 void Puzzle::init(
@@ -66,10 +79,16 @@ void Puzzle::swapRandomWeapons()
 
 void Puzzle::queuePreviewGem()
 {
+  queuePreviewGemOnWeapon(random(0, PUZZLE_WEAPON_COUNT));
 }
 
 void Puzzle::update()
 {
+  if (previewGemCount == 0)
+  {
+    queuePreviewGem();
+    queuePreviewGem();
+  }
 }
 
 void Puzzle::render(
