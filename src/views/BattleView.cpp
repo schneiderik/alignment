@@ -71,7 +71,7 @@ namespace
         //Puzzle::addRandomGem();
         break;
       case ENEMY_TYPE_ORC:
-        Puzzle::queuePreviewGem();
+        Puzzle::queueRandomPreviewGem();
         break;
       case ENEMY_TYPE_GOLEM:
         //Puzzle::swapRandomWeapons();
