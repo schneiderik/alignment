@@ -13,8 +13,6 @@
 namespace
 {
   uint8_t cursor = PUZZLE_CURSOR_MIN;
-  uint8_t previewGemCount = 0;
-  uint8_t fallingGemCount = 0;
 
   Weapon weapons[PUZZLE_WEAPON_COUNT];
   uint8_t weaponPositions[PUZZLE_WEAPON_COUNT] = {0, 1, 2, 3};
@@ -74,11 +72,9 @@ void Puzzle::swapRandomWeapons()
 
 void Puzzle::queueRandomPreviewGem()
 {
-  if (previewGemCount == PUZZLE_WEAPON_COUNT) return;
-
   Weapon& weapon = getRandomWeapon();
 
-  if (weapon.previewGem == -1)
+  if (!weapon.hasPreviewGem())
   {
     weapon.queuePreviewGem();
   }
@@ -88,31 +84,36 @@ void Puzzle::queueRandomPreviewGem()
   }
 }
 
+void Puzzle::dropPreviewGems()
+{
+  for (uint8_t i = 0; i < PUZZLE_WEAPON_COUNT; i++)
+  {
+    weapons[i].dropPreviewGem();
+  }
+}
+
 void Puzzle::update()
 {
-  previewGemCount = 0;
-  fallingGemCount = 0;
+  bool hasPreviewGems = false;
+  bool hasFallingGems = false;
 
   for (uint8_t i = 0; i < PUZZLE_WEAPON_COUNT; i++)
   {
     weapons[i].update();
 
-    if (weapons[i].fallingGem != -1) fallingGemCount++;
-    if (weapons[i].previewGem != -1) previewGemCount++;
+    if (weapons[i].hasPreviewGem()) hasPreviewGems = true;
+    if (weapons[i].hasFallingGem()) hasFallingGems = true;
   }
 
-  if (previewGemCount == 0)
+  if (!hasPreviewGems)
   {
     queueRandomPreviewGem();
     queueRandomPreviewGem();
   }
 
-  if (fallingGemCount == 0 && previewGemCount > 0)
+  if (hasPreviewGems && !hasFallingGems)
   {
-    for (uint8_t i = 0; i < PUZZLE_WEAPON_COUNT; i++)
-    {
-      weapons[i].dropPreviewGem();
-    }
+    dropPreviewGems();
   }
 }
 

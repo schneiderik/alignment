@@ -20,6 +20,11 @@ struct Weapon
   void stackGem(uint8_t);
   void update();
   void render(uint8_t, uint8_t, bool);
+  void clearPreviewGem();
+  void clearFallingGem();
+  void setFallingGem(uint8_t);
+  bool hasPreviewGem();
+  bool hasFallingGem();
 };
 
 #endif

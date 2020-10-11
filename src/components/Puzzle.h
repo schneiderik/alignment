@@ -12,6 +12,7 @@ namespace Puzzle
   void swapActiveWeapons();
   void swapRandomWeapons();
   void queueRandomPreviewGem();
+  void dropPreviewGems();
   void init();
   void render(uint8_t, uint8_t);
 }

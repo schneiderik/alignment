@@ -33,11 +33,10 @@ void Weapon::init(uint8_t type_)
 
 void Weapon::dropPreviewGem()
 {
-  if (previewGem >= 0 && fallingGem == -1)
+  if (hasPreviewGem() && !hasFallingGem())
   {
-    fallingGem = previewGem;
-    previewGem = -1;
-    fallingGemX = WEAPON_PREVIEW_GEM_X;
+    setFallingGem(previewGem);
+    clearPreviewGem();
   }
 }
 
@@ -48,13 +47,15 @@ void Weapon::queuePreviewGem()
 
 void Weapon::stackGem(uint8_t gem)
 {
+  if (gemCount == WEAPON_GEMS_MAX) return;
+
   gems[gemCount] = gem;
   gemCount++;
 }
 
 void Weapon::update()
 {
-  if (fallingGem != -1)
+  if (hasFallingGem())
   {
     if (arduboy.everyXFrames(WEAPON_FALLING_GEM_INTERVAL))
     {
@@ -64,7 +65,7 @@ void Weapon::update()
     if (fallingGemX <= WEAPON_GEMS_X + (gemCount * gemSpritePlusMask[0]))
     {
       stackGem(fallingGem);
-      fallingGem = -1;
+      clearFallingGem();
     }
   }
 }
@@ -112,7 +113,7 @@ void Weapon::render(uint8_t x, uint8_t y, bool active)
     WHITE
   );
 
-  if (previewGem >= 0) {
+  if (hasPreviewGem()) {
     sprites.drawPlusMask(
       x + WEAPON_PREVIEW_GEM_X,
       y + WEAPON_GEM_Y,
@@ -121,7 +122,7 @@ void Weapon::render(uint8_t x, uint8_t y, bool active)
     );  
   }
 
-  if (fallingGem >= 0) {
+  if (hasFallingGem()) {
     sprites.drawPlusMask(
       x + fallingGemX,
       y + WEAPON_GEM_Y,
@@ -139,4 +140,30 @@ void Weapon::render(uint8_t x, uint8_t y, bool active)
       gems[i]
     );  
   }
+}
+
+void Weapon::clearPreviewGem()
+{
+  previewGem = -1;
+}
+
+void Weapon::clearFallingGem()
+{
+  fallingGem = -1;
+}
+
+void Weapon::setFallingGem(uint8_t type)
+{
+  fallingGem = type;
+  fallingGemX = WEAPON_PREVIEW_GEM_X;
+}
+
+bool Weapon::hasPreviewGem()
+{
+  return previewGem != -1;
+}
+
+bool Weapon::hasFallingGem()
+{
+  return fallingGem != -1;
 }
