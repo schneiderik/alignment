@@ -62,7 +62,7 @@ void Weapon::update()
       fallingGemX += WEAPON_FALLING_GEM_X_INCREMENT;
     }
 
-    if (fallingGemX <= WEAPON_GEMS_X + (gemCount * gemSpritePlusMask[0]))
+    if (fallingGemX <= endOfStackX())
     {
       stackGem(fallingGem);
       clearFallingGem();
@@ -166,4 +166,9 @@ bool Weapon::hasPreviewGem()
 bool Weapon::hasFallingGem()
 {
   return fallingGem != -1;
+}
+
+int Weapon::endOfStackX()
+{
+  return WEAPON_GEMS_X + (gemCount * gemSpritePlusMask[0]);
 }

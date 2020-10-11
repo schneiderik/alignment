@@ -25,6 +25,7 @@ struct Weapon
   void setFallingGem(uint8_t);
   bool hasPreviewGem();
   bool hasFallingGem();
+  int endOfStackX();
 };
 
 #endif
