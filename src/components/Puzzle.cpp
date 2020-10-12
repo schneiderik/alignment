@@ -34,12 +34,28 @@ namespace
   }
 }
 
+void Puzzle::handleWeaponClear()
+{
+  clearingWeaponCount++;
+}
+
+void Puzzle::handleWeaponCleared()
+{
+  clearingWeaponCount--;
+}
+
+void Puzzle::handleWeaponGemStack()
+{
+  fallingGemCount--;
+}
+
+
 void Puzzle::init(
 )
 {
   for(uint8_t i = 0; i < PUZZLE_WEAPON_COUNT; i++)
   {
-    weapons[i].init(i);
+    weapons[i].init(i, &handleWeaponGemStack, &handleWeaponClear, &handleWeaponCleared);
   }
 }
 
@@ -113,28 +129,13 @@ void Puzzle::dropPreviewGems()
   }
 }
 
-void Puzzle::handleWeaponClear()
-{
-  clearingWeaponCount++;
-}
-
-void Puzzle::handleWeaponCleared()
-{
-  clearingWeaponCount--;
-}
-
-void Puzzle::handleWeaponGemStack()
-{
-  fallingGemCount--;
-}
-
 void Puzzle::updateClearingWeapons()
 {
   for (uint8_t i = 0; i < PUZZLE_WEAPON_COUNT; i++)
   {
     if (weapons[i].isClearing())
     {
-      weapons[i].update(&noop, &noop, &handleWeaponCleared);
+      weapons[i].update();
     }
   }
 }
@@ -143,7 +144,7 @@ void Puzzle::updateWeapons()
 {
   for (uint8_t i = 0; i < PUZZLE_WEAPON_COUNT; i++)
   {
-    weapons[i].update(&handleWeaponGemStack, &handleWeaponClear, &noop);
+    weapons[i].update();
   }
 
   if (previewGemCount == 0)

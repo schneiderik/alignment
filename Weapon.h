@@ -17,12 +17,16 @@ struct Weapon
   int gemCount = 0;
   int clearingGemCount = 0;
 
-  void init(uint8_t);
+  void (*onGemStack)();
+  void (*onClear)();
+  void (*onCleared)();
+
+  void init(uint8_t, void (*)(), void (*)(), void (*)());
   void dropPreviewGem();
   void queuePreviewGem();
   void stackGem(uint8_t);
-  void update(void (*)(), void (*)(), void (*)());
-  void updateClearingGems(void (*)());
+  void update();
+  void updateClearingGems();
   void clearStack();
   void render(uint8_t, uint8_t, bool);
   void clearPreviewGem();

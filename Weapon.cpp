@@ -33,9 +33,17 @@
 
 #define WEAPON_CLEARING_GEM_INTERVAL 4
 
-void Weapon::init(uint8_t type_)
+void Weapon::init(
+  uint8_t type_,
+  void (*onGemStack_)(),
+  void (*onClear_)(),
+  void (*onCleared_)()
+)
 {
   type = type_;
+  onGemStack = onGemStack_;
+  onClear = onClear_;
+  onCleared = onCleared_;
 }
 
 void Weapon::dropPreviewGem()
@@ -60,11 +68,7 @@ void Weapon::stackGem(uint8_t gem)
   gemCount++;
 }
 
-void Weapon::update(
-  void (*onGemStack)(),
-  void (*onClear)(),
-  void (*onCleared)()
-)
+void Weapon::update()
 {
   if (hasFallingGem())
   {
@@ -85,7 +89,7 @@ void Weapon::update(
   {
     if (arduboy.everyXFrames(WEAPON_CLEARING_GEM_INTERVAL))
     {
-      updateClearingGems(onCleared);
+      updateClearingGems();
     }
   }
   else if (isFull())
@@ -95,7 +99,7 @@ void Weapon::update(
   }
 }
 
-void Weapon::updateClearingGems(void (*onCleared)())
+void Weapon::updateClearingGems()
 {
   clearingGemCount = WEAPON_GEMS_MAX;
 
