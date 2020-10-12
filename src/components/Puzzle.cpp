@@ -17,6 +17,8 @@ namespace
   uint8_t previewGemCount = 0;
   uint8_t fallingGemCount = 0;
 
+  void (*onWeaponClear)();
+
   Weapon weapons[PUZZLE_WEAPON_COUNT];
   int weaponPositions[PUZZLE_WEAPON_COUNT] = {0, 1, 2, 3};
   uint8_t weaponYOffsets[PUZZLE_WEAPON_COUNT] = {0, 12, 24, 36};
@@ -37,6 +39,7 @@ namespace
 void Puzzle::handleWeaponClear()
 {
   clearingWeaponCount++;
+  onWeaponClear();
 }
 
 void Puzzle::handleWeaponCleared()
@@ -50,9 +53,14 @@ void Puzzle::handleWeaponGemStack()
 }
 
 
-void Puzzle::init(
-)
+void Puzzle::init(void (*onWeaponClear_)())
 {
+  onWeaponClear = onWeaponClear_;
+  cursor = PUZZLE_CURSOR_MIN;
+  clearingWeaponCount = 0;
+  previewGemCount = 0;
+  fallingGemCount = 0;
+
   for(uint8_t i = 0; i < PUZZLE_WEAPON_COUNT; i++)
   {
     weapons[i].init(i, &handleWeaponGemStack, &handleWeaponClear, &handleWeaponCleared);

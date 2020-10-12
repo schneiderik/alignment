@@ -3,6 +3,10 @@
 
 #include "global.h"
 
+#define COUNTER_FRAME_COUNT_DEFAULT 1
+#define COUNTER_FRAME_DURATION_DEFAULT 10
+#define COUNTER_DIRECTION_DEFAULT 1
+
 struct Counter
 {
   bool running = false;

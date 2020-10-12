@@ -44,6 +44,10 @@ void Weapon::init(
   onGemStack = onGemStack_;
   onClear = onClear_;
   onCleared = onCleared_;
+  gemCount = 0;
+  clearingGemCount = 0;
+  clearPreviewGem();
+  clearFallingGem();
 }
 
 void Weapon::dropPreviewGem()

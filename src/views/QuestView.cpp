@@ -34,10 +34,7 @@ namespace
     {101, 16}
   };
 
-  Counter counter(
-    QUEST_VIEW_BOUNCING_CURSOR_FRAME_COUNT,
-    QUEST_VIEW_BOUNCING_CURSOR_INTERVAL
-  );
+  Counter counter;
 
   void handleInput()
   {
@@ -133,6 +130,11 @@ namespace
 
 void QuestView::init()
 {
+  counter.init(
+    QUEST_VIEW_BOUNCING_CURSOR_FRAME_COUNT,
+    QUEST_VIEW_BOUNCING_CURSOR_INTERVAL
+  );
+
   counter.alternate();
 }
 

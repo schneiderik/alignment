@@ -19,7 +19,7 @@ namespace Puzzle
   void queueRandomPreviewGem();
   void dropPreviewGems();
   bool isClearing();
-  void init();
+  void init(void (*)());
   void render(uint8_t, uint8_t);
 }
 

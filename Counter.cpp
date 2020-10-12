@@ -5,7 +5,7 @@
 #define COUNTER_MODE_ALTERNATE 2
 
 Counter::Counter() {
-  init(0, 0, noop);
+  init(COUNTER_FRAME_COUNT_DEFAULT, COUNTER_FRAME_DURATION_DEFAULT, noop);
 }
 
 Counter::Counter(int frameCount_, int frameDuration_) 
@@ -28,10 +28,12 @@ void Counter::init(int frameCount_, int frameDuration_, void (*onComplete_)())
   frameCount = frameCount_;
   frameDuration = frameDuration_;
   onComplete = onComplete_;
+  running = false;
 }
 
 void Counter::reset()
 {
+  direction = COUNTER_DIRECTION_DEFAULT;
   frame = 0;
   previousFrame = 0;
 }

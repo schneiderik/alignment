@@ -104,6 +104,7 @@ void EnemyPanel::init(
   );
 
   onStrike = onStrike_;
+  shouldAttack = false;
 
   enemyType == ENEMY_TYPE_DEMON
     ? idleCounter.loop()

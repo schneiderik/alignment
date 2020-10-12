@@ -93,8 +93,14 @@ namespace
     EnemyPanel::attack();
   }
 
+  void handleWeaponClear()
+  {
+    Game::playerHealth--;
+  }
+
   void update()
   {
+    if (Game::playerHealth == 0) Game::goToLoseView();
     if (paused) return;
 
     Puzzle::update();
@@ -148,9 +154,10 @@ void BattleView::init()
     &handleAttack
   );
 
+  Game::playerHealth = PLAYER_HEALTH_MAX;
   attackCounter.run();
   EnemyPanel::init(Game::currentEnemy.type, &handleStrike);
-  Puzzle::init();
+  Puzzle::init(&handleWeaponClear);
 }
 
 void BattleView::loop()
