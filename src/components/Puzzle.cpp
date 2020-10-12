@@ -13,14 +13,24 @@
 namespace
 {
   uint8_t cursor = PUZZLE_CURSOR_MIN;
+  uint8_t clearingWeaponCount = 0;
+  uint8_t previewGemCount = 0;
+  uint8_t fallingGemCount = 0;
 
   Weapon weapons[PUZZLE_WEAPON_COUNT];
-  uint8_t weaponPositions[PUZZLE_WEAPON_COUNT] = {0, 1, 2, 3};
+  int weaponPositions[PUZZLE_WEAPON_COUNT] = {0, 1, 2, 3};
   uint8_t weaponYOffsets[PUZZLE_WEAPON_COUNT] = {0, 12, 24, 36};
 
   Weapon& getRandomWeapon()
   {
     return weapons[random(0, PUZZLE_WEAPON_COUNT)];
+  }
+
+  void swapValues(int& a, int& b)
+  {
+    int tmp = a;
+    a = b;
+    b = tmp;
   }
 }
 
@@ -51,31 +61,20 @@ void Puzzle::decrementCursor()
 
 void Puzzle::swap(uint8_t a, uint8_t b)
 {
-  int tmp;
   Weapon& weaponA = weapons[weaponPositions[a]];
   Weapon& weaponB = weapons[weaponPositions[b]];
 
-  tmp = weaponA.previewGem;
-  weaponA.previewGem = weaponB.previewGem;
-  weaponB.previewGem = tmp;
-
   if (
-    (weaponA.hasFallingGem() && weaponA.fallingGemX >= weaponB.endOfStackX())
-    || (weaponB.hasFallingGem() && weaponB.fallingGemX >= weaponA.endOfStackX())
+    weaponA.fallingGemIsAboveX(weaponB.getEndOfStackX())
+    || weaponB.fallingGemIsAboveX(weaponA.getEndOfStackX())
   )
   {
-    tmp = weaponA.fallingGem;
-    weaponA.fallingGem = weaponB.fallingGem;
-    weaponB.fallingGem = tmp;
-
-    tmp = weaponA.fallingGemX;
-    weaponA.fallingGemX = weaponB.fallingGemX;
-    weaponB.fallingGemX = tmp;
+    swapValues(weaponA.fallingGem, weaponB.fallingGem);
+    swapValues(weaponA.fallingGemX, weaponB.fallingGemX);
   }
 
-  tmp = weaponPositions[a];
-  weaponPositions[a] = weaponPositions[b];
-  weaponPositions[b] = tmp;
+  swapValues(weaponA.previewGem, weaponB.previewGem);
+  swapValues(weaponPositions[a], weaponPositions[b]);
 }
 
 void Puzzle::swapActiveWeapons()
@@ -110,29 +109,60 @@ void Puzzle::dropPreviewGems()
   }
 }
 
-void Puzzle::update()
+void Puzzle::updateClearingWeapons()
 {
-  bool hasPreviewGems = false;
-  bool hasFallingGems = false;
-
   for (uint8_t i = 0; i < PUZZLE_WEAPON_COUNT; i++)
   {
-    weapons[i].update();
+    Weapon& weapon = weapons[i];
 
-    if (weapons[i].hasPreviewGem()) hasPreviewGems = true;
-    if (weapons[i].hasFallingGem()) hasFallingGems = true;
+    if (weapon.isClearing())
+    {
+      weapon.update();
+
+      if (!weapon.isClearing()) clearingWeaponCount--;
+    }
   }
+}
 
-  if (!hasPreviewGems)
+void Puzzle::updateWeapons()
+{
+  if (previewGemCount == 0)
   {
     queueRandomPreviewGem();
     queueRandomPreviewGem();
   }
 
-  if (hasPreviewGems && !hasFallingGems)
+  if (previewGemCount > 0 && fallingGemCount == 0)
   {
     dropPreviewGems();
   }
+
+  previewGemCount = 0;
+  fallingGemCount = 0;
+  clearingWeaponCount = 0;
+
+  for (uint8_t i = 0; i < PUZZLE_WEAPON_COUNT; i++)
+  {
+    Weapon& weapon = weapons[i];
+
+    weapon.update();
+
+    if (weapon.hasPreviewGem()) previewGemCount++;
+    if (weapon.hasFallingGem()) fallingGemCount++;
+    if (weapon.isClearing()) clearingWeaponCount++;
+  }
+}
+
+bool Puzzle::isClearing()
+{
+  return clearingWeaponCount > 0;
+}
+
+void Puzzle::update()
+{
+  clearingWeaponCount > 0
+    ? updateClearingWeapons()
+    : updateWeapons();
 }
 
 void Puzzle::render(

@@ -5,6 +5,8 @@
 
 namespace Puzzle
 {
+  void updateClearingWeapons();
+  void updateWeapons();
   void update();
   void incrementCursor();
   void decrementCursor();
@@ -13,6 +15,7 @@ namespace Puzzle
   void swapRandomWeapons();
   void queueRandomPreviewGem();
   void dropPreviewGems();
+  bool isClearing();
   void init();
   void render(uint8_t, uint8_t);
 }

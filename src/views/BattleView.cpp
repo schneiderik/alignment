@@ -34,6 +34,7 @@ namespace
     }
 
     if (paused) return;
+    if (Puzzle::isClearing()) return;
 
     if (arduboy.justPressed(UP_BUTTON))
     {
