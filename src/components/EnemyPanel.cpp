@@ -24,6 +24,7 @@
 
 namespace
 {
+  void (*onStrike)();
   Counter attackCounter;
   Counter idleCounter;
   bool shouldAttack;
@@ -67,7 +68,7 @@ namespace
   }
 }
 
-void EnemyPanel::update(void (*onStrike)())
+void EnemyPanel::update()
 {
   if (attackCounter.running)
   {
@@ -93,13 +94,16 @@ void EnemyPanel::update(void (*onStrike)())
 }
 
 void EnemyPanel::init(
-  uint8_t enemyType
+  uint8_t enemyType,
+  void (*onStrike_)()
 )
 {
   idleCounter.init(
     ENEMY_PANEL_IDLE_SPRITE_FRAME_COUNT,
     ENEMY_PANEL_IDLE_SPRITE_FRAME_DURATION
   );
+
+  onStrike = onStrike_;
 
   enemyType == ENEMY_TYPE_DEMON
     ? idleCounter.loop()

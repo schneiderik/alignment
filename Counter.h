@@ -12,11 +12,14 @@ struct Counter
   int frameCount = 1;
   int direction = 1;
   int frameDuration = 10;
+  void (*onComplete)();
 
   Counter();
   Counter(int, int);
+  Counter(int, int, void(*)());
 
   void init(int, int);
+  void init(int, int, void (*)());
   void reset();
   void run();
   void loop();
@@ -24,7 +27,6 @@ struct Counter
   void stop();
   bool frameJustCompleted(int);
   void update();
-  void update(void (*)());
 };
 
 #endif

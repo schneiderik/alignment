@@ -5,9 +5,9 @@
 
 namespace EnemyPanel
 {
-  void init(uint8_t);
+  void init(uint8_t, void(*)());
   void attack();
-  void update(void (*)());
+  void update();
   void render(int, int, float, float);
 }
 

@@ -4,17 +4,30 @@
 #define COUNTER_MODE_LOOP 1
 #define COUNTER_MODE_ALTERNATE 2
 
-Counter::Counter() {}
+Counter::Counter() {
+  init(0, 0, noop);
+}
 
 Counter::Counter(int frameCount_, int frameDuration_) 
 {
   init(frameCount_, frameDuration_);
 }
 
+Counter::Counter(int frameCount_, int frameDuration_, void (*onComplete_)()) 
+{
+  init(frameCount_, frameDuration_, onComplete_);
+}
+
 void Counter::init(int frameCount_, int frameDuration_)
+{
+  init(frameCount_, frameDuration_, noop);
+}
+
+void Counter::init(int frameCount_, int frameDuration_, void (*onComplete_)())
 {
   frameCount = frameCount_;
   frameDuration = frameDuration_;
+  onComplete = onComplete_;
 }
 
 void Counter::reset()
@@ -54,7 +67,7 @@ void Counter::stop()
   running = false;
 }
 
-void Counter::update(void (*onComplete)())
+void Counter::update()
 {
   if (!running) return;
 
@@ -98,9 +111,4 @@ void Counter::update(void (*onComplete)())
         break;
     }
   }
-}
-
-void Counter::update()
-{
-  update(&noop);
 }

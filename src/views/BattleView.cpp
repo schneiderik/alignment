@@ -51,19 +51,6 @@ namespace
       Puzzle::swapActiveWeapons();
     }
   }
-  
-  void initAttackCounter()
-  {
-    attackCounter.init(
-      random(
-        BATTLE_VIEW_ATTACK_INTERVAL_MIN,
-        BATTLE_VIEW_ATTACK_INTERVAL_MAX
-      ),
-      1
-    );
-
-    attackCounter.run();
-  }
 
   void handleStrike(uint8_t enemyType)
   {
@@ -93,8 +80,17 @@ namespace
 
   void handleAttack()
   {
+    attackCounter.init(
+      random(
+        BATTLE_VIEW_ATTACK_INTERVAL_MIN,
+        BATTLE_VIEW_ATTACK_INTERVAL_MAX
+      ),
+      1,
+      &handleAttack
+    );
+
+    attackCounter.run();
     EnemyPanel::attack();
-    initAttackCounter();
   }
 
   void update()
@@ -105,8 +101,8 @@ namespace
 
     if (Puzzle::isClearing()) return;
 
-    EnemyPanel::update(&handleStrike);
-    attackCounter.update(&handleAttack);
+    EnemyPanel::update();
+    attackCounter.update();
   }
 
   void render()
@@ -143,8 +139,17 @@ namespace
 
 void BattleView::init()
 {
-  initAttackCounter();
-  EnemyPanel::init(Game::currentEnemy.type);
+  attackCounter.init(
+    random(
+      BATTLE_VIEW_ATTACK_INTERVAL_MIN,
+      BATTLE_VIEW_ATTACK_INTERVAL_MAX
+    ),
+    1,
+    &handleAttack
+  );
+
+  attackCounter.run();
+  EnemyPanel::init(Game::currentEnemy.type, &handleStrike);
   Puzzle::init();
 }
 
