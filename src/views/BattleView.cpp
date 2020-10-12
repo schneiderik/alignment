@@ -91,8 +91,11 @@ namespace
     if (paused) return;
 
     Puzzle::update();
-    attackCounter.update();
+
+    if (Puzzle::isClearing()) return;
+
     EnemyPanel::update();
+    attackCounter.update();
 
     if (!attackCounter.running)
     {
