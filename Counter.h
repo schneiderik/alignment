@@ -24,6 +24,7 @@ struct Counter
   void stop();
   bool frameJustCompleted(int);
   void update();
+  void update(void (*)());
 };
 
 #endif

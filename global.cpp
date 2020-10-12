@@ -3,3 +3,5 @@
 Arduboy2 arduboy;
 Sprites sprites;
 ArduboyTones sound(arduboy.audio.enabled);
+
+void noop() {};

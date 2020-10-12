@@ -22,8 +22,6 @@
 #define ENEMY_PANEL_IDLE_SPRITE_FRAME_COUNT 3
 #define ENEMY_PANEL_IDLE_SPRITE_FRAME_DURATION 30
 
-bool EnemyPanel::isStriking = false;
-
 namespace
 {
   Counter attackCounter;
@@ -69,15 +67,13 @@ namespace
   }
 }
 
-void EnemyPanel::update()
+void EnemyPanel::update(void (*onStrike)())
 {
   if (attackCounter.running)
   {
-    isStriking = false;
-
     if (attackCounter.frameJustCompleted(strikeFrame - 1))
     {
-      isStriking = true;
+      onStrike();
     }
 
     attackCounter.update();

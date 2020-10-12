@@ -5,11 +5,9 @@
 
 namespace EnemyPanel
 {
-  extern bool isStriking;
-
   void init(uint8_t);
   void attack();
-  void update();
+  void update(void (*)());
   void render(int, int, float, float);
 }
 

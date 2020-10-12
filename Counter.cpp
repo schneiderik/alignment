@@ -54,7 +54,7 @@ void Counter::stop()
   running = false;
 }
 
-void Counter::update()
+void Counter::update(void (*onComplete)())
 {
   if (!running) return;
 
@@ -89,6 +89,7 @@ void Counter::update()
         if (frame == frameCount - 1)
         {
           stop();
+          onComplete();
         }
         else
         {
@@ -97,4 +98,9 @@ void Counter::update()
         break;
     }
   }
+}
+
+void Counter::update()
+{
+  update(&noop);
 }

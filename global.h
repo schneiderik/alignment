@@ -47,5 +47,6 @@ extern ArduboyTones sound;
 #define POPPING_GEM_FRAME_LENGTH 5
 #define CLEARING_GEM_FRAME_LENGTH 5
 
+void noop();
 
 #endif

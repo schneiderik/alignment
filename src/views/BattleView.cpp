@@ -86,6 +86,17 @@ namespace
     }
   }
 
+  void onStrike()
+  {
+    handleStrike(Game::currentEnemy.type);
+  }
+
+  void onAttack()
+  {
+    EnemyPanel::attack();
+    initAttackCounter();
+  }
+
   void update()
   {
     if (paused) return;
@@ -94,19 +105,8 @@ namespace
 
     if (Puzzle::isClearing()) return;
 
-    EnemyPanel::update();
-    attackCounter.update();
-
-    if (!attackCounter.running)
-    {
-      EnemyPanel::attack();
-      initAttackCounter();
-    }
-    
-    if (EnemyPanel::isStriking)
-    {
-      handleStrike(Game::currentEnemy.type);
-    }
+    EnemyPanel::update(&onStrike);
+    attackCounter.update(&onAttack);
   }
 
   void render()
