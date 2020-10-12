@@ -60,7 +60,11 @@ void Weapon::stackGem(uint8_t gem)
   gemCount++;
 }
 
-void Weapon::update()
+void Weapon::update(
+  void (*onGemStack)(),
+  void (*onClear)(),
+  void (*onCleared)()
+)
 {
   if (hasFallingGem())
   {
@@ -72,6 +76,7 @@ void Weapon::update()
     if (fallingGemX < getEndOfStackX())
     {
       stackGem(fallingGem);
+      onGemStack();
       clearFallingGem();
     }
   }
@@ -80,23 +85,19 @@ void Weapon::update()
   {
     if (arduboy.everyXFrames(WEAPON_CLEARING_GEM_INTERVAL))
     {
-      updateClearingGems();
+      updateClearingGems(onCleared);
     }
   }
   else if (isFull())
   {
     clearStack();
+    onClear();
   }
 }
 
-void Weapon::updateClearingGems()
+void Weapon::updateClearingGems(void (*onCleared)())
 {
   clearingGemCount = WEAPON_GEMS_MAX;
-
-  arduboy.setCursor(48, 0);
-  arduboy.print(gemCount);
-  arduboy.print(clearingGemData[0][WEAPON_CLEARING_GEM_DATA_Y]);
-  arduboy.print(clearingGemCount);
 
   for (uint8_t i = 0; i < WEAPON_GEMS_MAX; i++)
   {
@@ -114,6 +115,7 @@ void Weapon::updateClearingGems()
 
   if (clearingGemCount == 0) {
     gemCount = 0;
+    onCleared();
   }
 }
 

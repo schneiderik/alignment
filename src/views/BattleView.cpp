@@ -86,12 +86,12 @@ namespace
     }
   }
 
-  void onStrike()
+  void handleStrike()
   {
     handleStrike(Game::currentEnemy.type);
   }
 
-  void onAttack()
+  void handleAttack()
   {
     EnemyPanel::attack();
     initAttackCounter();
@@ -105,8 +105,8 @@ namespace
 
     if (Puzzle::isClearing()) return;
 
-    EnemyPanel::update(&onStrike);
-    attackCounter.update(&onAttack);
+    EnemyPanel::update(&handleStrike);
+    attackCounter.update(&handleAttack);
   }
 
   void render()

@@ -94,6 +94,7 @@ void Puzzle::queueRandomPreviewGem()
   if (!weapon.hasPreviewGem())
   {
     weapon.queuePreviewGem();
+    previewGemCount++;
   }
   else
   {
@@ -103,29 +104,48 @@ void Puzzle::queueRandomPreviewGem()
 
 void Puzzle::dropPreviewGems()
 {
+  fallingGemCount = previewGemCount;
+  previewGemCount = 0;
+
   for (uint8_t i = 0; i < PUZZLE_WEAPON_COUNT; i++)
   {
     weapons[i].dropPreviewGem();
   }
 }
 
+void Puzzle::handleWeaponClear()
+{
+  clearingWeaponCount++;
+}
+
+void Puzzle::handleWeaponCleared()
+{
+  clearingWeaponCount--;
+}
+
+void Puzzle::handleWeaponGemStack()
+{
+  fallingGemCount--;
+}
+
 void Puzzle::updateClearingWeapons()
 {
   for (uint8_t i = 0; i < PUZZLE_WEAPON_COUNT; i++)
   {
-    Weapon& weapon = weapons[i];
-
-    if (weapon.isClearing())
+    if (weapons[i].isClearing())
     {
-      weapon.update();
-
-      if (!weapon.isClearing()) clearingWeaponCount--;
+      weapons[i].update(&noop, &noop, &handleWeaponCleared);
     }
   }
 }
 
 void Puzzle::updateWeapons()
 {
+  for (uint8_t i = 0; i < PUZZLE_WEAPON_COUNT; i++)
+  {
+    weapons[i].update(&handleWeaponGemStack, &handleWeaponClear, &noop);
+  }
+
   if (previewGemCount == 0)
   {
     queueRandomPreviewGem();
@@ -136,21 +156,6 @@ void Puzzle::updateWeapons()
   {
     dropPreviewGems();
   }
-
-  previewGemCount = 0;
-  fallingGemCount = 0;
-  clearingWeaponCount = 0;
-
-  for (uint8_t i = 0; i < PUZZLE_WEAPON_COUNT; i++)
-  {
-    Weapon& weapon = weapons[i];
-
-    weapon.update();
-
-    if (weapon.hasPreviewGem()) previewGemCount++;
-    if (weapon.hasFallingGem()) fallingGemCount++;
-    if (weapon.isClearing()) clearingWeaponCount++;
-  }
 }
 
 bool Puzzle::isClearing()
@@ -160,7 +165,7 @@ bool Puzzle::isClearing()
 
 void Puzzle::update()
 {
-  clearingWeaponCount > 0
+  isClearing()
     ? updateClearingWeapons()
     : updateWeapons();
 }

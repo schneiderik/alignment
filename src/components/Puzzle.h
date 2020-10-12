@@ -5,6 +5,9 @@
 
 namespace Puzzle
 {
+  void handleWeaponGemStack();
+  void handleWeaponClear();
+  void handleWeaponCleared();
   void updateClearingWeapons();
   void updateWeapons();
   void update();

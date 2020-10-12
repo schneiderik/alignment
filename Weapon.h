@@ -21,8 +21,8 @@ struct Weapon
   void dropPreviewGem();
   void queuePreviewGem();
   void stackGem(uint8_t);
-  void update();
-  void updateClearingGems();
+  void update(void (*)(), void (*)(), void (*)());
+  void updateClearingGems(void (*)());
   void clearStack();
   void render(uint8_t, uint8_t, bool);
   void clearPreviewGem();
