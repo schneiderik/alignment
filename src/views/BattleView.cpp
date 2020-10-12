@@ -56,7 +56,7 @@ namespace
   {
     switch (enemyType) {
       case ENEMY_TYPE_SKELETON:
-        //Puzzle::addRandomGem();
+        Puzzle::stackRandomGem();
         break;
       case ENEMY_TYPE_ORC:
         Puzzle::queueRandomPreviewGem();

@@ -111,6 +111,20 @@ void Puzzle::swapRandomWeapons()
   swap(cursor, cursor + 1);
 }
 
+void Puzzle::stackRandomGem()
+{
+  Weapon& weapon = getRandomWeapon();
+
+  if (!weapon.hasFallingGem())
+  {
+    weapon.stackGem(random(0, GEM_TYPE_COUNT));
+  }
+  else
+  {
+    stackRandomGem();
+  }
+}
+
 void Puzzle::queueRandomPreviewGem()
 {
   Weapon& weapon = getRandomWeapon();

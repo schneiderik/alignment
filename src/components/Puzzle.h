@@ -17,6 +17,7 @@ namespace Puzzle
   void swapActiveWeapons();
   void swapRandomWeapons();
   void queueRandomPreviewGem();
+  void stackRandomGem();
   void dropPreviewGems();
   bool isClearing();
   void init(void (*)());
