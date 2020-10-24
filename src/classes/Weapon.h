@@ -1,7 +1,7 @@
 #ifndef WEAPON_H
 #define WEAPON_H
 
-#include "global.h"
+#include "../../global.h"
 
 #define WEAPON_GEMS_MAX 7
 #define WEAPON_CLEARING_GEM_DATA_LENGTH 4

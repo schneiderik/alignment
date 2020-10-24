@@ -1,7 +1,7 @@
 #ifndef SOUND_H
 #define SOUND_H
 
-#include "global.h"
+#include "../../global.h"
 
 namespace Sound
 {

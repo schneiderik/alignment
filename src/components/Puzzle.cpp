@@ -1,6 +1,6 @@
 #include "Puzzle.h"
 
-#include "../../Weapon.h"
+#include "../classes/Weapon.h"
 
 #define PUZZLE_WEAPONS_X 0
 #define PUZZLE_WEAPONS_Y 1

@@ -1,6 +1,6 @@
 #include "EnemyPanel.h"
 
-#include "../../Counter.h"
+#include "../classes/Counter.h"
 
 #define ENEMY_PANEL_HEALTH_BAR_X 2
 #define ENEMY_PANEL_HEALTH_BAR_Y 50

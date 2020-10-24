@@ -1,7 +1,7 @@
 #include "BattleView.h"
 
 #include "../../Game.h"
-#include "../../Counter.h"
+#include "../classes/Counter.h"
 #include "../components/StatBar.h"
 #include "../components/EnemyPanel.h"
 #include "../components/Puzzle.h"
@@ -75,7 +75,7 @@ namespace
 
   void handleStrike()
   {
-    handleStrike(Game::currentEnemy.type);
+    handleStrike(Game::enemyType);
   }
 
   void handleAttack()
@@ -123,8 +123,8 @@ namespace
     EnemyPanel::render(
       BATTLE_VIEW_ENEMY_PANEL_X,
       BATTLE_VIEW_ENEMY_PANEL_Y,
-      Game::currentEnemy.health,
-      Game::currentEnemy.healthMax
+      Game::enemyHealth,
+      Game::enemyHealthMax
     );
 
     Puzzle::render(
@@ -156,7 +156,7 @@ void BattleView::init()
 
   Game::playerHealth = PLAYER_HEALTH_MAX;
   attackCounter.run();
-  EnemyPanel::init(Game::currentEnemy.type, &handleStrike);
+  EnemyPanel::init(Game::enemyType, &handleStrike);
   Puzzle::init(&handleWeaponClear);
 }
 

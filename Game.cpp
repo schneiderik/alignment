@@ -14,14 +14,28 @@
 #define GAME_STATE_WIN 4
 #define GAME_STATE_LOSE 5
 
+#define GAME_ENEMY_DATA_LENGTH 5
+#define GAME_ENEMY_DATA_HEALTH 0
+#define GAME_ENEMY_DATA_WEAPON_MODIFIERS 1
+
 namespace
 {
   uint8_t state = GAME_STATE_TITLE;
+
+  const int enemyData[ENEMY_COUNT][GAME_ENEMY_DATA_LENGTH] = {
+    {100, 0, 0, 0, 0},
+    {200, 0, 0, 0, 0},
+    {200, -1, 2, -2, 1},
+    {150, -1, -1, 2, 0},
+    {250, 2, -1, -1, -2}
+  };
 }
 
 uint8_t Game::playerHealth = PLAYER_HEALTH_MAX;
 unsigned long int Game::score = 0;
-Enemy Game::currentEnemy;
+int Game::enemyType;
+int Game::enemyHealth;
+int Game::enemyHealthMax;
 
 void Game::goToTitleView()
 {
@@ -57,7 +71,14 @@ void Game::goToLoseView()
 
 void Game::init()
 {
-  currentEnemy.init(ENEMY_TYPE_SKELETON);
+  setEnemy(ENEMY_TYPE_SKELETON);
+}
+
+void Game::setEnemy(int type)
+{
+  enemyType = type;
+  enemyHealth = enemyData[type][GAME_ENEMY_DATA_HEALTH];
+  enemyHealthMax = enemyData[type][GAME_ENEMY_DATA_HEALTH];
 }
 
 void Game::loop()

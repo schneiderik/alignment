@@ -1,7 +1,7 @@
 #ifndef COUNTER_H
 #define COUNTER_H
 
-#include "global.h"
+#include "../../global.h"
 
 #define COUNTER_FRAME_COUNT_DEFAULT 1
 #define COUNTER_FRAME_DURATION_DEFAULT 10

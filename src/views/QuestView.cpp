@@ -1,7 +1,7 @@
 #include "QuestView.h"
 
 #include "../../Game.h"
-#include "../../Counter.h"
+#include "../classes/Counter.h"
 
 #define QUEST_VIEW_TEXT_X 32
 #define QUEST_VIEW_TEXT_Y 2
@@ -75,9 +75,9 @@ namespace
       getEnemyPositionX(i),
       getEnemyPositionY(i),
       questSprite,
-      Game::currentEnemy.type == i
+      Game::enemyType == i
         ? i
-        : i < Game::currentEnemy.type
+        : i < Game::enemyType
           ? QUEST_VIEW_ENEMY_SPRITE_GRAVE_INDEX
           : QUEST_VIEW_ENEMY_SPRITE_MYSTERY_INDEX
     );
@@ -112,8 +112,8 @@ namespace
   void renderCursor()
   {
     sprites.drawOverwrite(
-      getEnemyPositionX(Game::currentEnemy.type) + QUEST_VIEW_CURSOR_X,
-      getEnemyPositionY(Game::currentEnemy.type) + QUEST_VIEW_CURSOR_Y + counter.frame - 1,
+      getEnemyPositionX(Game::enemyType) + QUEST_VIEW_CURSOR_X,
+      getEnemyPositionY(Game::enemyType) + QUEST_VIEW_CURSOR_Y + counter.frame - 1,
       questCursorImage,
       0
     );  

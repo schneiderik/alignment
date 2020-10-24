@@ -1,7 +1,7 @@
 #include "TitleView.h"
 
 #include "../../Game.h"
-#include "../../Sound.h"
+#include "../components/Sound.h"
 
 #define TITLE_VIEW_TITLE_X 0
 #define TITLE_VIEW_TITLE_Y 5
