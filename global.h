@@ -48,5 +48,7 @@ extern ArduboyTones sound;
 #define CLEARING_GEM_FRAME_LENGTH 5
 
 void noop();
+void swapValues(int&, int&);
+void swapValues(bool&, bool&);
 
 #endif

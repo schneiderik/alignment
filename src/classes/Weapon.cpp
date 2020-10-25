@@ -52,16 +52,17 @@ void Weapon::init(
 
 void Weapon::dropPreviewGem()
 {
-  if (hasPreviewGem() && !hasFallingGem())
+  if (hasPreviewGem && !hasFallingGem())
   {
-    setFallingGem(previewGem);
+    setFallingGem(previewGem.type);
     clearPreviewGem();
   }
 }
 
 void Weapon::queuePreviewGem()
 {
-  previewGem = random(0, GEM_TYPE_COUNT);
+  previewGem.type = random(0, GEM_TYPE_COUNT);
+  hasPreviewGem = true;
 }
 
 void Weapon::stackGem(uint8_t gem)
@@ -127,6 +128,21 @@ void Weapon::updateClearingGems()
   }
 }
 
+void Weapon::swapGems(Weapon& other)
+{
+  if (
+    fallingGemIsAboveX(other.getEndOfStackX())
+    || other.fallingGemIsAboveX(getEndOfStackX())
+  )
+  {
+    swapValues(fallingGem, other.fallingGem);
+    swapValues(fallingGemX, other.fallingGemX);
+  }
+
+  swapValues(previewGem.type, other.previewGem.type);
+  swapValues(hasPreviewGem, other.hasPreviewGem);
+}
+
 void Weapon::clearStack()
 {
   clearingGemCount = WEAPON_GEMS_MAX;
@@ -183,12 +199,12 @@ void Weapon::render(uint8_t x, uint8_t y, bool active)
     WHITE
   );
 
-  if (hasPreviewGem()) {
+  if (hasPreviewGem) {
     sprites.drawPlusMask(
       x + WEAPON_PREVIEW_GEM_X,
       y + WEAPON_GEM_Y,
       gemSpritePlusMask,
-      previewGem
+      previewGem.type
     );  
   }
 
@@ -226,7 +242,7 @@ void Weapon::render(uint8_t x, uint8_t y, bool active)
 
 void Weapon::clearPreviewGem()
 {
-  previewGem = -1;
+  hasPreviewGem = false;
 }
 
 void Weapon::clearFallingGem()
@@ -238,11 +254,6 @@ void Weapon::setFallingGem(uint8_t type)
 {
   fallingGem = type;
   fallingGemX = WEAPON_PREVIEW_GEM_X;
-}
-
-bool Weapon::hasPreviewGem()
-{
-  return previewGem != -1;
 }
 
 bool Weapon::hasFallingGem()

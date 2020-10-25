@@ -27,13 +27,6 @@ namespace
   {
     return weapons[random(0, PUZZLE_WEAPON_COUNT)];
   }
-
-  void swapValues(int& a, int& b)
-  {
-    int tmp = a;
-    a = b;
-    b = tmp;
-  }
 }
 
 void Puzzle::handleWeaponClear()
@@ -51,7 +44,6 @@ void Puzzle::handleWeaponGemStack()
 {
   fallingGemCount--;
 }
-
 
 void Puzzle::init(void (*onWeaponClear_)())
 {
@@ -85,19 +77,7 @@ void Puzzle::decrementCursor()
 
 void Puzzle::swap(uint8_t a, uint8_t b)
 {
-  Weapon& weaponA = weapons[weaponPositions[a]];
-  Weapon& weaponB = weapons[weaponPositions[b]];
-
-  if (
-    weaponA.fallingGemIsAboveX(weaponB.getEndOfStackX())
-    || weaponB.fallingGemIsAboveX(weaponA.getEndOfStackX())
-  )
-  {
-    swapValues(weaponA.fallingGem, weaponB.fallingGem);
-    swapValues(weaponA.fallingGemX, weaponB.fallingGemX);
-  }
-
-  swapValues(weaponA.previewGem, weaponB.previewGem);
+  weapons[weaponPositions[a]].swapGems(weapons[weaponPositions[b]]);
   swapValues(weaponPositions[a], weaponPositions[b]);
 }
 
@@ -129,7 +109,7 @@ void Puzzle::queueRandomPreviewGem()
 {
   Weapon& weapon = getRandomWeapon();
 
-  if (!weapon.hasPreviewGem())
+  if (!weapon.hasPreviewGem)
   {
     weapon.queuePreviewGem();
     previewGemCount++;
