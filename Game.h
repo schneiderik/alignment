@@ -5,7 +5,7 @@
 
 namespace Game
 {
-  extern uint8_t playerHealth;
+  extern int playerHealth;
   extern unsigned long int score;
   extern int enemyType;
   extern int enemyHealth;

@@ -31,7 +31,7 @@ namespace
   };
 }
 
-uint8_t Game::playerHealth = PLAYER_HEALTH_MAX;
+int Game::playerHealth = PLAYER_HEALTH_MAX;
 unsigned long int Game::score = 0;
 int Game::enemyType;
 int Game::enemyHealth;
