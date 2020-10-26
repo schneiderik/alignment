@@ -95,7 +95,7 @@ void Puzzle::stackRandomGem()
 {
   Weapon& weapon = getRandomWeapon();
 
-  if (!weapon.hasFallingGem())
+  if (!weapon.hasFallingGem)
   {
     weapon.stackGem(random(0, GEM_TYPE_COUNT));
   }

@@ -13,7 +13,8 @@ struct Weapon
   int clearingGemData[WEAPON_GEMS_MAX][WEAPON_CLEARING_GEM_DATA_LENGTH];
   Gem previewGem;
   bool hasPreviewGem = false;
-  int fallingGem = -1;
+  Gem fallingGem;
+  bool hasFallingGem = false;;
   int fallingGemX = 0;
   int gems[WEAPON_GEMS_MAX];
   int gemCount = 0;
@@ -35,7 +36,6 @@ struct Weapon
   void clearPreviewGem();
   void clearFallingGem();
   void setFallingGem(uint8_t);
-  bool hasFallingGem();
   bool isClearing();
   bool isFull();
   bool fallingGemIsAboveX(int);

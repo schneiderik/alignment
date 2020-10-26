@@ -52,7 +52,7 @@ void Weapon::init(
 
 void Weapon::dropPreviewGem()
 {
-  if (hasPreviewGem && !hasFallingGem())
+  if (hasPreviewGem && !hasFallingGem)
   {
     setFallingGem(previewGem.type);
     clearPreviewGem();
@@ -75,7 +75,7 @@ void Weapon::stackGem(uint8_t gem)
 
 void Weapon::update()
 {
-  if (hasFallingGem())
+  if (hasFallingGem)
   {
     if (arduboy.everyXFrames(WEAPON_FALLING_GEM_INTERVAL))
     {
@@ -84,7 +84,7 @@ void Weapon::update()
 
     if (fallingGemX < getEndOfStackX())
     {
-      stackGem(fallingGem);
+      stackGem(fallingGem.type);
       onGemStack();
       clearFallingGem();
     }
@@ -135,8 +135,9 @@ void Weapon::swapGems(Weapon& other)
     || other.fallingGemIsAboveX(getEndOfStackX())
   )
   {
-    swapValues(fallingGem, other.fallingGem);
+    swapValues(fallingGem.type, other.fallingGem.type);
     swapValues(fallingGemX, other.fallingGemX);
+    swapValues(hasFallingGem, other.hasFallingGem);
   }
 
   swapValues(previewGem.type, other.previewGem.type);
@@ -208,12 +209,12 @@ void Weapon::render(uint8_t x, uint8_t y, bool active)
     );  
   }
 
-  if (hasFallingGem()) {
+  if (hasFallingGem) {
     sprites.drawPlusMask(
       x + fallingGemX,
       y + WEAPON_GEM_Y,
       gemSpritePlusMask,
-      fallingGem
+      fallingGem.type
     );  
   }
 
@@ -247,18 +248,14 @@ void Weapon::clearPreviewGem()
 
 void Weapon::clearFallingGem()
 {
-  fallingGem = -1;
+  hasFallingGem = false;
 }
 
 void Weapon::setFallingGem(uint8_t type)
 {
-  fallingGem = type;
+  fallingGem.type = type;
   fallingGemX = WEAPON_PREVIEW_GEM_X;
-}
-
-bool Weapon::hasFallingGem()
-{
-  return fallingGem != -1;
+  hasFallingGem = true;
 }
 
 bool Weapon::isClearing()
@@ -273,7 +270,7 @@ bool Weapon::isFull()
 
 bool Weapon::fallingGemIsAboveX(int x)
 {
-  return hasFallingGem() && fallingGemX >= x;
+  return hasFallingGem && fallingGemX >= x;
 }
 
 int Weapon::getGemX(uint8_t i)
