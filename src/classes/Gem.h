@@ -6,6 +6,7 @@
 struct Gem
 {
   int type;
+  int x;
 };
 
 #endif

@@ -79,10 +79,10 @@ void Weapon::update()
   {
     if (arduboy.everyXFrames(WEAPON_FALLING_GEM_INTERVAL))
     {
-      fallingGemX += WEAPON_FALLING_GEM_X_INCREMENT;
+      fallingGem.x += WEAPON_FALLING_GEM_X_INCREMENT;
     }
 
-    if (fallingGemX < getEndOfStackX())
+    if (fallingGem.x < getEndOfStackX())
     {
       stackGem(fallingGem.type);
       onGemStack();
@@ -136,7 +136,7 @@ void Weapon::swapGems(Weapon& other)
   )
   {
     swapValues(fallingGem.type, other.fallingGem.type);
-    swapValues(fallingGemX, other.fallingGemX);
+    swapValues(fallingGem.x, other.fallingGem.x);
     swapValues(hasFallingGem, other.hasFallingGem);
   }
 
@@ -211,7 +211,7 @@ void Weapon::render(uint8_t x, uint8_t y, bool active)
 
   if (hasFallingGem) {
     sprites.drawPlusMask(
-      x + fallingGemX,
+      x + fallingGem.x,
       y + WEAPON_GEM_Y,
       gemSpritePlusMask,
       fallingGem.type
@@ -254,7 +254,7 @@ void Weapon::clearFallingGem()
 void Weapon::setFallingGem(uint8_t type)
 {
   fallingGem.type = type;
-  fallingGemX = WEAPON_PREVIEW_GEM_X;
+  fallingGem.x = WEAPON_PREVIEW_GEM_X;
   hasFallingGem = true;
 }
 
@@ -270,7 +270,7 @@ bool Weapon::isFull()
 
 bool Weapon::fallingGemIsAboveX(int x)
 {
-  return hasFallingGem && fallingGemX >= x;
+  return hasFallingGem && fallingGem.x >= x;
 }
 
 int Weapon::getGemX(uint8_t i)
