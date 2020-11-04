@@ -69,7 +69,7 @@ void Weapon::stackGem(uint8_t gem)
 {
   if (isFull()) return;
 
-  gems[gemCount] = gem;
+  gems[gemCount].type = gem;
   gemCount++;
 }
 
@@ -226,7 +226,7 @@ void Weapon::render(uint8_t x, uint8_t y, bool active)
         x + clearingGemData[i][WEAPON_CLEARING_GEM_DATA_X],
         y + clearingGemData[i][WEAPON_CLEARING_GEM_DATA_Y],
         gemSpritePlusMask,
-        gems[i]
+        gems[i].type
       );  
     }
     else
@@ -235,7 +235,7 @@ void Weapon::render(uint8_t x, uint8_t y, bool active)
         x + WEAPON_GEMS_X + (gemSpritePlusMask[0] * i),
         y + WEAPON_GEM_Y,
         gemSpritePlusMask,
-        gems[i]
+        gems[i].type
       );  
     }
   }

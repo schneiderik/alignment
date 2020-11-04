@@ -15,7 +15,7 @@ struct Weapon
   bool hasPreviewGem = false;
   Gem fallingGem;
   bool hasFallingGem = false;;
-  int gems[WEAPON_GEMS_MAX];
+  Gem gems[WEAPON_GEMS_MAX];
   int gemCount = 0;
   int clearingGemCount = 0;
 
