@@ -37,13 +37,15 @@ void Weapon::init(
   uint8_t type_,
   void (*onGemStack_)(),
   void (*onClear_)(),
-  void (*onCleared_)()
+  void (*onCleared_)(),
+  void (*onMatch_)()
 )
 {
   type = type_;
   onGemStack = onGemStack_;
   onClear = onClear_;
   onCleared = onCleared_;
+  onMatch = onMatch_;
   gemCount = 0;
   clearingGemCount = 0;
   clearPreviewGem();
@@ -77,6 +79,7 @@ void Weapon::update()
 {
   if (hasMatch())
   {
+    onMatch();
     gemCount -= 2;
   }
 

@@ -8,6 +8,7 @@ namespace Puzzle
   void handleWeaponGemStack();
   void handleWeaponClear();
   void handleWeaponCleared();
+  void handleWeaponMatch();
   void updateClearingWeapons();
   void updateWeapons();
   void update();
@@ -20,7 +21,7 @@ namespace Puzzle
   void stackRandomGem();
   void dropPreviewGems();
   bool isClearing();
-  void init(void (*)());
+  void init(void (*)(), void (*)(), void (*)());
   void render(uint8_t, uint8_t);
 }
 

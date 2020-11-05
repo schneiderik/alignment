@@ -18,10 +18,11 @@ struct Weapon
   int clearingGemCount = 0;
 
   void (*onGemStack)();
+  void (*onMatch)();
   void (*onClear)();
   void (*onCleared)();
 
-  void init(uint8_t, void (*)(), void (*)(), void (*)());
+  void init(uint8_t, void (*)(), void (*)(), void (*)(), void(*)());
   void dropPreviewGem();
   void queuePreviewGem();
   void stackGem(uint8_t);

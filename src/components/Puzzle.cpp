@@ -18,6 +18,8 @@ namespace
   uint8_t fallingGemCount = 0;
 
   void (*onWeaponClear)();
+  void (*onWeaponMatch)();
+  void (*onWeaponGemStack)();
 
   Weapon weapons[PUZZLE_WEAPON_COUNT];
   int weaponPositions[PUZZLE_WEAPON_COUNT] = {0, 1, 2, 3};
@@ -43,11 +45,19 @@ void Puzzle::handleWeaponCleared()
 void Puzzle::handleWeaponGemStack()
 {
   fallingGemCount--;
+  onWeaponGemStack();
 }
 
-void Puzzle::init(void (*onWeaponClear_)())
+void Puzzle::handleWeaponMatch()
+{
+  onWeaponMatch();
+}
+
+void Puzzle::init(void (*onWeaponClear_)(), void (*onWeaponMatch_)(), void (*onWeaponGemStack_)())
 {
   onWeaponClear = onWeaponClear_;
+  onWeaponMatch = onWeaponMatch_;
+  onWeaponGemStack = onWeaponGemStack_;
   cursor = PUZZLE_CURSOR_MIN;
   clearingWeaponCount = 0;
   previewGemCount = 0;
@@ -55,7 +65,7 @@ void Puzzle::init(void (*onWeaponClear_)())
 
   for(uint8_t i = 0; i < PUZZLE_WEAPON_COUNT; i++)
   {
-    weapons[i].init(i, &handleWeaponGemStack, &handleWeaponClear, &handleWeaponCleared);
+    weapons[i].init(i, &handleWeaponGemStack, &handleWeaponClear, &handleWeaponCleared, &handleWeaponMatch);
   }
 }
 

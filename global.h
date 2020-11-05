@@ -18,6 +18,9 @@ extern ArduboyTones sound;
 #define ALIGN_CENTER 1
 #define ALIGN_RIGHT 2
 
+#define SCORE_MATCH 100
+#define SCORE_GEM_STACK 10
+
 #define PLAYER_HEALTH_MAX 3
 
 #define GEM_TYPE_COUNT 5

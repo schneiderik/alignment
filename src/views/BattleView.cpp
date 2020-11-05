@@ -98,6 +98,16 @@ namespace
     Game::playerHealth--;
   }
 
+  void handleWeaponMatch()
+  {
+    Game::score += SCORE_MATCH;
+  }
+
+  void handleWeaponGemStack()
+  {
+    Game::score += SCORE_GEM_STACK;
+  }
+
   void update()
   {
     if (Game::playerHealth == 0) Game::goToLoseView();
@@ -157,7 +167,7 @@ void BattleView::init()
   Game::playerHealth = PLAYER_HEALTH_MAX;
   attackCounter.run();
   EnemyPanel::init(Game::enemyType, &handleStrike);
-  Puzzle::init(&handleWeaponClear);
+  Puzzle::init(&handleWeaponClear, &handleWeaponMatch, &handleWeaponGemStack);
 }
 
 void BattleView::loop()

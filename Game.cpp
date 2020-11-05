@@ -39,6 +39,7 @@ int Game::enemyHealthMax;
 
 void Game::goToTitleView()
 {
+  score = 0;
   state = GAME_STATE_TITLE;
 }
 
