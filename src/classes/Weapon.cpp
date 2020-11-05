@@ -75,6 +75,11 @@ void Weapon::stackGem(uint8_t gem)
 
 void Weapon::update()
 {
+  if (hasMatch())
+  {
+    gemCount -= 2;
+  }
+
   if (hasFallingGem)
   {
     if (arduboy.everyXFrames(WEAPON_FALLING_GEM_INTERVAL))
@@ -102,6 +107,13 @@ void Weapon::update()
     clearStack();
     onClear();
   }
+}
+
+bool Weapon::hasMatch()
+{
+  if (gemCount <= 1) return false;
+
+  if (gems[gemCount - 1].type == gems[gemCount - 2].type) return true;
 }
 
 void Weapon::updateClearingGems()
