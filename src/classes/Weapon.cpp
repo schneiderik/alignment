@@ -24,7 +24,6 @@
 #define WEAPON_GEM_Y 0
 
 #define WEAPON_FALLING_GEM_X_INCREMENT -3
-#define WEAPON_FALLING_GEM_INTERVAL 8
 
 #define WEAPON_CLEARING_GEM_DATA_X 0
 #define WEAPON_CLEARING_GEM_DATA_Y 1
@@ -75,7 +74,7 @@ void Weapon::stackGem(uint8_t gem)
   gemCount++;
 }
 
-void Weapon::update()
+void Weapon::update(int fallSpeed)
 {
   if (hasMatch())
   {
@@ -85,7 +84,7 @@ void Weapon::update()
 
   if (hasFallingGem)
   {
-    if (arduboy.everyXFrames(WEAPON_FALLING_GEM_INTERVAL))
+    if (arduboy.everyXFrames(fallSpeed))
     {
       fallingGem.x += WEAPON_FALLING_GEM_X_INCREMENT;
     }

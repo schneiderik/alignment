@@ -14,6 +14,9 @@ extern ArduboyTones sound;
 #define SCREEN_HEIGHT 64
 #define GRAVITY 1
 
+#define GAME_SPEED_DEFAULT 8
+#define GAME_SPEED_FAST 4
+
 #define ALIGN_LEFT 0
 #define ALIGN_CENTER 1
 #define ALIGN_RIGHT 2

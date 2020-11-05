@@ -20,6 +20,9 @@ namespace Puzzle
   void queueRandomPreviewGem();
   void stackRandomGem();
   void dropPreviewGems();
+  void enableFastFall();
+  void disableFastFall();
+  int getSpeed();
   bool isClearing();
   void init(void (*)(), void (*)(), void (*)());
   void render(uint8_t, uint8_t);

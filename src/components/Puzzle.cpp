@@ -16,6 +16,7 @@ namespace
   uint8_t clearingWeaponCount = 0;
   uint8_t previewGemCount = 0;
   uint8_t fallingGemCount = 0;
+  bool fastFall = false;
 
   void (*onWeaponClear)();
   void (*onWeaponMatch)();
@@ -141,13 +142,28 @@ void Puzzle::dropPreviewGems()
   }
 }
 
+void Puzzle::enableFastFall()
+{
+  fastFall = true;
+}
+
+void Puzzle::disableFastFall()
+{
+  fastFall = false;
+}
+
+int Puzzle::getSpeed()
+{
+  return fastFall ? GAME_SPEED_FAST : GAME_SPEED_DEFAULT;
+}
+
 void Puzzle::updateClearingWeapons()
 {
   for (uint8_t i = 0; i < PUZZLE_WEAPON_COUNT; i++)
   {
     if (weapons[i].isClearing())
     {
-      weapons[i].update();
+      weapons[i].update(getSpeed());
     }
   }
 }
@@ -156,7 +172,7 @@ void Puzzle::updateWeapons()
 {
   for (uint8_t i = 0; i < PUZZLE_WEAPON_COUNT; i++)
   {
-    weapons[i].update();
+    weapons[i].update(getSpeed());
   }
 
   if (previewGemCount == 0)

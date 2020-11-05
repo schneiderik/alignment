@@ -27,7 +27,7 @@ struct Weapon
   void queuePreviewGem();
   void stackGem(uint8_t);
   bool hasMatch();
-  void update();
+  void update(int);
   void updateClearingGems();
   void swapGems(Weapon&);
   void clearStack();

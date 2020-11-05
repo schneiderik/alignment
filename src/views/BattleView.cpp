@@ -46,6 +46,16 @@ namespace
       Puzzle::incrementCursor();
     }
 
+    if (arduboy.justPressed(LEFT_BUTTON))
+    {
+      Puzzle::enableFastFall();
+    }
+
+    if (arduboy.justReleased(LEFT_BUTTON))
+    {
+      Puzzle::disableFastFall();
+    }
+
     if (arduboy.justPressed(A_BUTTON))
     {
       Puzzle::swapActiveWeapons();
