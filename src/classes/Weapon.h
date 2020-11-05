@@ -5,12 +5,10 @@
 #include "Gem.h"
 
 #define WEAPON_GEMS_MAX 7
-#define WEAPON_CLEARING_GEM_DATA_LENGTH 4
 
 struct Weapon
 {
   uint8_t type;
-  int clearingGemData[WEAPON_GEMS_MAX][WEAPON_CLEARING_GEM_DATA_LENGTH];
   Gem previewGem;
   bool hasPreviewGem = false;
   Gem fallingGem;
