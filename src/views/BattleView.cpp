@@ -66,10 +66,10 @@ namespace
   {
     switch (enemyType) {
       case ENEMY_TYPE_SKELETON:
-        Puzzle::stackRandomGem();
+        //Puzzle::stackRandomGem();
         break;
       case ENEMY_TYPE_ORC:
-        Puzzle::queueRandomPreviewGem();
+        //Puzzle::queueRandomPreviewGem();
         break;
       case ENEMY_TYPE_GOLEM:
         //Puzzle::swapRandomWeapons();
@@ -78,7 +78,7 @@ namespace
         //Puzzle::enableForcedFastFall();
         break;
       case ENEMY_TYPE_SORCERER:
-        handleStrike(random(0, 4));
+        //handleStrike(random(0, 4));
         break;
     }
   }
