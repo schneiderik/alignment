@@ -86,10 +86,10 @@ void Weapon::update(int fallSpeed)
   {
     if (arduboy.everyXFrames(fallSpeed))
     {
-      fallingGem.x += WEAPON_FALLING_GEM_X_INCREMENT;
+      fallingGem.xOffset += WEAPON_FALLING_GEM_X_INCREMENT;
     }
 
-    if (fallingGem.x < getEndOfStackX())
+    if (fallingGem.xOffset < getEndOfStackX())
     {
       stackGem(fallingGem.type);
       onGemStack();
@@ -124,10 +124,10 @@ void Weapon::updateClearingGems()
 
   for (uint8_t i = 0; i < WEAPON_GEMS_MAX; i++)
   {
-    if (gems[i].y < SCREEN_HEIGHT)
+    if (gems[i].yOffset < SCREEN_HEIGHT)
     {
-      gems[i].x += gems[i].velX;
-      gems[i].y += gems[i].velY;
+      gems[i].xOffset += gems[i].velX;
+      gems[i].yOffset += gems[i].velY;
       gems[i].velY += GRAVITY;
     }
     else
@@ -150,7 +150,7 @@ void Weapon::swapGems(Weapon& other)
   )
   {
     swapValues(fallingGem.type, other.fallingGem.type);
-    swapValues(fallingGem.x, other.fallingGem.x);
+    swapValues(fallingGem.xOffset, other.fallingGem.xOffset);
     swapValues(hasFallingGem, other.hasFallingGem);
   }
 
@@ -214,30 +214,24 @@ void Weapon::render(uint8_t x, uint8_t y, bool active)
   );
 
   if (hasPreviewGem) {
-    sprites.drawPlusMask(
+    previewGem.render(
       x + WEAPON_PREVIEW_GEM_X,
-      y + WEAPON_GEM_Y,
-      gemSpritePlusMask,
-      previewGem.type
+      y + WEAPON_GEM_Y
     );  
   }
 
   if (hasFallingGem) {
-    sprites.drawPlusMask(
-      x + fallingGem.x,
-      y + WEAPON_GEM_Y,
-      gemSpritePlusMask,
-      fallingGem.type
+    fallingGem.render(
+      x,
+      y + WEAPON_GEM_Y
     );  
   }
 
   for (uint8_t i = 0; i < gemCount; i++)
   {
-    sprites.drawPlusMask(
-      x + gems[i].x + WEAPON_GEMS_X + (gemSpritePlusMask[0] * i),
-      y + gems[i].y + WEAPON_GEM_Y,
-      gemSpritePlusMask,
-      gems[i].type
+    gems[i].render(
+      x + WEAPON_GEMS_X + (gemSpritePlusMask[0] * i),
+      y + WEAPON_GEM_Y
     );  
   }
 }
@@ -255,7 +249,7 @@ void Weapon::clearFallingGem()
 void Weapon::setFallingGem(uint8_t type)
 {
   fallingGem.type = type;
-  fallingGem.x = WEAPON_PREVIEW_GEM_X;
+  fallingGem.xOffset = WEAPON_PREVIEW_GEM_X;
   hasFallingGem = true;
 }
 
@@ -271,7 +265,7 @@ bool Weapon::isFull()
 
 bool Weapon::fallingGemIsAboveX(int x)
 {
-  return hasFallingGem && fallingGem.x >= x;
+  return hasFallingGem && fallingGem.xOffset >= x;
 }
 
 int Weapon::getGemX(uint8_t i)
