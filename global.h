@@ -26,6 +26,8 @@ extern ArduboyTones sound;
 
 #define PLAYER_HEALTH_MAX 3
 
+#define DAMAGE_BASE 5
+
 #define GEM_TYPE_COUNT 5
 
 #define ENEMY_TYPE_SKELETON 0
@@ -37,9 +39,6 @@ extern ArduboyTones sound;
 #define ENEMY_COUNT 5
 #define LAST_ENEMY ENEMY_COUNT - 1
 #define ENEMY_DAMAGE_BASE 5
-
-#define FALL_SPEED_DEFAULT 8
-#define FALL_SPEED_FAST 4
 
 #define FALLING_GEMS_X_MAX 92
 #define FALLING_GEMS_X_INCREMENT -3

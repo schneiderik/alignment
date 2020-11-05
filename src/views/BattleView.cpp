@@ -111,6 +111,7 @@ namespace
   void handleWeaponMatch()
   {
     Game::score += SCORE_MATCH;
+    Game::enemyHealth -= DAMAGE_BASE;
   }
 
   void handleWeaponGemStack()
@@ -121,6 +122,19 @@ namespace
   void update()
   {
     if (Game::playerHealth == 0) Game::goToLoseView();
+    if (Game::enemyHealth <= 0)
+    {
+      if (Game::enemyType == LAST_ENEMY) 
+      {
+        Game::goToWinView();
+      }
+      else
+      {
+        Game::setEnemy(Game::enemyType + 1);
+        Game::goToQuestView();
+      }
+    }
+
     if (paused) return;
 
     Puzzle::update();
