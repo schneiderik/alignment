@@ -13,6 +13,7 @@ struct Gem
 
   void init(int);
   void reset();
+  void swap(Gem&);
   void render(int, int);
 };
 

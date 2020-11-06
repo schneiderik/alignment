@@ -10,6 +10,17 @@ void Gem::reset()
 {
   xOffset = 0; 
   yOffset = 0;
+  velX = random(0, 3) - 1;
+  velY = random(0, 3) - 2;
+}
+
+void Gem::swap(Gem& other)
+{
+  swapValues(type, other.type);
+  swapValues(xOffset, other.xOffset);
+  swapValues(yOffset, other.yOffset);
+  swapValues(velX, other.velX);
+  swapValues(velY, other.velY);
 }
 
 void Gem::render(int x, int y)

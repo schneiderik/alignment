@@ -25,15 +25,14 @@ struct Weapon
   void init(uint8_t, void (*)(), void (*)(), void (*)(), void(*)());
   void dropPreviewGem();
   void queuePreviewGem();
+  void handleMatch();
   void stackGem(uint8_t);
   bool hasMatch();
   void update(int);
   void updateClearingGems();
-  void swapGems(Weapon&);
+  void swap(Weapon&);
   void clearStack();
   void render(uint8_t, uint8_t, bool);
-  void clearPreviewGem();
-  void clearFallingGem();
   void setFallingGem(uint8_t);
   bool isClearing();
   bool isFull();

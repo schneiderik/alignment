@@ -47,22 +47,23 @@ void Weapon::init(
   onMatch = onMatch_;
   gemCount = 0;
   clearingGemCount = 0;
-  clearPreviewGem();
-  clearFallingGem();
+  hasPreviewGem = false;
+  hasFallingGem = false;
 }
 
 void Weapon::dropPreviewGem()
 {
-  if (hasPreviewGem && !hasFallingGem)
-  {
-    setFallingGem(previewGem.type);
-    clearPreviewGem();
-  }
+  if (!hasPreviewGem || hasFallingGem) return;
+
+  setFallingGem(previewGem.type);
+  hasPreviewGem = false;
 }
 
 void Weapon::queuePreviewGem()
 {
-  previewGem.type = random(0, GEM_TYPE_COUNT);
+  if (hasPreviewGem) return;
+
+  previewGem.init(random(0, GEM_TYPE_COUNT));
   hasPreviewGem = true;
 }
 
@@ -71,16 +72,20 @@ void Weapon::stackGem(uint8_t gem)
   if (isFull()) return;
 
   gems[gemCount].init(gem);
+  hasFallingGem = false;
   gemCount++;
+  onGemStack();
+}
+
+void Weapon::handleMatch()
+{
+  gemCount -= 2;
+  onMatch();
 }
 
 void Weapon::update(int fallSpeed)
 {
-  if (hasMatch())
-  {
-    onMatch();
-    gemCount -= 2;
-  }
+  if (hasMatch()) handleMatch();
 
   if (hasFallingGem)
   {
@@ -89,11 +94,9 @@ void Weapon::update(int fallSpeed)
       fallingGem.xOffset += WEAPON_FALLING_GEM_X_INCREMENT;
     }
 
-    if (fallingGem.xOffset < getEndOfStackX())
+    if (fallingGem.xOffset + WEAPON_PREVIEW_GEM_X < getEndOfStackX())
     {
       stackGem(fallingGem.type);
-      onGemStack();
-      clearFallingGem();
     }
   }
 
@@ -107,7 +110,6 @@ void Weapon::update(int fallSpeed)
   else if (isFull())
   {
     clearStack();
-    onClear();
   }
 }
 
@@ -142,32 +144,25 @@ void Weapon::updateClearingGems()
   }
 }
 
-void Weapon::swapGems(Weapon& other)
+void Weapon::swap(Weapon& other)
 {
   if (
     fallingGemIsAboveX(other.getEndOfStackX())
     || other.fallingGemIsAboveX(getEndOfStackX())
   )
   {
-    swapValues(fallingGem.type, other.fallingGem.type);
-    swapValues(fallingGem.xOffset, other.fallingGem.xOffset);
+    fallingGem.swap(other.fallingGem);
     swapValues(hasFallingGem, other.hasFallingGem);
   }
 
-  swapValues(previewGem.type, other.previewGem.type);
+  previewGem.swap(other.previewGem);
   swapValues(hasPreviewGem, other.hasPreviewGem);
 }
 
 void Weapon::clearStack()
 {
   clearingGemCount = WEAPON_GEMS_MAX;
-
-  for (uint8_t i = 0; i < WEAPON_GEMS_MAX; i++)
-  {
-    gems[i].reset();
-    gems[i].velX = random(0, 3) - 1;
-    gems[i].velY = random(0, 3) - 2;
-  }
+  onClear();
 }
 
 void Weapon::render(uint8_t x, uint8_t y, bool active)
@@ -222,7 +217,7 @@ void Weapon::render(uint8_t x, uint8_t y, bool active)
 
   if (hasFallingGem) {
     fallingGem.render(
-      x,
+      x + WEAPON_PREVIEW_GEM_X,
       y + WEAPON_GEM_Y
     );  
   }
@@ -236,20 +231,9 @@ void Weapon::render(uint8_t x, uint8_t y, bool active)
   }
 }
 
-void Weapon::clearPreviewGem()
-{
-  hasPreviewGem = false;
-}
-
-void Weapon::clearFallingGem()
-{
-  hasFallingGem = false;
-}
-
 void Weapon::setFallingGem(uint8_t type)
 {
-  fallingGem.type = type;
-  fallingGem.xOffset = WEAPON_PREVIEW_GEM_X;
+  fallingGem.init(type);
   hasFallingGem = true;
 }
 
@@ -265,7 +249,7 @@ bool Weapon::isFull()
 
 bool Weapon::fallingGemIsAboveX(int x)
 {
-  return hasFallingGem && fallingGem.xOffset >= x;
+  return hasFallingGem && fallingGem.xOffset >= x - WEAPON_PREVIEW_GEM_X;
 }
 
 int Weapon::getGemX(uint8_t i)
