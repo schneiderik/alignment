@@ -1,5 +1,7 @@
 #include "Gem.h"
 
+#define GEM_FALL_INCREMENT -3
+
 void Gem::init(int type_)
 {
   type = type_;
@@ -21,6 +23,11 @@ void Gem::swap(Gem& other)
   swapValues(yOffset, other.yOffset);
   swapValues(velX, other.velX);
   swapValues(velY, other.velY);
+}
+
+void Gem::fall()
+{
+  xOffset += GEM_FALL_INCREMENT;
 }
 
 void Gem::render(int x, int y)

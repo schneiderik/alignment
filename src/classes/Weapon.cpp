@@ -23,8 +23,6 @@
 
 #define WEAPON_GEM_Y 0
 
-#define WEAPON_FALLING_GEM_X_INCREMENT -3
-
 #define WEAPON_CLEARING_GEM_DATA_X 0
 #define WEAPON_CLEARING_GEM_DATA_Y 1
 #define WEAPON_CLEARING_GEM_DATA_VEL_X 2
@@ -55,7 +53,8 @@ void Weapon::dropPreviewGem()
 {
   if (!hasPreviewGem || hasFallingGem) return;
 
-  setFallingGem(previewGem.type);
+  fallingGem.init(previewGem.type);
+  hasFallingGem = true;
   hasPreviewGem = false;
 }
 
@@ -67,14 +66,21 @@ void Weapon::queuePreviewGem()
   hasPreviewGem = true;
 }
 
-void Weapon::stackGem(uint8_t gem)
+void Weapon::stackGem(uint8_t gemType)
 {
   if (isFull()) return;
 
-  gems[gemCount].init(gem);
+  gems[gemCount].init(gemType);
   hasFallingGem = false;
   gemCount++;
   onGemStack();
+}
+
+bool Weapon::hasMatch()
+{
+  if (gemCount <= 1) return false;
+
+  if (gems[gemCount - 1].type == gems[gemCount - 2].type) return true;
 }
 
 void Weapon::handleMatch()
@@ -85,39 +91,20 @@ void Weapon::handleMatch()
 
 void Weapon::update(int fallSpeed)
 {
+  if (isClearing()) 
+  {
+    if (arduboy.everyXFrames(WEAPON_CLEARING_GEM_INTERVAL)) updateClearingGems();
+    return;
+  }
+
+  if (isFull()) clearStack();
   if (hasMatch()) handleMatch();
 
   if (hasFallingGem)
   {
-    if (arduboy.everyXFrames(fallSpeed))
-    {
-      fallingGem.xOffset += WEAPON_FALLING_GEM_X_INCREMENT;
-    }
-
-    if (fallingGem.xOffset + WEAPON_PREVIEW_GEM_X < getEndOfStackX())
-    {
-      stackGem(fallingGem.type);
-    }
+    if (arduboy.everyXFrames(fallSpeed)) fallingGem.fall();
+    if (!fallingGemIsAboveX(getEndOfStackX())) stackGem(fallingGem.type);
   }
-
-  if (isClearing())
-  {
-    if (arduboy.everyXFrames(WEAPON_CLEARING_GEM_INTERVAL))
-    {
-      updateClearingGems();
-    }
-  }
-  else if (isFull())
-  {
-    clearStack();
-  }
-}
-
-bool Weapon::hasMatch()
-{
-  if (gemCount <= 1) return false;
-
-  if (gems[gemCount - 1].type == gems[gemCount - 2].type) return true;
 }
 
 void Weapon::updateClearingGems()
@@ -229,12 +216,6 @@ void Weapon::render(uint8_t x, uint8_t y, bool active)
       y + WEAPON_GEM_Y
     );  
   }
-}
-
-void Weapon::setFallingGem(uint8_t type)
-{
-  fallingGem.init(type);
-  hasFallingGem = true;
 }
 
 bool Weapon::isClearing()

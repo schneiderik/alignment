@@ -33,7 +33,6 @@ struct Weapon
   void swap(Weapon&);
   void clearStack();
   void render(uint8_t, uint8_t, bool);
-  void setFallingGem(uint8_t);
   bool isClearing();
   bool isFull();
   bool fallingGemIsAboveX(int);
