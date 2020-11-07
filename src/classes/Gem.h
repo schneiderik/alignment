@@ -16,7 +16,9 @@ struct Gem
   void swap(Gem&);
   void fall();
   void clear();
+  void align();
   bool isCleared();
+  bool isAligned();
   void render(int, int);
 };
 

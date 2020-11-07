@@ -1,6 +1,7 @@
 #include "Gem.h"
 
 #define GEM_FALL_INCREMENT -3
+#define GEM_ALIGN_INCREMENT 2
 
 void Gem::init(int type_)
 {
@@ -30,6 +31,11 @@ void Gem::fall()
   xOffset += GEM_FALL_INCREMENT;
 }
 
+void Gem::align()
+{
+  yOffset += (yOffset > 0 ? -1 : 1) * GEM_ALIGN_INCREMENT;
+}
+
 void Gem::clear()
 {
   xOffset += velX;
@@ -40,6 +46,11 @@ void Gem::clear()
 bool Gem::isCleared()
 {
   return yOffset < SCREEN_HEIGHT;
+}
+
+bool Gem::isAligned()
+{
+  return yOffset == 0;
 }
 
 void Gem::render(int x, int y)

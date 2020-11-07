@@ -23,6 +23,8 @@
 
 #define WEAPON_GEM_Y 0
 
+#define WEAPON_ALIGN_INCREMENT 2
+
 #define WEAPON_CLEARING_GEM_DATA_X 0
 #define WEAPON_CLEARING_GEM_DATA_Y 1
 #define WEAPON_CLEARING_GEM_DATA_VEL_X 2
@@ -80,7 +82,7 @@ bool Weapon::hasMatch()
 {
   if (gemCount <= 1) return false;
 
-  if (gems[gemCount - 1].type == gems[gemCount - 2].type) return true;
+  return gems[gemCount - 1].type == gems[gemCount - 2].type;
 }
 
 void Weapon::handleMatch()
@@ -99,10 +101,12 @@ void Weapon::update(int fallSpeed)
 
   if (hasMatch()) handleMatch();
   if (isFull()) clearStack();
+  if (!isAligned()) align();
 
   if (hasFallingGem)
   {
     if (arduboy.everyXFrames(fallSpeed)) fallingGem.fall();
+    if (!fallingGem.isAligned()) fallingGem.align();
     if (!fallingGemIsAboveX(getEndOfStackX())) stackGem(fallingGem.type);
   }
 }
@@ -129,7 +133,7 @@ void Weapon::updateClearingGems()
   }
 }
 
-void Weapon::swap(Weapon& other)
+void Weapon::swap(Weapon& other, int y)
 {
   if (
     fallingGemIsAboveX(other.getEndOfStackX())
@@ -139,9 +143,21 @@ void Weapon::swap(Weapon& other)
     fallingGem.swap(other.fallingGem);
     swapValues(hasFallingGem, other.hasFallingGem);
   }
+  else {
+    fallingGem.yOffset = y;
+    other.fallingGem.yOffset = -y;
+  }
+
+  yOffset = y;
+  other.yOffset = -y;
 
   previewGem.swap(other.previewGem);
   swapValues(hasPreviewGem, other.hasPreviewGem);
+}
+
+void Weapon::align()
+{
+  yOffset += (yOffset > 0 ? -1 : 1) * WEAPON_ALIGN_INCREMENT;
 }
 
 void Weapon::clearStack()
@@ -154,7 +170,7 @@ void Weapon::render(uint8_t x, uint8_t y, bool active)
 {
   arduboy.fillRect(
     x + WEAPON_DIVIDER_X,
-    y + WEAPON_DIVIDER_Y,
+    y + yOffset + WEAPON_DIVIDER_Y,
     WEAPON_DIVIDER_WIDTH,
     WEAPON_DIVIDER_HEIGHT
   );
@@ -163,14 +179,14 @@ void Weapon::render(uint8_t x, uint8_t y, bool active)
   {
     arduboy.fillRect(
       x + WEAPON_ACTIVE_INDICATOR_X,
-      y + WEAPON_ACTIVE_INDICATOR_Y,
+      y + yOffset + WEAPON_ACTIVE_INDICATOR_Y,
       WEAPON_ACTIVE_INDICATOR_WIDTH,
       WEAPON_ACTIVE_INDICATOR_HEIGHT
     ); 
 
     sprites.drawErase(
       x + WEAPON_ICON_X,
-      y + WEAPON_ICON_Y,
+      y + yOffset + WEAPON_ICON_Y,
       weaponSprite,
       type
     );  
@@ -179,7 +195,7 @@ void Weapon::render(uint8_t x, uint8_t y, bool active)
   {
     sprites.drawOverwrite(
       x + WEAPON_ICON_X,
-      y + WEAPON_ICON_Y,
+      y + yOffset + WEAPON_ICON_Y,
       weaponSprite,
       type
     );  
@@ -211,7 +227,7 @@ void Weapon::render(uint8_t x, uint8_t y, bool active)
   {
     gems[i].render(
       x + WEAPON_GEMS_X + (gemSpritePlusMask[0] * i),
-      y + WEAPON_GEM_Y
+      y + yOffset + WEAPON_GEM_Y
     );  
   }
 }
@@ -239,4 +255,9 @@ int Weapon::getGemX(uint8_t i)
 int Weapon::getEndOfStackX()
 {
   return getGemX(gemCount);
+}
+
+bool Weapon::isAligned()
+{
+  return yOffset == 0;
 }

@@ -9,6 +9,7 @@
 struct Weapon
 {
   uint8_t type;
+  int yOffset = 0;
   Gem previewGem;
   bool hasPreviewGem = false;
   Gem fallingGem;
@@ -30,11 +31,13 @@ struct Weapon
   bool hasMatch();
   void update(int);
   void updateClearingGems();
-  void swap(Weapon&);
+  void swap(Weapon&, int);
+  void align();
   void clearStack();
   void render(uint8_t, uint8_t, bool);
   bool isClearing();
   bool isFull();
+  bool isAligned();
   bool fallingGemIsAboveX(int);
   int getGemX(uint8_t);
   int getEndOfStackX();

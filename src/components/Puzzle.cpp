@@ -88,7 +88,7 @@ void Puzzle::decrementCursor()
 
 void Puzzle::swap(uint8_t a, uint8_t b)
 {
-  weapons[weaponPositions[a]].swap(weapons[weaponPositions[b]]);
+  weapons[weaponPositions[a]].swap(weapons[weaponPositions[b]], weaponYOffsets[a] - weaponYOffsets[b]);
   swapValues(weaponPositions[a], weaponPositions[b]);
 }
 
