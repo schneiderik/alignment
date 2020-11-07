@@ -33,6 +33,11 @@ namespace
       paused = !paused;
     }
 
+    if (arduboy.justReleased(LEFT_BUTTON))
+    {
+      Puzzle::disableFastFall();
+    }
+
     if (paused) return;
     if (Puzzle::isClearing()) return;
 
@@ -49,11 +54,6 @@ namespace
     if (arduboy.justPressed(LEFT_BUTTON))
     {
       Puzzle::enableFastFall();
-    }
-
-    if (arduboy.justReleased(LEFT_BUTTON))
-    {
-      Puzzle::disableFastFall();
     }
 
     if (arduboy.justPressed(A_BUTTON))

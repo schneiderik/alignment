@@ -15,6 +15,8 @@ struct Gem
   void reset();
   void swap(Gem&);
   void fall();
+  void clear();
+  bool isCleared();
   void render(int, int);
 };
 

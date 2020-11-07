@@ -97,8 +97,8 @@ void Weapon::update(int fallSpeed)
     return;
   }
 
-  if (isFull()) clearStack();
   if (hasMatch()) handleMatch();
+  if (isFull()) clearStack();
 
   if (hasFallingGem)
   {
@@ -113,11 +113,9 @@ void Weapon::updateClearingGems()
 
   for (uint8_t i = 0; i < WEAPON_GEMS_MAX; i++)
   {
-    if (gems[i].yOffset < SCREEN_HEIGHT)
+    if (gems[i].isCleared())
     {
-      gems[i].xOffset += gems[i].velX;
-      gems[i].yOffset += gems[i].velY;
-      gems[i].velY += GRAVITY;
+      gems[i].clear();
     }
     else
     {
@@ -125,7 +123,7 @@ void Weapon::updateClearingGems()
     }
   }
 
-  if (clearingGemCount == 0) {
+  if (!isClearing()) {
     gemCount = 0;
     onCleared();
   }

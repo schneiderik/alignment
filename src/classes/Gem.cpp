@@ -30,6 +30,18 @@ void Gem::fall()
   xOffset += GEM_FALL_INCREMENT;
 }
 
+void Gem::clear()
+{
+  xOffset += velX;
+  yOffset += velY;
+  velY += GRAVITY;
+}
+
+bool Gem::isCleared()
+{
+  return yOffset < SCREEN_HEIGHT;
+}
+
 void Gem::render(int x, int y)
 {
   sprites.drawPlusMask(
