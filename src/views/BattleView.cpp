@@ -3,7 +3,6 @@
 #include "../../Game.h"
 #include "../classes/Counter.h"
 #include "../components/StatBar.h"
-#include "../components/EnemyPanel.h"
 #include "../components/Puzzle.h"
 
 #define BATTLE_VIEW_STAT_BAR_X 0
@@ -25,6 +24,7 @@ namespace
 {
   bool paused;
   Counter attackCounter;
+  EnemyPanel enemyPanel;
 
   void handleInput()
   {
@@ -100,7 +100,7 @@ namespace
     );
 
     attackCounter.run();
-    EnemyPanel::attack();
+    enemyPanel.attack();
   }
 
   void handleWeaponClear()
@@ -141,7 +141,7 @@ namespace
 
     if (Puzzle::isClearing()) return;
 
-    EnemyPanel::update();
+    enemyPanel.update();
     attackCounter.update();
   }
 
@@ -154,7 +154,7 @@ namespace
       Game::score
     );
 
-    EnemyPanel::render(
+    enemyPanel.render(
       BATTLE_VIEW_ENEMY_PANEL_X,
       BATTLE_VIEW_ENEMY_PANEL_Y,
       Game::enemyHealth,
@@ -190,7 +190,7 @@ void BattleView::init()
 
   Game::playerHealth = PLAYER_HEALTH_MAX;
   attackCounter.run();
-  EnemyPanel::init(Game::enemyType, &handleStrike);
+  enemyPanel.init(Game::enemyType, &handleStrike);
   Puzzle::init(&handleWeaponClear, &handleWeaponMatch, &handleWeaponGemStack);
 }
 

@@ -3,6 +3,8 @@
 
 #include "../../global.h"
 
+#include "../components/EnemyPanel.h"
+
 namespace BattleView
 {
   void init();
