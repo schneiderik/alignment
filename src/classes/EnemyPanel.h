@@ -3,7 +3,7 @@
 
 #include "../../global.h"
 
-#include "../classes/Counter.h"
+#include "./Counter.h"
 
 #define ENEMY_PANEL_HEALTH_BAR_X 2
 #define ENEMY_PANEL_HEALTH_BAR_Y 50
