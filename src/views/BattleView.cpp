@@ -2,7 +2,6 @@
 
 #include "../../Game.h"
 #include "../classes/Counter.h"
-#include "../components/StatBar.h"
 #include "../components/Puzzle.h"
 
 #define BATTLE_VIEW_STAT_BAR_X 0
@@ -25,6 +24,7 @@ namespace
   bool paused;
   Counter attackCounter;
   EnemyPanel enemyPanel;
+  StatBar statBar;
 
   void handleInput()
   {
@@ -147,7 +147,7 @@ namespace
 
   void render()
   {
-    StatBar::render(
+    statBar.render(
       BATTLE_VIEW_STAT_BAR_X,
       BATTLE_VIEW_STAT_BAR_Y,
       Game::playerHealth,

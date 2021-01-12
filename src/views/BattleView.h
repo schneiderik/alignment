@@ -3,6 +3,7 @@
 
 #include "../../global.h"
 
+#include "../classes/StatBar.h"
 #include "../classes/EnemyPanel.h"
 
 namespace BattleView
